@@ -12,4 +12,4 @@ export const reducerUserAuth = (state = null, action) => {
   default:
     return state;
   }
-}
+};
