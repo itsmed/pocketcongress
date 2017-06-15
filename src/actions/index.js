@@ -4,7 +4,7 @@ export {
   UNAUTH_USER,
   TOGGLE_IS_FETCHING,
   RECEIVE_USER_DISTRICT_INFO,
-  REQUEST_USER_REPS,
+  VERIFY_USER_DISTRICT_INF0,
   RECEIVE_USER_REPS,
 } from './consts';
 
@@ -19,4 +19,5 @@ export {
 
 export {
   getUserDistrict,
+  setUserDistrict,
 } from './user_district/action.user_district';

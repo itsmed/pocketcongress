@@ -14,8 +14,13 @@ import {
   reducerUserDistrict,
 } from './user_district/reducer.user_district';
 
+import {
+  reducerSetFederalReps
+} from './user_reps/reducer.user_reps';
+
 export const rootReducer = combineReducers({
   user: reducerUserAuth,
   isFetching: reducerIsFetching,
   district: reducerUserDistrict,
+  federalReps: reducerSetFederalReps,
 });
