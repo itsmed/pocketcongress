@@ -18,9 +18,14 @@ import {
   reducerSetFederalReps
 } from './user_reps/reducer.user_reps';
 
+import {
+  reducerFederalFloorItems
+} from './congressional_votes/reducer.congressional_votes';
+
 export const rootReducer = combineReducers({
   user: reducerUserAuth,
   isFetching: reducerIsFetching,
   district: reducerUserDistrict,
   federalReps: reducerSetFederalReps,
+  federalFloorItems: reducerFederalFloorItems,
 });

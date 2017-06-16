@@ -5,7 +5,8 @@ import './App.css';
 import { connect } from 'react-redux';
 import {
   getUserDistrict,
-  setUserDistrict
+  setUserDistrict,
+  requestFloorItems,
 } from './actions';
 
 class App extends Component {
@@ -17,7 +18,8 @@ class App extends Component {
   }
 
   findDistrict() {
-    this.props.getUserDistrict({lat: '37.6317388', long: '-122.0527006'});
+    // this.props.getUserDistrict({lat: '37.6317388', long: '-122.0527006'});
+    this.props.requestFloorItems('03', '2017');
   }
 
   handleAddressConfirmation(obj) {
@@ -50,4 +52,5 @@ class App extends Component {
 export default connect((state) => state, {
   getUserDistrict,
   setUserDistrict,
+  requestFloorItems
 })(App);

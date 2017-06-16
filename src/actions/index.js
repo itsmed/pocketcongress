@@ -6,6 +6,7 @@ export {
   RECEIVE_USER_DISTRICT_INFO,
   VERIFY_USER_DISTRICT_INF0,
   RECEIVE_USER_REPS,
+  RECEIVE_FLOOR_ITEMS
 } from './consts';
 
 export {
@@ -21,3 +22,7 @@ export {
   getUserDistrict,
   setUserDistrict,
 } from './user_district/action.user_district';
+
+export {
+  requestFloorItems,
+} from './congressional_votes/action.floor_items';
