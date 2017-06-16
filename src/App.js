@@ -4,7 +4,7 @@ import './App.css';
 
 import { connect } from 'react-redux';
 import {
-  getUserDistrict,
+  getUserDistrictByLocation,
   setUserDistrict,
   requestFloorItems,
 } from './actions';
@@ -18,7 +18,7 @@ class App extends Component {
   }
 
   findDistrict() {
-    // this.props.getUserDistrict({lat: '37.6317388', long: '-122.0527006'});
+    // this.props.getUserDistrictByLocation({lat: '37.6317388', long: '-122.0527006'});
     this.props.requestFloorItems('03', '2017');
   }
 
@@ -50,7 +50,7 @@ class App extends Component {
 }
 
 export default connect((state) => state, {
-  getUserDistrict,
+  getUserDistrictByLocation,
   setUserDistrict,
   requestFloorItems
 })(App);

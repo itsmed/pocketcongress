@@ -19,7 +19,7 @@ export {
 } from './is_fetching/action.is_fetching';
 
 export {
-  getUserDistrict,
+  getUserDistrictByLocation,
   setUserDistrict,
 } from './user_district/action.user_district';
 
