@@ -6,7 +6,7 @@ import {
   RECEIVE_USER_REPS,
 } from '../consts';
 
-export const getUserDistrict = (lat, long) => {
+export const getUserDistrictByLocation = (lat, long) => {
   return (dispatch) => {
     dispatch({ type: TOGGLE_IS_FETCHING });
     return fetch(API_BASE.concat('/api/get-district-by-coords'), {
