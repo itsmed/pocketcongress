@@ -9,7 +9,7 @@ import {
 export const getUserDistrict = (lat, long) => {
   return (dispatch) => {
     dispatch({ type: TOGGLE_IS_FETCHING });
-    return fetch('http://localhost:8000'.concat('/api/get-district-by-coords'), {
+    return fetch(API_BASE.concat('/api/get-district-by-coords'), {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -35,7 +35,7 @@ export const setUserDistrict = (addrObj) => {
       type: TOGGLE_IS_FETCHING
     });
 
-    fetch('http://localhost:8000'.concat('/api/reps/all/federal/by-district'), {
+    fetch(API_BASE.concat('/api/reps/all/federal/by-district'), {
       method: 'POST',
       mode: 'cors',
       headers: {
