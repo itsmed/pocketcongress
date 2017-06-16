@@ -2,10 +2,10 @@ import {
   RECEIVE_FLOOR_ITEMS,
 } from '../../actions';
 
-export function reducerFederalFloorItems(state = {
+export const reducerFederalFloorItems = (state = {
   house: {},
   senate: {}
-}, action) {
+}, action) => {
   switch(action.type) {
   case RECEIVE_FLOOR_ITEMS:
     return Object.assign({}, state, {
