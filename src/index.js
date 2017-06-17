@@ -1,22 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import thunk from 'redux-thunk';
-import { createStore, applyMiddleware, compose } from 'redux';
-import { Provider } from 'react-redux';
 import registerServiceWorker from './registerServiceWorker';
+import {
+  Provider,
+} from 'react-redux';
 
 import App from './App';
-import { rootReducer } from './reducers';
-
 import './index.css';
+import store from './make_store';
 
-const store = createStore(
-  rootReducer,
-  compose(
-    applyMiddleware(thunk),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  )
-);
+window.addEventListener('fetch', (e) => {
+  console.log('[FETCH EVENT]: ', e, arguments);
+}, false);
 
 ReactDOM.render(<Provider store={store}>
   <App />

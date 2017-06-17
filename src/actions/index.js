@@ -10,8 +10,10 @@ export {
 } from './consts';
 
 export {
+  authorizeNewUserWithProvider,
   authUser,
-  unauthUser
+  getAuthUpdate,
+  unauthUser,
 } from './user_auth/action.user_auth';
 
 export {

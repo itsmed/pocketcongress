@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import logo from './logo.svg';
 import './App.css';
 
-import { connect } from 'react-redux';
 import {
+  authorizeNewUserWithProvider,
+  getAuthUpdate,
   getUserDistrictByLocation,
   setUserDistrict,
   requestFloorItems,
+  unauthUser,
 } from './actions';
+
+import firebase from './firebase_config';
+import {
+  auth,
+} from './firebase_config';
 
 class App extends Component {
   constructor(props) {
@@ -15,6 +24,9 @@ class App extends Component {
 
     this.findDistrict = this.findDistrict.bind(this);
     this.handleAddressConfirmation = this.handleAddressConfirmation.bind(this);
+
+    this.login = this.login.bind(this);
+    this.signout = this.signout.bind(this);
   }
 
   findDistrict() {
@@ -27,8 +39,32 @@ class App extends Component {
     this.props.setUserDistrict(obj);
   }
 
+  componentDidMount() {
+    console.log('mounting', firebase.User);
+    this.props.getAuthUpdate();
+  }
+
+  login(provider) {
+    const { authorizeNewUserWithProvider } = this.props;
+
+    console.log('calling login');
+    authorizeNewUserWithProvider(provider);
+  }
+
+  signout() {
+    const { unauthUser } = this.props;
+
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+      console.log('signout succe');
+      unauthUser();
+    }).catch(function(error) {
+      // An error happened.
+      console.log('eror', error);
+    });
+  }
+
   render() {
-    console.log('this', this.props);
     return (
       <div className="App">
         <div className="App-header">
@@ -39,6 +75,8 @@ class App extends Component {
         <button onClick={ this.findDistrict }>click</button>
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
+        <button onClick={ () => this.login('google') }>Login With Google</button>
+        <button onClick={ this.signout }>Sign Out</button>
           <ul>
           {
             this.props.district.possibleDistricts.map((d, i) => <li key={i} onClick={() => this.handleAddressConfirmation(d) }>{d.fields.congressional_district.district_number}</li>)
@@ -50,7 +88,10 @@ class App extends Component {
 }
 
 export default connect((state) => state, {
+  authorizeNewUserWithProvider,
+  getAuthUpdate,
   getUserDistrictByLocation,
   setUserDistrict,
-  requestFloorItems
+  requestFloorItems,
+  unauthUser,
 })(App);

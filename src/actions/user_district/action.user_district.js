@@ -29,6 +29,29 @@ export const getUserDistrictByLocation = (lat, long) => {
   };
 };
 
+export const getUserDistrictByAddress = (addrObj) => {
+  return dispatch => {
+    dispatch({ type: TOGGLE_IS_FETCHING });
+
+    return fetch(API_BASE.concat('/api/get-district-by-address'), {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ "data": addrObj})
+    })
+    .then(res => res.json())
+    .then(addresses => {
+      dispatch({ type: TOGGLE_IS_FETCHING });
+      return dispatch({
+        type: RECEIVE_USER_DISTRICT_INFO,
+        payload: addresses
+      });
+    });
+  };
+};
+
 export const setUserDistrict = (addrObj) => {
   return dispatch => {
     dispatch({
