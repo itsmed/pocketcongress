@@ -1,5 +1,5 @@
-export const API_BASE = 'https://powerful-earth-40118.herokuapp.com';
-// export const API_BASE = 'http://localhost://8080'; // for testing when offline
+// export const API_BASE = 'https://powerful-earth-40118.herokuapp.com';
+export const API_BASE = 'http://localhost:8000'; // for testing when offline
 export const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 export const RECIVE_AUTH_UPDATE = 'RECIVE_AUTH_UPDATE';
 export const AUTH_USER = 'AUTH_USER';

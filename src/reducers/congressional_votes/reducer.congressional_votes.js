@@ -3,8 +3,12 @@ import {
 } from '../../actions';
 
 export const reducerFederalFloorItems = (state = {
-  house: {},
-  senate: {}
+  house: {
+    votes: [],
+  },
+  senate: {
+    votes: [],
+  },
 }, action) => {
   switch(action.type) {
   case RECEIVE_FLOOR_ITEMS:
