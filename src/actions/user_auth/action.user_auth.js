@@ -28,6 +28,7 @@ export const unauthUser = (id) => {
 
 export const getAuthUpdate = () => {
   return dispatch => {
+    dispatch(toggleIsFetching());
     console.log('updating');
     localforage.getItem('user')
     .then(user => {
@@ -37,7 +38,8 @@ export const getAuthUpdate = () => {
             console.log('[in getAuthUpdate] got redirect result', result);
             if (!result.user) {
               console.log('[in getAuthUpdate] no user from firebase redirect result', result);
-              return;
+              dispatch(toggleIsFetching());
+              return null;
             }
             localforage.setItem('user', {
               id: result.user.uid,
@@ -53,7 +55,9 @@ export const getAuthUpdate = () => {
                   email: result.user.email,
                   pictureUrl: result.user.photoURL
                 });
-              return dispatch(authUser(user));
+              dispatch(toggleIsFetching());
+              dispatch(authUser(user));
+              return setTimeout(() => user);
             })
             .catch(error => {
               console.log('[LOCAL FORAGE] save user error', error);
@@ -63,12 +67,19 @@ export const getAuthUpdate = () => {
           .catch(err => console.log('[in getAuthUpdate] maybe no redirect?', err));
       } else {
         console.log('user', user);
-        return dispatch(authUser(user));
+        dispatch(toggleIsFetching());
+        dispatch(authUser(user));
+        return setTimeout(() => user);
       }
     })
-    .then(() => {
-      if (window.location.pathname === '/signin') {
+    .then((user) => {
+      console.log('user', user);
+      // dispatch(toggleIsFetching()); 
+      if (user && window.location.pathname === '/signin') {
         window.location.replace('/profile');
+      }
+      if (!user && window.location.pathname === '/profile') {
+        window.location.replace('/signin');
       }
     })
     .catch(err => console.log('[LOCALFORAGE] most likely the cause', err));

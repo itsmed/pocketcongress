@@ -5,6 +5,7 @@ import {
   Redirect,
   Switch
 } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 
 import FloorItemList from './containers/flooritemlist/FloorItemList';
@@ -18,21 +19,31 @@ import './App.css';
 
 const NoMatch = () => (<div>No Match</div>);
 
-const App = () => (
+const App = (props) => (
   <Router>
     <div>
       <Header />
-      <Switch>
-        <Route path="/" exact component={Landing} />
-        <Route path="/floor-items" exact component={FloorItemList} />
-        <Route path="/signin" exact component={SignIn} />
-        <Route path="/signup" exact component={SignUp} />
-        <Route path="/profile" component={UserProfile} />
-        <Route component={NoMatch}/>
-      </Switch>
+      {
+        props.isFetching ?
+          <div>
+            <h1>LOADING...</h1>
+          </div>
+        :
+          <Switch>
+            <Route path="/" exact component={Landing} />
+            <Route path="/floor-items" exact component={FloorItemList} />
+            <Route path="/signin" exact component={SignIn} />
+            <Route path="/signup" exact component={SignUp} />
+            <Route path="/profile" component={UserProfile} />
+            <Route component={NoMatch}/>
+          </Switch>
+      }
     </div>
   </Router>
 );
 
+const mapStateToProps = (state) => ({
+  isFetching: state.isFetching,
+});
 
-export default App;
+export default connect(mapStateToProps)(App);

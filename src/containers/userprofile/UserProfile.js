@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { getAuthUpdate } from '../../actions';
+
 class UserProfile extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    // this.props.getAuthUpdate();
   }
 
   render() {
@@ -19,4 +25,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(UserProfile);
+export default connect(mapStateToProps, { getAuthUpdate })(UserProfile);

@@ -15,7 +15,7 @@ class Header extends Component {
     this.handleSignOut = this.handleSignOut.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.getAuthUpdate();
   }
 

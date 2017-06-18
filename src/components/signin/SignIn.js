@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { authorizeNewUserWithProvider } from '../../actions';
+import { authorizeNewUserWithProvider, getAuthUpdate } from '../../actions';
 
 class SignIn extends Component {
   constructor(props) {
     super(props);
   
     this.handleProviderSubmit = this.handleProviderSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    // this.props.getAuthUpdate();
   }
 
   handleProviderSubmit(provider) {
@@ -16,7 +20,6 @@ class SignIn extends Component {
   render() {
     return (
       <div>
-        SignIn! 
         <button onClick={ () => this.handleProviderSubmit('google')}>Sign In With Google</button>
       </div>
     );
@@ -24,4 +27,4 @@ class SignIn extends Component {
 }
 const mstp = (state) => ({user: state.user});
 
-export default connect(mstp , { authorizeNewUserWithProvider })(SignIn);
+export default connect(mstp , { authorizeNewUserWithProvider, getAuthUpdate })(SignIn);
