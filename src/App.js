@@ -12,6 +12,7 @@ import Header from './containers/header/Header';
 import Landing from './components/landing/Landing';
 import SignIn from './components/signin/SignIn';
 import SignUp from './components/signup/SignUp';
+import UserProfile from './containers/userprofile/UserProfile';
 
 import './App.css';
 
@@ -26,6 +27,7 @@ const App = () => (
         <Route path="/floor-items" exact component={FloorItemList} />
         <Route path="/signin" exact component={SignIn} />
         <Route path="/signup" exact component={SignUp} />
+        <Route path="/profile" component={UserProfile} />
         <Route component={NoMatch}/>
       </Switch>
     </div>

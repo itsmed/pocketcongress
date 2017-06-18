@@ -15,7 +15,7 @@ class Header extends Component {
     this.handleSignOut = this.handleSignOut.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.getAuthUpdate();
   }
 
@@ -34,6 +34,12 @@ class Header extends Component {
             ''
           :
             <li><Link to="/signup">Sign Up</Link></li>
+        }
+        {
+          user ?
+            <li><Link to="/profile">Profile</Link></li>
+          : 
+            ''
         }
         {
           user ?

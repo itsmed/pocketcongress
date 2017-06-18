@@ -17,6 +17,9 @@ export const authUser = user => ({
 
 export const unauthUser = (id) => {
   localforage.removeItem('user');
+  if (window.location.pathname === '/profile') {
+    window.location.replace('/');
+  }  
   return {
     type: UNAUTH_USER,
     payload: null
@@ -29,7 +32,7 @@ export const getAuthUpdate = () => {
     localforage.getItem('user')
     .then(user => {
       if (!user) {
-        firebase.auth().getRedirectResult()
+        return firebase.auth().getRedirectResult()
           .then(result => {
             console.log('[in getAuthUpdate] got redirect result', result);
             if (!result.user) {
@@ -43,24 +46,29 @@ export const getAuthUpdate = () => {
               userPhoto: result.user.photoURL,
             }).then(user => {
               console.log('[LOCAL FORAGE] saved user', user);
-              dispatch(authUser(user));
+              database.ref(`/users/${result.user.uid}`)
+                .set({
+                  provider: result.credential.providerId,
+                  name: result.user.displayName,
+                  email: result.user.email,
+                  pictureUrl: result.user.photoURL
+                });
+              return dispatch(authUser(user));
             })
             .catch(error => {
               console.log('[LOCAL FORAGE] save user error', error);
               return Promise.reject(error);
             });
-            database.ref(`/users/${result.user.uid}`)
-              .set({
-                provider: result.credential.providerId,
-                name: result.user.displayName,
-                email: result.user.email,
-                pictureUrl: result.user.photoURL
-              });
           })
           .catch(err => console.log('[in getAuthUpdate] maybe no redirect?', err));
       } else {
         console.log('user', user);
         return dispatch(authUser(user));
+      }
+    })
+    .then(() => {
+      if (window.location.pathname === '/signin') {
+        window.location.replace('/profile');
       }
     })
     .catch(err => console.log('[LOCALFORAGE] most likely the cause', err));
