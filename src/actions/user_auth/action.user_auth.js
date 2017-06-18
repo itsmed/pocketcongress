@@ -16,7 +16,7 @@ export const authUser = user => ({
 });
 
 export const unauthUser = (id) => {
-  localforage.removeItem(id);
+  localforage.removeItem('user');
   return {
     type: UNAUTH_USER,
     payload: null
@@ -41,7 +41,10 @@ export const getAuthUpdate = () => {
               accessToken: result.credential.accessToken,
               name: result.user.displayName,
               userPhoto: result.user.photoURL,
-            }).then(user => console.log('[LOCAL FORAGE] saved user', user))
+            }).then(user => {
+              console.log('[LOCAL FORAGE] saved user', user);
+              dispatch(authUser(user));
+            })
             .catch(error => {
               console.log('[LOCAL FORAGE] save user error', error);
               return Promise.reject(error);
@@ -57,7 +60,7 @@ export const getAuthUpdate = () => {
           .catch(err => console.log('[in getAuthUpdate] maybe no redirect?', err));
       } else {
         console.log('user', user);
-        dispatch(authUser(user));
+        return dispatch(authUser(user));
       }
     })
     .catch(err => console.log('[LOCALFORAGE] most likely the cause', err));

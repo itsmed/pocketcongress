@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 const FloorItemPreview = (props) => {
   const { item } = props;
+  console.log('item preview', item);
   return (
     <div>
      { 

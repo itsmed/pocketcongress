@@ -2,9 +2,25 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import {
+  getAuthUpdate,
+  unauthUser,
+} from '../../actions';
+import localforage from 'localforage';
+
 class Header extends Component {
   constructor(props) {
     super(props);
+
+    this.handleSignOut = this.handleSignOut.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.getAuthUpdate();
+  }
+
+  handleSignOut() {
+    this.props.unauthUser(this.props.user.id);
   }
 
   render() {
@@ -21,7 +37,7 @@ class Header extends Component {
         }
         {
           user ?
-            <li><Link to="/signout">Sign out</Link></li>
+            <li onClick={ this.handleSignOut }>Sign out</li>
           :
             <li><Link to="/signin">Sign In</Link></li>
         }
@@ -37,4 +53,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, { getAuthUpdate, unauthUser })(Header);

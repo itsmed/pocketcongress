@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 
 
-import FloorItems from './components/flooritems/FloorItems';
+import FloorItemList from './containers/flooritemlist/FloorItemList';
 import Header from './containers/header/Header';
 import Landing from './components/landing/Landing';
 import SignIn from './components/signin/SignIn';
@@ -23,7 +23,7 @@ const App = () => (
       <Header />
       <Switch>
         <Route path="/" exact component={Landing} />
-        <Route path="/floor-items" exact component={FloorItems} />
+        <Route path="/floor-items" exact component={FloorItemList} />
         <Route path="/signin" exact component={SignIn} />
         <Route path="/signup" exact component={SignUp} />
         <Route component={NoMatch}/>

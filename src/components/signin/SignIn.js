@@ -1,7 +1,27 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { authorizeNewUserWithProvider } from '../../actions';
 
-const SignIn = (props) => <div>
-  SignIn! { props.user ? JSON.stringify(this.props.user) : null }
-</div>;
+class SignIn extends Component {
+  constructor(props) {
+    super(props);
+  
+    this.handleProviderSubmit = this.handleProviderSubmit.bind(this);
+  }
 
-export default SignIn;
+  handleProviderSubmit(provider) {
+    this.props.authorizeNewUserWithProvider(provider);
+  }
+
+  render() {
+    return (
+      <div>
+        SignIn! 
+        <button onClick={ () => this.handleProviderSubmit('google')}>Sign In With Google</button>
+      </div>
+    );
+  }
+}
+const mstp = (state) => ({user: state.user});
+
+export default connect(mstp , { authorizeNewUserWithProvider })(SignIn);
