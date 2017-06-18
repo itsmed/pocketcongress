@@ -2,15 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { requestFloorItems } from '../../actions';
-import FloorItemPreview from '../../components/flooritempreview/FloorItemPreview';
+import FloorItem from '../../components/flooritem/FloorItem';
+import DropDown from '../../components/dropdown/DropDown';
 
 class FloorItemList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      activeChamber: 'all'
+      activeChamber: 'all',
     };
+
+    this.setActiveChamber = this.setActiveChamber.bind(this);
   }
 
   componentWillMount() {
@@ -18,22 +21,34 @@ class FloorItemList extends Component {
     this.props.requestFloorItems((now.getMonth() + 1), now.getFullYear());
   }
 
+  setActiveChamber(activeChamber) {
+    this.setState({
+      activeChamber,
+    });
+  }
+
   render() {
     const items = this.props.floorItems;
     const { activeChamber } = this.state;
-    return <ul>
-      {
-        activeChamber === 'senate' ?
-          items.senate.votes
-            .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}><FloorItemPreview item={vote} /></li>)
-        : activeChamber === 'house' ?
-          items.house.votes
-            .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}><FloorItemPreview item={vote} /></li>)
-        :
-          [...items.house.votes, ...items.senate.votes]
-            .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}><FloorItemPreview item={vote} /></li>)
-      }
-    </ul>;
+    return <div>
+      <DropDown
+        action={ this.setActiveChamber }
+        items={['all', 'house', 'senate']}
+      />
+      <ul>
+        {
+          activeChamber === 'senate' ?
+            items.senate.votes
+              .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}><FloorItem item={vote} /></li>)
+          : activeChamber === 'house' ?
+            items.house.votes
+              .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}><FloorItem item={vote} /></li>)
+          :
+            [...items.house.votes, ...items.senate.votes]
+              .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}><FloorItem item={vote} /></li>)
+        }
+      </ul>
+    </div>;
   }
 }
 
