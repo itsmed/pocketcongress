@@ -1,28 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
-import { getAuthUpdate } from '../../actions';
 
-class UserProfile extends Component {
-  constructor(props) {
-    super(props);
-  }
+const UserProfile = ({user}) => (
+   <div>
+    User Profile! {user ? user.name : ''}
+  </div>
+);
 
-  componentDidMount() {
-    // this.props.getAuthUpdate();
-  }
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
 
-  render() {
-    return <div>
-      User Profile!
-    </div>;
-  }
-}
-
-function mapStateToProps(state) {
-  return {
-    user: state.user
-  };
-}
-
-export default connect(mapStateToProps, { getAuthUpdate })(UserProfile);
+export default connect(mapStateToProps)(UserProfile);

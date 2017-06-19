@@ -16,8 +16,11 @@ import SignUp from './components/signup/SignUp';
 import UserProfile from './containers/userprofile/UserProfile';
 
 import './App.css';
+import { acknowledgeErrorMessage } from './actions';
+
 
 const NoMatch = () => (<div>No Match</div>);
+const ErrorMessage = (props) => (<div onClick={ props.acknowledgeErrorMessage }><span>click to close</span><br />{props.errorMessage}</div>);
 
 const App = (props) => (
   <Router>
@@ -28,6 +31,12 @@ const App = (props) => (
           <div>
             <h1>LOADING...</h1>
           </div>
+        :
+        props.errorMessage !== null ?
+          <ErrorMessage
+            acknowledgeErrorMessage={ props.acknowledgeErrorMessage } 
+            errorMessage={ props.errorMessage } 
+          />
         :
           <Switch>
             <Route path="/" exact component={Landing} />
@@ -44,6 +53,7 @@ const App = (props) => (
 
 const mapStateToProps = (state) => ({
   isFetching: state.isFetching,
+  errorMessage: state.errorMessage,
 });
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, { acknowledgeErrorMessage })(App);

@@ -43,6 +43,9 @@ export const requestFloorItems = (month, year) => {
         });
       }
     })
-    .catch(err => console.log('[LOCAL FORAGE] error!', err));
+    .catch(err => {
+      console.log('[LOCAL FORAGE] error!', err);
+      return dispatch(toggleIsFetching()); 
+    });
   };
 };

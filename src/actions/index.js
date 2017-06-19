@@ -6,12 +6,15 @@ export {
   RECEIVE_USER_DISTRICT_INFO,
   VERIFY_USER_DISTRICT_INF0,
   RECEIVE_USER_REPS,
-  RECEIVE_FLOOR_ITEMS
+  RECEIVE_FLOOR_ITEMS,
+  ACKNOWLEDGE_ERROR_MESSAGE,
+  RECEIVE_ERROR_MESSAGE,
 } from './consts';
 
 export {
   authorizeNewUserWithProvider,
   authUser,
+  createUserWithEmailAndPassword,
   getAuthUpdate,
   unauthUser,
 } from './user_auth/action.user_auth';
@@ -28,3 +31,8 @@ export {
 export {
   requestFloorItems,
 } from './congressional_votes/action.floor_items';
+
+export {
+  receiveErrorMessage,
+  acknowledgeErrorMessage,
+} from './error_message/action.error_message';
