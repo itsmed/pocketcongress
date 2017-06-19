@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { validate } from 'email-validator';
+
 import { 
   authorizeNewUserWithProvider,
   getAuthUpdate,
   createUserWithEmailAndPassword,
+  receiveErrorMessage,
 } from '../../actions';
 
 class SignUp extends Component {
@@ -20,6 +23,7 @@ class SignUp extends Component {
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleEmailFormChange = this.handleEmailFormChange.bind(this);
     this.handlePasswordFormChange = this.handlePasswordFormChange.bind(this);
+    this.validateInfo = this.validateInfo.bind(this);
   }
 
   handleProviderSubmit(provider) {
@@ -35,6 +39,16 @@ class SignUp extends Component {
     });
   }
 
+  validateInfo(e) {
+    e.preventDefault();
+    if (!(validate(this.state.emailValue))) {
+      return this.props.receiveErrorMessage(`[${this.state.emailValue}] is not a valid email`);
+    }
+    if (validatePassword(this.state.passwordValue) === -1) {
+      return this.props.receiveErrorMessage(`Passwords must be at least 8 characters long, including at least one number, special character, lowercase letter and capital letter`);
+    }
+  }
+
   handleEmailFormChange() {
     this.setState({
       emailValue: this.refs.email.value,
@@ -48,7 +62,6 @@ class SignUp extends Component {
   }
 
   handleFormSubmit(e) {
-    e.preventDefault();
     this.props.createUserWithEmailAndPassword(this.state.emailValue, this.state.passwordValue);
   }
 
@@ -72,7 +85,7 @@ class SignUp extends Component {
   }
   renderInitialSignUpForm() {
     return <div>
-      <form onSubmit={ this.handleFormSubmit }>
+      <form onSubmit={ this.validateInfo }>
         <input
           type="text"
           onChange={ this.handleEmailFormChange }
@@ -100,5 +113,10 @@ export default connect(mapStateToProps , {
   authorizeNewUserWithProvider,
   getAuthUpdate,
   createUserWithEmailAndPassword,
+  receiveErrorMessage,
 })(SignUp);
 
+
+function validatePassword(pw) {
+  return pw.search(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm);
+}
