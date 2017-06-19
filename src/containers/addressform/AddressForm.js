@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import { API_BASE } from '../../actions';
+import {
+  API_BASE,
+  toggleIsFetching,
+} from '../../actions';
 
 const AddressConfirmation = ({addr}) => (
   <ul key={addr.address_components.number.concat(addr.address_components.street, addr.address_components.zip)}>
@@ -26,8 +30,10 @@ class AddressForm extends Component {
     this.getUserDistrictByAddress = this.getUserDistrictByAddress.bind(this);
     this.getUserDistrictByLocation = this.getUserDistrictByLocation.bind(this);
     this.verifyAddress = this.verifyAddress.bind(this);
-    this.mungeAddresses = this.mungeAddresses.bind(this);
   }
+
+
+
 
   handleAddressSubmit() {
     const { streetInput, aptInput, cityInput, stateInput, zipInput } = this.refs;
@@ -69,7 +75,6 @@ class AddressForm extends Component {
     })
     .then(res => res.json())
     .then(resp => {
-      console.log('location results array', resp.results);
       this.setState({
         addresses: resp.results,
       });
@@ -87,35 +92,11 @@ class AddressForm extends Component {
     })
     .then(res => res.json())
     .then(resp => {
-      console.log('addresses results arrayu', resp.results);
       return this.setState({
         addresses: resp.results,
       });
     });
   };
-
-
-  mungeAddresses(addressList) {
-    const addresses = addressList.map(addy => {
-      let a = addy.address_components;
-      return ({
-        number: a.number,
-        street: a.street,
-        city: a.city,
-        state: a.state,
-        county: a.county,
-        zip: a.zip,
-        coords: {
-          lat: addy.location.lat,
-          long: addy.location.lng
-        },
-        district_info: addy.fields
-      });
-    });
-    this.setState({
-      addresses: addresses,
-    });
-  }
 
   verifyAddress(address) {
     this.setState({
@@ -150,4 +131,6 @@ class AddressForm extends Component {
   }
 }
 
-export default AddressForm;
+export default connect(() => ({}), {
+  toggleIsFetching,
+})(AddressForm);

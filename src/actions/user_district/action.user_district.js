@@ -1,12 +1,12 @@
 import {
   API_BASE,
   TOGGLE_IS_FETCHING,
+  RECEIVE_USER_DISTRICT_INFO,
   VERIFY_USER_DISTRICT_INF0,
   RECEIVE_USER_REPS,
 } from '../consts';
 
 export const setUserDistrict = (addrObj) => {
-  console.log('submit user adress', addrObj);
   return dispatch => {
     dispatch({
       type: TOGGLE_IS_FETCHING
@@ -23,7 +23,6 @@ export const setUserDistrict = (addrObj) => {
     .then(res => res.json())
     .then(repObj => {
       dispatch({ type: TOGGLE_IS_FETCHING });
-      console.log('response in set user disrtrict', repObj);
       return dispatch({
         type: RECEIVE_USER_REPS,
         payload: repObj.reps

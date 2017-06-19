@@ -23,7 +23,7 @@ export const unauthUser = (id) => {
   localforage.removeItem('user');
   if (window.location.pathname === '/profile') {
     window.location.replace('/');
-  }  
+  }
   return {
     type: UNAUTH_USER,
     payload: null
@@ -33,47 +33,36 @@ export const unauthUser = (id) => {
 export const getAuthUpdate = () => {
   return dispatch => {
     dispatch(toggleIsFetching());
-    console.log('updating');
     return localforage.getItem('user')
       .then(user => {
         if (!user) {
-          console.log('no ;user found in update', user);
           return firebase.auth().getRedirectResult()
           .then(result => {
-            console.log('[in getAuthUpdate] got redirect result', result);
             if (!result.user) {
-              console.log('[in getAuthUpdate] no user from firebase redirect result', result);
-              dispatch(toggleIsFetching());
               return null;
             }
             saveUser(result.user, dispatch);
             return user;
           });
         } else {
-          console.log('user found in update', user);
-          saveUser(user, dispatch);
+          dispatch(authUser(user));
           return user;
         }
       })
-      .then((user) => {
-        console.log('user', user);
-        if (user && window.location.pathname === '/signin') {
-          window.location.replace('/profile');
-        }
-        if (!user && window.location.pathname === '/profile') {
-          window.location.replace('/signin');
-        }
+      .then(user => {
+        checkWindowPath(user);
+        dispatch(toggleIsFetching());
       })
       .catch(err => console.log('[LOCALFORAGE] most likely the cause', err));
   };
 };
 
-export const createUserWithEmailAndPassword = (email, password) => {
+export const createUserWithEmailAndPassword = (email, password, addr) => {
   return dispatch => {
     dispatch(toggleIsFetching());
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(user => {
-        console.log('user from email', user);
+        user.address = addr;
         return saveUser(user, dispatch);
       })
       .catch(function(error) {
@@ -88,14 +77,13 @@ export const createUserWithEmailAndPassword = (email, password) => {
   };
 };
 
-export const authorizeNewUserWithProvider = method => {
+export const authorizeNewUserWithProvider = (method, addr) => {
   console.log('calling auth user', method);
   return dispatch => {
     let provider;
     dispatch(toggleIsFetching());
     switch(method) {
     case 'google':
-      console.log('got this method in switch [google]', method);
       provider = new firebase.auth.GoogleAuthProvider();
       break;
     default:
@@ -105,7 +93,7 @@ export const authorizeNewUserWithProvider = method => {
     }
     provider.addScope('profile');
     provider.addScope('email');
-    console.log('provider', provider);
+
     return firebase.auth().signInWithRedirect(provider)
       .then(function(result) {
 
@@ -114,6 +102,7 @@ export const authorizeNewUserWithProvider = method => {
         console.log('[NEVER SHOWN] token', token);
         // The signed-in user info.
         const user = result.user;
+        user.address = addr;
         return saveUser(user, dispatch, 'google');
         // console.log('[NEVER SHOWN] user', user);
         // return dispatch(authUser(user));
@@ -130,11 +119,6 @@ export const signInWithEmailAndPassword = (email, password) => {
     saveUser(user);
     return user;
   })
-  .then((user) => {
-    if (user !== null) {
-      window.location.replace('/profile');
-    }
-  })
   .catch(function(error) {
     // Handle Errors here.
     var errorCode = error.code;
@@ -146,29 +130,37 @@ export const signInWithEmailAndPassword = (email, password) => {
 
 
 function saveUser(user, dispatch, provider) {
-  localforage.setItem('user', {
-    id: user.uid,
+  const newUser = {
+    id: user.uid || user.id,
     refreshToken: user.refreshToken,
     name: user.displayName || 'anonymous',
-    userPhoto: user.photoURL || '',
+    userPhoto: user.photoURL || 'http://fillmurray.com/g/200/200',
     provider: provider || 'email',
+    address: user.address,
+    email: user.email || 'no email given',
+  };
 
-  }).then(userResult => {
-    console.log('[LOCAL FORAGE] saved userResult', userResult);
-  console.log('user data used to savee', user);
-    database.ref(`/users/${user.uid}`)
-      .set({
-        provider: userResult.provider,
-        name: userResult.displayName,
-        email: user.email,
-        pictureUrl: userResult.photoURL,
-      });
-    dispatch(toggleIsFetching());
-    dispatch(authUser(userResult));
-    return userResult;
-  })
-  .catch(error => {
-    console.log('[LOCAL FORAGE] save user error', error);
-    return Promise.reject(error);
-  });
+  localforage.setItem('user', newUser)
+    .then(userResult => {
+      database.ref(`/users/${user.uid}`)
+        .set(newUser);
+      dispatch(toggleIsFetching());
+      dispatch(authUser(userResult));
+      checkWindowPath(userResult);
+      return userResult;
+    })
+    .catch(error => {
+      console.log('[LOCAL FORAGE] save user error', error.message);
+      // return Promise.reject(error);
+    });
+}
+
+
+function checkWindowPath(user) {
+  if ((user !== null && window.location.pathname === '/signin') || ( user !== null && window.location.pathname === '/signup')) {
+    window.location.replace('/profile');
+  }
+  if (!user && window.location.pathname === '/profile') {
+    window.location.replace('/signin');
+  }
 }

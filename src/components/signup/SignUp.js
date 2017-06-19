@@ -19,28 +19,20 @@ class SignUp extends Component {
 
     this.state = {
       currentStep: 0,
+      verifiedAddress: null,
     };
   
     this.handleProviderSubmit = this.handleProviderSubmit.bind(this);
-    this.incrementCurrentStep = this.incrementCurrentStep.bind(this);
-    this.renderInitialSignUpForm = this.renderInitialSignUpForm.bind(this);
+    this.renderSignUpForm = this.renderSignUpForm.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleEmailFormChange = this.handleEmailFormChange.bind(this);
     this.handlePasswordFormChange = this.handlePasswordFormChange.bind(this);
     this.validateInfo = this.validateInfo.bind(this);
+    this.handleAddressSubmit = this.handleAddressSubmit.bind(this);
   }
 
   handleProviderSubmit(provider) {
     this.props.authorizeNewUserWithProvider(provider);
-    this.incrementCurrentStep();
-  }
-
-  incrementCurrentStep() { 
-    this.setState({
-      currentStep: this.state.currentStep++,
-      emailValue: '',
-      passwordValue: ''
-    });
   }
 
   validateInfo(e) {
@@ -69,7 +61,14 @@ class SignUp extends Component {
   }
 
   handleFormSubmit() {
-    this.props.createUserWithEmailAndPassword(this.state.emailValue, this.state.passwordValue);
+    this.props.createUserWithEmailAndPassword(this.state.emailValue, this.state.passwordValue, this.state.verifiedAddress);
+  }
+
+  handleAddressSubmit(addr) {
+    this.setState({
+      verifiedAddress: addr,
+      currentStep: 1,
+    });
   }
 
   render() {
@@ -78,19 +77,25 @@ class SignUp extends Component {
       <h2>Sign Up</h2>
       {
         currentStep === 0 ?
-          <AddressForm submitAddress={ this.props.setUserDistrict.bind(this) } />
+          <div>
+            <h4>Set Your Congressional District</h4>
+            <p>Set your district. You can search for other ones AT THIS LINK</p>
+            <p>Congressional districts are based on lines drawn by Congress every 10 years following the results of the census. EXPLAIN WHY THIS IS NEEED</p>
+            <AddressForm submitAddress={ this.handleAddressSubmit } />
+          </div>
         :
         currentStep === 1 ?
-          'step1'
+          this.renderSignUpForm()
         :
         currentStep === 2 ?
-          this.renderInitialSignUpForm()
+          'step3'
         :
-          'alldone'
+          'default!'
       }
     </div>;
   }
-  renderInitialSignUpForm() {
+
+  renderSignUpForm() {
     return <div>
       <form onSubmit={ this.validateInfo }>
         <input
@@ -110,7 +115,7 @@ class SignUp extends Component {
           value="Submit"
         />
       </form>
-      <button onClick={ () => this.handleProviderSubmit('google')}>Sign In With Google</button>
+      <button onClick={ () => this.handleProviderSubmit('google', this.state.verifiedAddress) }>Sign In With Google</button>
     </div>;
   }
 }
