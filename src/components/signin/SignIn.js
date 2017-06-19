@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { authorizeNewUserWithProvider } from '../../actions';
+import { validate } from 'email-validator';
+
+import {
+  authorizeNewUserWithProvider,
+  receiveErrorMessage,
+  signInWithEmailAndPassword,
+  validatePassword,
+} from '../../actions';
 
 class SignIn extends Component {
   constructor(props) {
@@ -15,6 +22,7 @@ class SignIn extends Component {
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleEmailFormChange = this.handleEmailFormChange.bind(this);
     this.handlePasswordFormChange = this.handlePasswordFormChange.bind(this);
+    this.validateInfo = this.validateInfo.bind(this);
   }
 
   handleProviderSubmit(provider) {
@@ -34,16 +42,27 @@ class SignIn extends Component {
     });
   }
 
-  handleFormSubmit(e) {
+  validateInfo(e) {
     e.preventDefault();
+    if (!(validate(this.state.emailValue))) {
+      return this.props.receiveErrorMessage(`[${this.state.emailValue}] is not a valid email`);
+    }
+    if (validatePassword(this.state.passwordValue) === -1) {
+      return this.props.receiveErrorMessage(`Passwords must be at least 8 characters long, including at least one number, special character, lowercase letter and capital letter`);
+    }
 
-    console.log(this.state);
+    this.handleFormSubmit();
+  }
+
+  handleFormSubmit() {
+    console.log('called handleFormSubmit signin', this.state.emailValue, this.state.passwordValue);
+    this.props.signInWithEmailAndPassword(this.state.emailValue, this.state.passwordValue);
   }
 
   render() {
     return <div>
     <h3>Sign In</h3>
-      <form onSubmit={ this.handleFormSubmit }>
+      <form onSubmit={ this.validateInfo }>
         <input
           type="text"
           onChange={ this.handleEmailFormChange }
@@ -69,5 +88,10 @@ class SignIn extends Component {
 }
 const mapStateToProps = (state) => ({user: state.user});
 
-export default connect(mapStateToProps , { authorizeNewUserWithProvider })(SignIn);
+export default connect(mapStateToProps , {
+  authorizeNewUserWithProvider,
+  receiveErrorMessage,
+  signInWithEmailAndPassword,
+  validatePassword,
+})(SignIn);
 

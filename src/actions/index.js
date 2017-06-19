@@ -12,10 +12,15 @@ export {
 } from './consts';
 
 export {
+  validatePassword,
+} from './helpers';
+
+export {
   authorizeNewUserWithProvider,
   authUser,
   createUserWithEmailAndPassword,
   getAuthUpdate,
+  signInWithEmailAndPassword,
   unauthUser,
 } from './user_auth/action.user_auth';
 
@@ -36,3 +41,4 @@ export {
   receiveErrorMessage,
   acknowledgeErrorMessage,
 } from './error_message/action.error_message';
+

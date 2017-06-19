@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { validate } from 'email-validator';
 
+import AddressForm from '../../containers/addressform/AddressForm';
+
 import { 
   authorizeNewUserWithProvider,
   getAuthUpdate,
   createUserWithEmailAndPassword,
   receiveErrorMessage,
+  validatePassword,
+  setUserDistrict,
 } from '../../actions';
 
 class SignUp extends Component {
@@ -47,6 +51,9 @@ class SignUp extends Component {
     if (validatePassword(this.state.passwordValue) === -1) {
       return this.props.receiveErrorMessage(`Passwords must be at least 8 characters long, including at least one number, special character, lowercase letter and capital letter`);
     }
+
+    // GET USER DISTRICT INFO (step 2) then:
+    this.handleFormSubmit();
   }
 
   handleEmailFormChange() {
@@ -61,7 +68,7 @@ class SignUp extends Component {
     });
   }
 
-  handleFormSubmit(e) {
+  handleFormSubmit() {
     this.props.createUserWithEmailAndPassword(this.state.emailValue, this.state.passwordValue);
   }
 
@@ -71,13 +78,13 @@ class SignUp extends Component {
       <h2>Sign Up</h2>
       {
         currentStep === 0 ?
-          this.renderInitialSignUpForm()
+          <AddressForm submitAddress={ this.props.setUserDistrict.bind(this) } />
         :
         currentStep === 1 ?
           'step1'
         :
         currentStep === 2 ?
-          'step2'
+          this.renderInitialSignUpForm()
         :
           'alldone'
       }
@@ -114,9 +121,6 @@ export default connect(mapStateToProps , {
   getAuthUpdate,
   createUserWithEmailAndPassword,
   receiveErrorMessage,
+  setUserDistrict,
 })(SignUp);
 
-
-function validatePassword(pw) {
-  return pw.search(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm);
-}

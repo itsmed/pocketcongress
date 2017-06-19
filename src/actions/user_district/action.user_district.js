@@ -1,58 +1,12 @@
 import {
   API_BASE,
   TOGGLE_IS_FETCHING,
-  RECEIVE_USER_DISTRICT_INFO,
   VERIFY_USER_DISTRICT_INF0,
   RECEIVE_USER_REPS,
 } from '../consts';
 
-export const getUserDistrictByLocation = (lat, long) => {
-  return (dispatch) => {
-    dispatch({ type: TOGGLE_IS_FETCHING });
-    return fetch(API_BASE.concat('/api/get-district-by-coords'), {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({"data": { "lat": '37.6316925', "long": '-122.0527084' }})
-    })
-    .then(res => res.json())
-    .then(repArray => {
-      dispatch({ type: TOGGLE_IS_FETCHING });
-
-      return dispatch({
-        type: RECEIVE_USER_DISTRICT_INFO,
-        payload: repArray
-      });
-    });
-  };
-};
-
-export const getUserDistrictByAddress = (addrObj) => {
-  return dispatch => {
-    dispatch({ type: TOGGLE_IS_FETCHING });
-
-    return fetch(API_BASE.concat('/api/get-district-by-address'), {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ "data": addrObj})
-    })
-    .then(res => res.json())
-    .then(addresses => {
-      dispatch({ type: TOGGLE_IS_FETCHING });
-      return dispatch({
-        type: RECEIVE_USER_DISTRICT_INFO,
-        payload: addresses
-      });
-    });
-  };
-};
-
 export const setUserDistrict = (addrObj) => {
+  console.log('submit user adress', addrObj);
   return dispatch => {
     dispatch({
       type: TOGGLE_IS_FETCHING
@@ -69,6 +23,7 @@ export const setUserDistrict = (addrObj) => {
     .then(res => res.json())
     .then(repObj => {
       dispatch({ type: TOGGLE_IS_FETCHING });
+      console.log('response in set user disrtrict', repObj);
       return dispatch({
         type: RECEIVE_USER_REPS,
         payload: repObj.reps
