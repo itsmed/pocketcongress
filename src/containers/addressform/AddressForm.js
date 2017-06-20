@@ -66,7 +66,8 @@ class AddressForm extends Component {
     })
     .then(res => res.json())
     .then(resp => {
-      return this.props.submitAddress('possibleAddresses', resp.results);
+      this.props.submitAddress('possibleAddresses', resp.results);
+      return this.props.toggleFetching();
     });
   }
 
@@ -82,7 +83,8 @@ class AddressForm extends Component {
     })
     .then(res => res.json())
     .then(resp => {
-      return this.props.submitAddress('possibleAddresses', resp.results);
+      this.props.submitAddress('possibleAddresses', resp.results);
+      return this.props.toggleFetching();
     });
   };
 

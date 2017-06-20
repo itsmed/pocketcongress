@@ -77,16 +77,16 @@ class SignUp extends Component {
   }
 
   receiveAddresses(key, addr) {
-    console.log('receiveing', key, addr);
+    console.log('receiving ', key, addr);
+    if (key === 'verifiedAddress') {
+      return this.handleAddressSubmit(addr);
+    }
     const newState = {};
     newState[key] = addr;
     this.setState(newState);
-    if (key === 'possibleAddresses') {
-      this.toggleFetching();
-    }
   }
 
-  toggleFetching()  {
+  toggleFetching() {
     this.setState({
       fetching: !this.state.fetching
     });
