@@ -19,7 +19,9 @@ class SignUp extends Component {
 
     this.state = {
       currentStep: 0,
+      possibleAddresses: [],
       verifiedAddress: null,
+      fetching: false,
     };
   
     this.handleProviderSubmit = this.handleProviderSubmit.bind(this);
@@ -29,6 +31,9 @@ class SignUp extends Component {
     this.handlePasswordFormChange = this.handlePasswordFormChange.bind(this);
     this.validateInfo = this.validateInfo.bind(this);
     this.handleAddressSubmit = this.handleAddressSubmit.bind(this);
+    this.receiveAddresses = this.receiveAddresses.bind(this);
+    this.toggleFetching = this.toggleFetching.bind(this);
+    this.signUpLoadingCard = this.signUpLoadingCard.bind(this);
   }
 
   handleProviderSubmit(provider) {
@@ -71,17 +76,46 @@ class SignUp extends Component {
     });
   }
 
+  receiveAddresses(key, addr) {
+    console.log('receiveing', key, addr);
+    const newState = {};
+    newState[key] = addr;
+    this.setState(newState);
+    if (key === 'possibleAddresses') {
+      this.toggleFetching();
+    }
+  }
+
+  toggleFetching()  {
+    this.setState({
+      fetching: !this.state.fetching
+    });
+  }
+
+  signUpLoadingCard () {
+    return <div>
+      <h1>Sign Up Loading...</h1>
+    </div>;
+  }
+
   render() {
-    const { currentStep } = this.state;
+    const { currentStep, fetching } = this.state;
     return <div>
       <h2>Sign Up</h2>
       {
+        fetching === true ?
+          this.signUpLoadingCard()
+        :
         currentStep === 0 ?
           <div>
             <h4>Set Your Congressional District</h4>
             <p>Set your district. You can search for other ones AT THIS LINK</p>
             <p>Congressional districts are based on lines drawn by Congress every 10 years following the results of the census. EXPLAIN WHY THIS IS NEEED</p>
-            <AddressForm submitAddress={ this.handleAddressSubmit } />
+            <AddressForm 
+              submitAddress={ this.receiveAddresses }
+              addresses={ this.state.possibleAddresses }
+              toggleFetching={ this.toggleFetching }
+            />
           </div>
         :
         currentStep === 1 ?

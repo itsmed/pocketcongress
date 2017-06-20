@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 import {
   API_BASE,
-  toggleIsFetching,
 } from '../../actions';
 
 const AddressConfirmation = ({addr}) => (
@@ -19,11 +17,6 @@ const AddressConfirmation = ({addr}) => (
 class AddressForm extends Component {
   constructor(props) {
     super(props);
-  
-    this.state = {
-      verifiedAddress: null,
-      addresses: [],
-    };
 
     this.handleAddressSubmit = this.handleAddressSubmit.bind(this);
     this.getLocation = this.getLocation.bind(this);
@@ -31,9 +24,6 @@ class AddressForm extends Component {
     this.getUserDistrictByLocation = this.getUserDistrictByLocation.bind(this);
     this.verifyAddress = this.verifyAddress.bind(this);
   }
-
-
-
 
   handleAddressSubmit() {
     const { streetInput, aptInput, cityInput, stateInput, zipInput } = this.refs;
@@ -49,6 +39,7 @@ class AddressForm extends Component {
   }
 
   getLocation() {
+    this.props.toggleFetching();
     let p = new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(p => {
         let params = {
@@ -75,13 +66,12 @@ class AddressForm extends Component {
     })
     .then(res => res.json())
     .then(resp => {
-      this.setState({
-        addresses: resp.results,
-      });
+      return this.props.submitAddress('possibleAddresses', resp.results);
     });
   }
 
   getUserDistrictByAddress (addrObj) {
+    this.props.toggleFetching();
     return fetch(API_BASE.concat('/api/get-district-by-address'), {
       method: 'POST',
       mode: 'cors',
@@ -92,17 +82,12 @@ class AddressForm extends Component {
     })
     .then(res => res.json())
     .then(resp => {
-      return this.setState({
-        addresses: resp.results,
-      });
+      return this.props.submitAddress('possibleAddresses', resp.results);
     });
   };
 
   verifyAddress(address) {
-    this.setState({
-      verifiedAddress: address
-    });
-    this.props.submitAddress(address);
+    this.props.submitAddress('verifiedAddress', address);
   }
 
   render() {
@@ -117,7 +102,7 @@ class AddressForm extends Component {
           ''
       }
       {
-        this.state.addresses.map((a, i) => <div key={i} onClick={ () => this.verifyAddress(a) }>
+        this.props.addresses.map((a, i) => <div key={i} onClick={ () => this.verifyAddress(a) }>
           <AddressConfirmation addr={a} />
         </div>)
       }
@@ -131,6 +116,4 @@ class AddressForm extends Component {
   }
 }
 
-export default connect(() => ({}), {
-  toggleIsFetching,
-})(AddressForm);
+export default AddressForm;
