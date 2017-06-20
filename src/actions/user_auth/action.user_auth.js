@@ -5,6 +5,7 @@ import { database } from '../../firebase_config';
 import {
   AUTH_USER,
   UNAUTH_USER,
+  API_BASE,
 } from '../consts';
 import {
   toggleIsFetching,
@@ -60,10 +61,11 @@ export const getAuthUpdate = () => {
 export const createUserWithEmailAndPassword = (email, password, addr) => {
   return dispatch => {
     dispatch(toggleIsFetching());
+
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(user => {
         user.address = addr;
-        return saveUser(user, dispatch);
+        return getUserDistrictInfo(user, dispatch);
       })
       .catch(function(error) {
         // Handle Errors here.
@@ -114,22 +116,55 @@ export const authorizeNewUserWithProvider = (method, addr) => {
 };
 
 export const signInWithEmailAndPassword = (email, password) => {
-  return firebase.auth().signInWithEmailAndPassword(email, password)
-  .then(user => {
-    saveUser(user);
-    return user;
-  })
-  .catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // ...
-    console.log('error sigingin in with meila', errorMessage);
-  });
+  return dispatch => { 
+    return firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(user => {
+      saveUser(user, dispatch);
+      return user;
+    })
+    .catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // ...
+      console.log('error sigingin in with meila', errorMessage);
+    });
+  };
 };
 
+function getUserDistrictInfo(user, dispatch) {
+  const data = {
+    state: user.address.address_components.state,
+    district: user.address.fields.congressional_district.district_number,
+  };
+
+  fetch(`${API_BASE}/api/reps/all/federal/by-district`, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ data })
+  })
+    .then(res => {
+      console.log('after district POST', res);
+      return res.json();
+    })
+    .then(json => {
+      const newUser = Object.assign({}, user, {
+        federalDistrict: json.results,
+      });
+      return saveUser(newUser, dispatch, 'email');
+    })
+    .catch(err => Promise.reject(err));
+}
 
 function saveUser(user, dispatch, provider) {
+  console.log('SAVE USER', user, dispatch, provider);
+
+    // SAVE USER IN DB
+    // CLEAN UP BELOW 
+
   const newUser = {
     id: user.uid || user.id,
     refreshToken: user.refreshToken,
@@ -143,11 +178,12 @@ function saveUser(user, dispatch, provider) {
   localforage.setItem('user', newUser)
     .then(userResult => {
       database.ref(`/users/${user.uid}`)
-        .set(newUser);
-      dispatch(toggleIsFetching());
+        .set(newUser)
+        .catch(err => Promise.reject(err));
       dispatch(authUser(userResult));
       checkWindowPath(userResult);
-      return userResult;
+      return dispatch(toggleIsFetching());
+      // return userResult;
     })
     .catch(error => {
       console.log('[LOCAL FORAGE] save user error', error.message);

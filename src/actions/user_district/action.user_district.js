@@ -6,11 +6,11 @@ import {
   RECEIVE_USER_REPS,
 } from '../consts';
 
+import { toggleIsFetching } from '../is_fetching/action.is_fetching';
+
 export const setUserDistrict = (addrObj) => {
   return dispatch => {
-    dispatch({
-      type: TOGGLE_IS_FETCHING
-    });
+    dispatch(toggleIsFetching());
 
     fetch(API_BASE.concat('/api/reps/all/federal/by-district'), {
       method: 'POST',
@@ -22,7 +22,7 @@ export const setUserDistrict = (addrObj) => {
     })
     .then(res => res.json())
     .then(repObj => {
-      dispatch({ type: TOGGLE_IS_FETCHING });
+      dispatch(toggleIsFetching());
       return dispatch({
         type: RECEIVE_USER_REPS,
         payload: repObj.reps
