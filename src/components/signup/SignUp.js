@@ -19,6 +19,9 @@ class SignUp extends Component {
 
     this.state = {
       currentStep: 0,
+      emailValue: '',
+      passwordValue: '',
+      userNameValue: '',
       possibleAddresses: [],
       verifiedAddress: null,
       fetching: false,
@@ -28,6 +31,7 @@ class SignUp extends Component {
     this.renderSignUpForm = this.renderSignUpForm.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleEmailFormChange = this.handleEmailFormChange.bind(this);
+    this.handleUserNameFormChange = this.handleUserNameFormChange.bind(this);
     this.handlePasswordFormChange = this.handlePasswordFormChange.bind(this);
     this.validateInfo = this.validateInfo.bind(this);
     this.handleAddressSubmit = this.handleAddressSubmit.bind(this);
@@ -59,6 +63,12 @@ class SignUp extends Component {
     });
   }
 
+  handleUserNameFormChange() {
+    this.setState({
+      userName: this.refs.userName.value,
+    });
+  }
+
   handlePasswordFormChange() {
     this.setState({
       passwordValue: this.refs.password.value,
@@ -66,7 +76,7 @@ class SignUp extends Component {
   }
 
   handleFormSubmit() {
-    this.props.createUserWithEmailAndPassword(this.state.emailValue, this.state.passwordValue, this.state.verifiedAddress);
+    this.props.createUserWithEmailAndPassword(this.state.emailValue, this.state.passwordValue, this.state.userName, this.state.verifiedAddress);
   }
 
   handleAddressSubmit(addr) {
@@ -137,6 +147,12 @@ class SignUp extends Component {
           onChange={ this.handleEmailFormChange }
           placeholder="email"
           ref="email"
+        />
+        <input
+          type="text"
+          onChange={ this.handleUserNameFormChange }
+          placeholder="user name"
+          ref="userName"
         />
         <input
           type="password"

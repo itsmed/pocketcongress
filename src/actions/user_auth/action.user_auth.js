@@ -5,6 +5,7 @@ import { database } from '../../firebase_config';
 import {
   AUTH_USER,
   UNAUTH_USER,
+  RECEIVE_USER_REPS,
   API_BASE,
 } from '../consts';
 import {
@@ -42,6 +43,7 @@ export const getAuthUpdate = () => {
             if (!result.user) {
               return null;
             }
+            console.log('results from redirect', result);
             saveUser(result.user, dispatch);
             return user;
           });
@@ -58,13 +60,14 @@ export const getAuthUpdate = () => {
   };
 };
 
-export const createUserWithEmailAndPassword = (email, password, addr) => {
+export const createUserWithEmailAndPassword = (email, password, userName, addr) => {
   return dispatch => {
     dispatch(toggleIsFetching());
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(user => {
         user.address = addr;
+        user.name = userName;
         return getUserDistrictInfo(user, dispatch);
       })
       .catch(function(error) {
@@ -138,49 +141,47 @@ function getUserDistrictInfo(user, dispatch) {
     district: user.address.fields.congressional_district.district_number,
   };
 
-  fetch(`${API_BASE}/api/reps/all/federal/by-district`, {
+  fetch(API_BASE.concat('/api/reps/all/federal/by-district'), {
     method: 'POST',
     mode: 'cors',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ data })
+    body: JSON.stringify({"data": data })
   })
     .then(res => {
-      console.log('after district POST', res);
       return res.json();
     })
     .then(json => {
-      const newUser = Object.assign({}, user, {
-        federalDistrict: json.results,
-      });
-      return saveUser(newUser, dispatch, 'email');
+      user.federalReps = json.results;
+      return saveUser(user, dispatch, 'email');
     })
     .catch(err => Promise.reject(err));
 }
 
 function saveUser(user, dispatch, provider) {
-  console.log('SAVE USER', user, dispatch, provider);
-
-    // SAVE USER IN DB
-    // CLEAN UP BELOW 
-
   const newUser = {
     id: user.uid || user.id,
     refreshToken: user.refreshToken,
-    name: user.displayName || 'anonymous',
+    name: user.displayName || user.name || 'anonymous',
     userPhoto: user.photoURL || 'http://fillmurray.com/g/200/200',
-    provider: provider || 'email',
+    provider: provider || user.providerData.providerId || 'email',
     address: user.address,
     email: user.email || 'no email given',
+    federalReps: user.federalReps,
   };
 
   localforage.setItem('user', newUser)
     .then(userResult => {
+      console.log('fukced', user, newUser);
       database.ref(`/users/${user.uid}`)
         .set(newUser)
         .catch(err => Promise.reject(err));
       dispatch(authUser(userResult));
+      dispatch({
+        type: RECEIVE_USER_REPS,
+        payload: user.federalReps 
+      });
       checkWindowPath(userResult);
       return dispatch(toggleIsFetching());
       // return userResult;
