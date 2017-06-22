@@ -6,7 +6,6 @@ import {
   getAuthUpdate,
   unauthUser,
 } from '../../actions';
-import localforage from 'localforage';
 
 class Header extends Component {
   constructor(props) {

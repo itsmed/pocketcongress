@@ -13,6 +13,7 @@ export {
 
 export {
   validatePassword,
+  getFederalReps,
 } from './helpers';
 
 export {

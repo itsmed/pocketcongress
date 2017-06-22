@@ -7,6 +7,7 @@ import {
   receiveErrorMessage,
   signInWithEmailAndPassword,
   validatePassword,
+  getAuthUpdate,
 } from '../../actions';
 
 class SignIn extends Component {
@@ -23,6 +24,12 @@ class SignIn extends Component {
     this.handleEmailFormChange = this.handleEmailFormChange.bind(this);
     this.handlePasswordFormChange = this.handlePasswordFormChange.bind(this);
     this.validateInfo = this.validateInfo.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if ((nextProps.user !== null ) && ( this.props.user !== nextProps.user) ) {
+      window.location.replace('/profile');
+    }
   }
 
   handleProviderSubmit(provider) {
@@ -93,5 +100,6 @@ export default connect(mapStateToProps , {
   receiveErrorMessage,
   signInWithEmailAndPassword,
   validatePassword,
+  getAuthUpdate,
 })(SignIn);
 

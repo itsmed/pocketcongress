@@ -11,6 +11,7 @@ import {
   receiveErrorMessage,
   validatePassword,
   setUserDistrict,
+  getFederalReps,
 } from '../../actions';
 
 class SignUp extends Component {
@@ -23,6 +24,7 @@ class SignUp extends Component {
       passwordValue: '',
       userNameValue: '',
       possibleAddresses: [],
+      federalReps: [],
       verifiedAddress: null,
       fetching: false,
     };
@@ -76,14 +78,23 @@ class SignUp extends Component {
   }
 
   handleFormSubmit() {
-    this.props.createUserWithEmailAndPassword(this.state.emailValue, this.state.passwordValue, this.state.userName, this.state.verifiedAddress);
+    this.props.createUserWithEmailAndPassword(this.state.emailValue, this.state.passwordValue, this.state.userName, this.state.verifiedAddress, this.state.federalReps);
   }
 
   handleAddressSubmit(addr) {
-    this.setState({
-      verifiedAddress: addr,
-      currentStep: 1,
-    });
+    const self = this;
+    console.log('handleAddressSubmit called with',);
+    return getFederalReps(addr.address_components.state, addr.fields.congressional_district.district_number)
+        .then(reps => {
+          console.log('got reps in component!', reps);
+          self.setState({
+            verifiedAddress: addr,
+            currentStep: 1,
+            federalReps: reps,
+          });
+        })
+        .catch(err => console.log('everything is fukced', err.message));
+    
   }
 
   receiveAddresses(key, addr) {

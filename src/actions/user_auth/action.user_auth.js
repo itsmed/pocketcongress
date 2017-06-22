@@ -21,8 +21,10 @@ export const authUser = user => ({
   payload: user
 });
 
-export const unauthUser = (id) => {
+export const unauthUser = () => {
+  console.log('ABOUT TO UNAUTH USER', localforage.getItem('user'));
   localforage.removeItem('user');
+  console.log('DElETED USER', localforage.getItem('user'));
   if (window.location.pathname === '/profile') {
     window.location.replace('/');
   }
@@ -33,42 +35,43 @@ export const unauthUser = (id) => {
 };
 
 export const getAuthUpdate = () => {
+  console.log('GETTING AUTH UPDATE');
   return dispatch => {
     dispatch(toggleIsFetching());
     return localforage.getItem('user')
       .then(user => {
-        if (!user) {
+        console.log('THE USER CAUSING ALL OF THE TROUBLE', user);
+        if (user !== null) {
+          console.log('USER DOES NOT EQUAL NULL IN GET AUTH UPDATE WHERE THE RECURSIVE SPOT', user);
+          checkWindowPath(user);
+          dispatch(toggleIsFetching());
+          return dispatch(authUser(user));
+        } else {
+          console.log('would it not be fucked if we got here??????????????????', user);
           return firebase.auth().getRedirectResult()
           .then(result => {
             if (!result.user) {
-              return null;
+              return dispatch(toggleIsFetching());
             }
-            console.log('results from redirect', result);
-            saveUser(result.user, dispatch);
-            return user;
+            return saveUser(result.user, dispatch);
           });
-        } else {
-          dispatch(authUser(user));
-          return user;
         }
-      })
-      .then(user => {
-        checkWindowPath(user);
-        dispatch(toggleIsFetching());
       })
       .catch(err => console.log('[LOCALFORAGE] most likely the cause', err));
   };
 };
 
-export const createUserWithEmailAndPassword = (email, password, userName, addr) => {
+export const createUserWithEmailAndPassword = (email, password, userName, address, federalReps) => {
   return dispatch => {
     dispatch(toggleIsFetching());
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(user => {
-        user.address = addr;
-        user.name = userName;
-        return getUserDistrictInfo(user, dispatch);
+        console.log('inside createUserWithEmailAndPassword .then!', user);
+        user.userName = userName;
+        user.address = address;
+        user.federalReps = federalReps;
+        return saveUser(user, dispatch);
       })
       .catch(function(error) {
         // Handle Errors here.
@@ -82,7 +85,7 @@ export const createUserWithEmailAndPassword = (email, password, userName, addr) 
   };
 };
 
-export const authorizeNewUserWithProvider = (method, addr) => {
+export const authorizeNewUserWithProvider = (method, address) => {
   console.log('calling auth user', method);
   return dispatch => {
     let provider;
@@ -100,18 +103,6 @@ export const authorizeNewUserWithProvider = (method, addr) => {
     provider.addScope('email');
 
     return firebase.auth().signInWithRedirect(provider)
-      .then(function(result) {
-
-        // This gives you a Google Access Token.
-        const token = result.credential.accessToken;
-        console.log('[NEVER SHOWN] token', token);
-        // The signed-in user info.
-        const user = result.user;
-        user.address = addr;
-        return saveUser(user, dispatch, 'google');
-        // console.log('[NEVER SHOWN] user', user);
-        // return dispatch(authUser(user));
-      })
       .catch(err => {
         console.log('err', err);
       });
@@ -122,50 +113,26 @@ export const signInWithEmailAndPassword = (email, password) => {
   return dispatch => { 
     return firebase.auth().signInWithEmailAndPassword(email, password)
     .then(user => {
-      saveUser(user, dispatch);
-      return user;
+      console.log('I SEE THE REPS INTHE DATABASE............ -_-', user);
+      return saveUser(user, dispatch);
     })
     .catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
       // ...
-      console.log('error sigingin in with meila', errorMessage);
+      console.log('error signing in with email', errorMessage);
     });
   };
 };
 
-function getUserDistrictInfo(user, dispatch) {
-  const data = {
-    state: user.address.address_components.state,
-    district: user.address.fields.congressional_district.district_number,
-  };
-
-  fetch(API_BASE.concat('/api/reps/all/federal/by-district'), {
-    method: 'POST',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({"data": data })
-  })
-    .then(res => {
-      return res.json();
-    })
-    .then(json => {
-      user.federalReps = json.results;
-      return saveUser(user, dispatch, 'email');
-    })
-    .catch(err => Promise.reject(err));
-}
-
-function saveUser(user, dispatch, provider) {
+function saveUser(user, dispatch) {
   const newUser = {
     id: user.uid || user.id,
     refreshToken: user.refreshToken,
-    name: user.displayName || user.name || 'anonymous',
+    name: user.displayName || 'anonymous',
     userPhoto: user.photoURL || 'http://fillmurray.com/g/200/200',
-    provider: provider || user.providerData.providerId || 'email',
+    provider: user.providerData.providerId || 'email',
     address: user.address,
     email: user.email || 'no email given',
     federalReps: user.federalReps,
@@ -173,18 +140,17 @@ function saveUser(user, dispatch, provider) {
 
   localforage.setItem('user', newUser)
     .then(userResult => {
-      console.log('fukced', user, newUser);
-      database.ref(`/users/${user.uid}`)
-        .set(newUser)
-        .catch(err => Promise.reject(err));
+      console.log('user result', userResult);
       dispatch(authUser(userResult));
       dispatch({
         type: RECEIVE_USER_REPS,
-        payload: user.federalReps 
+        payload: userResult.federalReps 
       });
       checkWindowPath(userResult);
-      return dispatch(toggleIsFetching());
-      // return userResult;
+      dispatch(toggleIsFetching());
+      return database.ref(`/users/${user.uid}`)
+        .set(newUser)
+        .catch(err => Promise.reject(err));
     })
     .catch(error => {
       console.log('[LOCAL FORAGE] save user error', error.message);
@@ -194,6 +160,7 @@ function saveUser(user, dispatch, provider) {
 
 
 function checkWindowPath(user) {
+  console.log('window PAATH', user, window.location.pathname);
   if ((user !== null && window.location.pathname === '/signin') || ( user !== null && window.location.pathname === '/signup')) {
     window.location.replace('/profile');
   }

@@ -7,6 +7,8 @@ import {
 } from 'react-redux';
 
 import App from './App';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap-theme.css';
 import './index.css';
 import store from './make_store';
 
