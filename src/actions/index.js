@@ -19,7 +19,7 @@ export {
 export {
   authorizeNewUserWithProvider,
   authUser,
-  createUserWithEmailAndPassword,
+  createUser,
   getAuthUpdate,
   signInWithEmailAndPassword,
   unauthUser,

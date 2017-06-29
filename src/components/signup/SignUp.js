@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { validate } from 'email-validator';
 
+import firebase from '../../firebase_config';
+
 import AddressForm from '../../containers/addressform/AddressForm';
 
 import { 
   authorizeNewUserWithProvider,
   getAuthUpdate,
-  createUserWithEmailAndPassword,
+  createUser,
   receiveErrorMessage,
   validatePassword,
   setUserDistrict,
@@ -27,6 +29,7 @@ class SignUp extends Component {
       federalReps: [],
       verifiedAddress: null,
       fetching: false,
+      user: null,
     };
   
     this.handleProviderSubmit = this.handleProviderSubmit.bind(this);
@@ -41,6 +44,25 @@ class SignUp extends Component {
     this.toggleFetching = this.toggleFetching.bind(this);
     this.signUpLoadingCard = this.signUpLoadingCard.bind(this);
   }
+
+  componentDidMount() {
+    const self = this;
+    firebase.auth().getRedirectResult()
+      .then(result => {
+        console.log('getting redirect result from firebase', result, result.user);
+        if (result.user) {
+          return self.setState({
+            user: result.user,
+            currentStep: 1,
+          });
+        }
+      })
+      .catch(err => console.log('[FIREBASE COMPONENT DID MOUNT]', err));
+  }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   console.log('component did update', prevProps, prevState);
+  // }
 
   handleProviderSubmit(provider) {
     this.props.authorizeNewUserWithProvider(provider);
@@ -78,21 +100,43 @@ class SignUp extends Component {
   }
 
   handleFormSubmit() {
-    this.props.createUserWithEmailAndPassword(this.state.emailValue, this.state.passwordValue, this.state.userName, this.state.verifiedAddress, this.state.federalReps);
+    const self = this;
+    // const user = {
+    //   email: this.state.emailValue,
+    //   displayName: this.state.userName
+    // };
+    // this.setState({
+    //   user,
+    //   currentStep: 1
+    // });
+    return firebase.auth().createUserWithEmailAndPassword(this.state.emailValue, this.state.passwordValue)
+      .then(result => {
+        console.log('created user', result);
+        const newUser = Object.assign({}, result, {
+          displayName: self.state.userName
+        });
+        self.setState({
+          user: newUser,
+          currentStep: 1
+        });
+      })
+      .catch(err => console.log('ERROR CREATING USER', err));
+    // this.props.createUser(this.state.emailValue, this.state.passwordValue, this.state.userName, this.state.verifiedAddress, this.state.federalReps);
   }
 
   handleAddressSubmit(addr) {
     const self = this;
-    console.log('handleAddressSubmit called with',);
+    console.log('handleAddressSubmit called with', addr);
     return getFederalReps(addr.address_components.state, addr.fields.congressional_district.district_number)
         .then(reps => {
-          console.log('got reps in component!', reps);
+          console.log('got reps in component!', reps, self.state);
           self.setState({
             verifiedAddress: addr,
-            currentStep: 1,
+            currentStep: 2,
             federalReps: reps,
           });
         })
+        .then(() => this.props.createUser(this.state.user, this.state.verifiedAddress, this.state.federalReps))
         .catch(err => console.log('everything is fukced', err.message));
     
   }
@@ -128,6 +172,9 @@ class SignUp extends Component {
           this.signUpLoadingCard()
         :
         currentStep === 0 ?
+          this.renderSignUpForm()
+        :
+        currentStep === 1 ?
           <div>
             <h4>Set Your Congressional District</h4>
             <p>Set your district. You can search for other ones AT THIS LINK</p>
@@ -138,9 +185,6 @@ class SignUp extends Component {
               toggleFetching={ this.toggleFetching }
             />
           </div>
-        :
-        currentStep === 1 ?
-          this.renderSignUpForm()
         :
         currentStep === 2 ?
           'step3'
@@ -176,7 +220,7 @@ class SignUp extends Component {
           value="Submit"
         />
       </form>
-      <button onClick={ () => this.handleProviderSubmit('google', this.state.verifiedAddress) }>Sign In With Google</button>
+      <button onClick={ () => this.handleProviderSubmit('google') }>Sign In With Google</button>
     </div>;
   }
 }
@@ -185,7 +229,7 @@ const mapStateToProps = (state) => ({user: state.user});
 export default connect(mapStateToProps , {
   authorizeNewUserWithProvider,
   getAuthUpdate,
-  createUserWithEmailAndPassword,
+  createUser,
   receiveErrorMessage,
   setUserDistrict,
 })(SignUp);

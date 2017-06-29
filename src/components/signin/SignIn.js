@@ -34,7 +34,6 @@ class SignIn extends Component {
 
   handleProviderSubmit(provider) {
     this.props.authorizeNewUserWithProvider(provider);
-    this.incrementCurrentStep();
   }
 
   handleEmailFormChange() {

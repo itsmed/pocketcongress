@@ -46,46 +46,53 @@ export const getAuthUpdate = () => {
           checkWindowPath(user);
           dispatch(toggleIsFetching());
           return dispatch(authUser(user));
-        } else {
-          console.log('would it not be fucked if we got here??????????????????', user);
-          return firebase.auth().getRedirectResult()
-          .then(result => {
-            if (!result.user) {
-              return dispatch(toggleIsFetching());
-            }
-            return saveUser(result.user, dispatch);
-          });
         }
+        // else {
+        //   console.log('would it not be fucked if we got here??????????????????', user);
+        //   return firebase.auth().getRedirectResult()
+        //   .then(result => {
+        //     if (!result.user) {
+        return dispatch(toggleIsFetching());
+        //     }
+        //     return saveUser(result.user, dispatch);
+        //   });
+        // }
       })
       .catch(err => console.log('[LOCALFORAGE] most likely the cause', err));
   };
 };
 
-export const createUserWithEmailAndPassword = (email, password, userName, address, federalReps) => {
+export const createUser = (user, address, federalReps) => {
   return dispatch => {
+    console.log('create user', user, address, federalReps);
     dispatch(toggleIsFetching());
-
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then(user => {
-        console.log('inside createUserWithEmailAndPassword .then!', user);
-        user.userName = userName;
-        user.address = address;
-        user.federalReps = federalReps;
-        return saveUser(user, dispatch);
-      })
-      .catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log('error with email', errorCode, errorMessage);
-        dispatch(receiveErrorMessage(errorMessage));
-        return dispatch(toggleIsFetching());
-        // ...
-      });
+    const newUser = Object.assign({}, user, {
+      address,
+      federalReps
+    });
+    return saveUser(newUser, dispatch);
+    console.log('NEW USER', newUser);
+    // firebase.auth().createUserWithEmailAndPassword(email, password)
+    //   .then(user => {
+    //     console.log('inside createUserWithEmailAndPassword .then!', user);
+    //     user.userName = userName;
+    //     user.address = address;
+    //     user.federalReps = federalReps;
+    //     return saveUser(user, dispatch);
+    //   })
+    //   .catch(function(error) {
+    //     // Handle Errors here.
+    //     var errorCode = error.code;
+    //     var errorMessage = error.message;
+    //     console.log('error with email', errorCode, errorMessage);
+    //     dispatch(receiveErrorMessage(errorMessage));
+    //     return dispatch(toggleIsFetching());
+    //     // ...
+    //   });
   };
 };
 
-export const authorizeNewUserWithProvider = (method, address) => {
+export const authorizeNewUserWithProvider = (method) => {
   console.log('calling auth user', method);
   return dispatch => {
     let provider;
@@ -103,6 +110,10 @@ export const authorizeNewUserWithProvider = (method, address) => {
     provider.addScope('email');
 
     return firebase.auth().signInWithRedirect(provider)
+      .then(user => {
+        console.log('INSIDE auth user with provider dot then!', user);
+        return user;
+      })
       .catch(err => {
         console.log('err', err);
       });
@@ -113,8 +124,18 @@ export const signInWithEmailAndPassword = (email, password) => {
   return dispatch => { 
     return firebase.auth().signInWithEmailAndPassword(email, password)
     .then(user => {
-      console.log('I SEE THE REPS INTHE DATABASE............ -_-', user);
-      return saveUser(user, dispatch);
+      console.log('I SEE THE REPS INTHE DATABASE............ -_-', user.uid);
+      return database.ref(`/users/${user.uid}`).once('value').then(function(snap) {
+        user = snap.val();
+        console.log('THIS IS THE SNAP', user);
+        localforage.setItem('user', user);
+        dispatch(authUser(user));
+        dispatch({
+          type: RECEIVE_USER_REPS,
+          payload: user.federalReps 
+        });
+        checkWindowPath(user);
+      }); 
     })
     .catch(function(error) {
       // Handle Errors here.
@@ -127,33 +148,34 @@ export const signInWithEmailAndPassword = (email, password) => {
 };
 
 function saveUser(user, dispatch) {
+  console.log('INSIDE SAVE USER', user);
   const newUser = {
-    id: user.uid || user.id,
-    refreshToken: user.refreshToken,
-    name: user.displayName || 'anonymous',
-    userPhoto: user.photoURL || 'http://fillmurray.com/g/200/200',
-    provider: user.providerData.providerId || 'email',
     address: user.address,
-    email: user.email || 'no email given',
+    name: user.displayName,
+    email: user.email,
     federalReps: user.federalReps,
+    uid: user.uid,
+    // photoUrl: user.photoUrl,
+    refreshToken: user.refreshToken,
   };
-
+  console.log('USER TO BE SAVED', newUser);
   localforage.setItem('user', newUser)
     .then(userResult => {
       console.log('user result', userResult);
-      dispatch(authUser(userResult));
+      dispatch(authUser(newUser));
       dispatch({
         type: RECEIVE_USER_REPS,
-        payload: userResult.federalReps 
+        payload: newUser.federalReps 
       });
-      checkWindowPath(userResult);
+      checkWindowPath(newUser);
       dispatch(toggleIsFetching());
-      return database.ref(`/users/${user.uid}`)
+      return database.ref(`/users/${newUser.uid}`)
         .set(newUser)
         .catch(err => Promise.reject(err));
     })
     .catch(error => {
       console.log('[LOCAL FORAGE] save user error', error.message);
+      return dispatch(toggleIsFetching());
       // return Promise.reject(error);
     });
 }
