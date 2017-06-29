@@ -147,11 +147,20 @@ export const signInWithEmailAndPassword = (email, password) => {
   };
 };
 
+export const setUser = (user) => {
+  return dispatch => {
+    return database.ref(`/users/${user.uid}`).once('value').then(function(snap) {
+      return saveUser(snap.val(), dispatch);
+    })
+    .catch(err => console.log('GOTTA HANDLE THE SET USER ERROR', err));
+  };
+};
+
 function saveUser(user, dispatch) {
   console.log('INSIDE SAVE USER', user);
   const newUser = {
     address: user.address,
-    name: user.displayName,
+    name: user.displayName || user.name,
     email: user.email,
     federalReps: user.federalReps,
     uid: user.uid,
@@ -162,15 +171,15 @@ function saveUser(user, dispatch) {
   localforage.setItem('user', newUser)
     .then(userResult => {
       console.log('user result', userResult);
-      dispatch(authUser(newUser));
+      dispatch(authUser(userResult));
       dispatch({
         type: RECEIVE_USER_REPS,
-        payload: newUser.federalReps 
+        payload: userResult.federalReps 
       });
-      checkWindowPath(newUser);
+      checkWindowPath(userResult);
       dispatch(toggleIsFetching());
       return database.ref(`/users/${newUser.uid}`)
-        .set(newUser)
+        .set(userResult)
         .catch(err => Promise.reject(err));
     })
     .catch(error => {

@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { validate } from 'email-validator';
 
+import firebase from '../../firebase_config';
+
 import {
   authorizeNewUserWithProvider,
   receiveErrorMessage,
   signInWithEmailAndPassword,
   validatePassword,
-  getAuthUpdate,
+  setUser,
 } from '../../actions';
 
 class SignIn extends Component {
@@ -30,6 +32,19 @@ class SignIn extends Component {
     if ((nextProps.user !== null ) && ( this.props.user !== nextProps.user) ) {
       window.location.replace('/profile');
     }
+  }
+
+  componentDidMount() {
+    const self = this;
+    firebase.auth().getRedirectResult()
+      .then(result => {
+        console.log('getting redirect result from firebase', result, result.user);
+        console.log('user from redirect', result);
+        if (result.user) {
+          this.props.setUser(result.user);
+        }
+      })
+      .catch(err => console.log('[FIREBASE COMPONENT DID MOUNT]', err));
   }
 
   handleProviderSubmit(provider) {
@@ -99,6 +114,6 @@ export default connect(mapStateToProps , {
   receiveErrorMessage,
   signInWithEmailAndPassword,
   validatePassword,
-  getAuthUpdate,
+  setUser,
 })(SignIn);
 

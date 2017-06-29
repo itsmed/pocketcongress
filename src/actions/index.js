@@ -21,6 +21,7 @@ export {
   authUser,
   createUser,
   getAuthUpdate,
+  setUser,
   signInWithEmailAndPassword,
   unauthUser,
 } from './user_auth/action.user_auth';
