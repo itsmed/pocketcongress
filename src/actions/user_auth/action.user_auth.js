@@ -24,7 +24,6 @@ export const authUser = user => ({
 export const unauthUser = () => {
   console.log('ABOUT TO UNAUTH USER', localforage.getItem('user'));
   localforage.removeItem('user');
-  console.log('DElETED USER', localforage.getItem('user'));
   if (window.location.pathname === '/profile') {
     window.location.replace('/');
   }
@@ -35,28 +34,16 @@ export const unauthUser = () => {
 };
 
 export const getAuthUpdate = () => {
-  console.log('GETTING AUTH UPDATE');
   return dispatch => {
     dispatch(toggleIsFetching());
     return localforage.getItem('user')
       .then(user => {
-        console.log('THE USER CAUSING ALL OF THE TROUBLE', user);
         if (user !== null) {
-          console.log('USER DOES NOT EQUAL NULL IN GET AUTH UPDATE WHERE THE RECURSIVE SPOT', user);
           checkWindowPath(user);
-          dispatch(toggleIsFetching());
-          return dispatch(authUser(user));
+          dispatch(authUser(user));
+          return dispatch(toggleIsFetching());
         }
-        // else {
-        //   console.log('would it not be fucked if we got here??????????????????', user);
-        //   return firebase.auth().getRedirectResult()
-        //   .then(result => {
-        //     if (!result.user) {
         return dispatch(toggleIsFetching());
-        //     }
-        //     return saveUser(result.user, dispatch);
-        //   });
-        // }
       })
       .catch(err => console.log('[LOCALFORAGE] most likely the cause', err));
   };
@@ -64,36 +51,16 @@ export const getAuthUpdate = () => {
 
 export const createUser = (user, address, federalReps) => {
   return dispatch => {
-    console.log('create user', user, address, federalReps);
     dispatch(toggleIsFetching());
     const newUser = Object.assign({}, user, {
       address,
       federalReps
     });
     return saveUser(newUser, dispatch);
-    console.log('NEW USER', newUser);
-    // firebase.auth().createUserWithEmailAndPassword(email, password)
-    //   .then(user => {
-    //     console.log('inside createUserWithEmailAndPassword .then!', user);
-    //     user.userName = userName;
-    //     user.address = address;
-    //     user.federalReps = federalReps;
-    //     return saveUser(user, dispatch);
-    //   })
-    //   .catch(function(error) {
-    //     // Handle Errors here.
-    //     var errorCode = error.code;
-    //     var errorMessage = error.message;
-    //     console.log('error with email', errorCode, errorMessage);
-    //     dispatch(receiveErrorMessage(errorMessage));
-    //     return dispatch(toggleIsFetching());
-    //     // ...
-    //   });
   };
 };
 
 export const authorizeNewUserWithProvider = (method) => {
-  console.log('calling auth user', method);
   return dispatch => {
     let provider;
     dispatch(toggleIsFetching());
@@ -111,7 +78,6 @@ export const authorizeNewUserWithProvider = (method) => {
 
     return firebase.auth().signInWithRedirect(provider)
       .then(user => {
-        console.log('INSIDE auth user with provider dot then!', user);
         return user;
       })
       .catch(err => {
@@ -124,10 +90,8 @@ export const signInWithEmailAndPassword = (email, password) => {
   return dispatch => { 
     return firebase.auth().signInWithEmailAndPassword(email, password)
     .then(user => {
-      console.log('I SEE THE REPS INTHE DATABASE............ -_-', user.uid);
       return database.ref(`/users/${user.uid}`).once('value').then(function(snap) {
         user = snap.val();
-        console.log('THIS IS THE SNAP', user);
         localforage.setItem('user', user);
         dispatch(authUser(user));
         dispatch({
@@ -141,8 +105,8 @@ export const signInWithEmailAndPassword = (email, password) => {
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
-      // ...
-      console.log('error signing in with email', errorMessage);
+
+      console.log(errorCode, 'error signing in with email', errorMessage);
     });
   };
 };
@@ -185,7 +149,6 @@ function saveUser(user, dispatch) {
     .catch(error => {
       console.log('[LOCAL FORAGE] save user error', error.message);
       return dispatch(toggleIsFetching());
-      // return Promise.reject(error);
     });
 }
 

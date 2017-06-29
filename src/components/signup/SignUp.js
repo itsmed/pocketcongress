@@ -60,10 +60,6 @@ class SignUp extends Component {
       .catch(err => console.log('[FIREBASE COMPONENT DID MOUNT]', err));
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   console.log('component did update', prevProps, prevState);
-  // }
-
   handleProviderSubmit(provider) {
     this.props.authorizeNewUserWithProvider(provider);
   }
@@ -76,8 +72,6 @@ class SignUp extends Component {
     if (validatePassword(this.state.passwordValue) === -1) {
       return this.props.receiveErrorMessage(`Passwords must be at least 8 characters long, including at least one number, special character, lowercase letter and capital letter`);
     }
-
-    // GET USER DISTRICT INFO (step 2) then:
     this.handleFormSubmit();
   }
 
@@ -101,14 +95,6 @@ class SignUp extends Component {
 
   handleFormSubmit() {
     const self = this;
-    // const user = {
-    //   email: this.state.emailValue,
-    //   displayName: this.state.userName
-    // };
-    // this.setState({
-    //   user,
-    //   currentStep: 1
-    // });
     return firebase.auth().createUserWithEmailAndPassword(this.state.emailValue, this.state.passwordValue)
       .then(result => {
         console.log('created user', result);
@@ -121,7 +107,6 @@ class SignUp extends Component {
         });
       })
       .catch(err => console.log('ERROR CREATING USER', err));
-    // this.props.createUser(this.state.emailValue, this.state.passwordValue, this.state.userName, this.state.verifiedAddress, this.state.federalReps);
   }
 
   handleAddressSubmit(addr) {
@@ -138,7 +123,6 @@ class SignUp extends Component {
         })
         .then(() => this.props.createUser(this.state.user, this.state.verifiedAddress, this.state.federalReps))
         .catch(err => console.log('everything is fukced', err.message));
-    
   }
 
   receiveAddresses(key, addr) {

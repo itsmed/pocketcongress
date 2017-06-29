@@ -38,10 +38,8 @@ class SignIn extends Component {
     const self = this;
     firebase.auth().getRedirectResult()
       .then(result => {
-        console.log('getting redirect result from firebase', result, result.user);
-        console.log('user from redirect', result);
         if (result.user) {
-          this.props.setUser(result.user);
+          return self.props.setUser(result.user);
         }
       })
       .catch(err => console.log('[FIREBASE COMPONENT DID MOUNT]', err));
