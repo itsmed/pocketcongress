@@ -3,13 +3,12 @@ import localforage from 'localforage';
 import {
   RECEIVE_FLOOR_ITEMS,
   API_BASE,
-  TOGGLE_IS_FETCHING,
 } from '../consts';
 import { toggleIsFetching } from '../is_fetching/action.is_fetching';
 
 export const requestFloorItems = (month, year) => {
   return (dispatch) => {
-    dispatch({ type: TOGGLE_IS_FETCHING });
+    dispatch(toggleIsFetching());
     localforage.getItem(`${month}/${year}`)
     .then(results => {
       if (!results) {
@@ -24,23 +23,26 @@ export const requestFloorItems = (month, year) => {
         })
         .then(res => res.json())
         .then(floorItems => {
-          dispatch({ type: TOGGLE_IS_FETCHING });
           localforage.setItem(`${month}/${year}`, floorItems)
-          .then(savedData => console.log('[LOCAL FORAGE] saved', savedData))
+          .then(savedData => {
+            console.log('[LOCAL FORAGE] saved', savedData);
+            dispatch({
+              type: RECEIVE_FLOOR_ITEMS,
+              payload: floorItems
+            });
+            
+            return dispatch(toggleIsFetching());
+          })
           .catch(err => Promise.reject(err));
-          return dispatch({
-            type: RECEIVE_FLOOR_ITEMS,
-            payload: floorItems
-          });
         })
         .catch(err => Promise.reject(err));
       } else {
         console.log('[LOCAL FORAGE] found stuff!', results);
-        dispatch(toggleIsFetching());
-        return dispatch({
+        dispatch({
           type: RECEIVE_FLOOR_ITEMS,
           payload: results
         });
+        return dispatch(toggleIsFetching());
       }
     })
     .catch(err => {

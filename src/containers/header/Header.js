@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+
+
 import { connect } from 'react-redux';
+
+import { Glyphicon } from 'react-bootstrap';
 
 import {
   getAuthUpdate,
@@ -26,6 +30,9 @@ class Header extends Component {
     const { user } = this.props;
     return <header>
       <ul>
+        <li>
+          <Glyphicon glyph="menu-hamburger" />
+        </li>
         <li><Link to="/">Landing</Link></li>
         <li><Link to="/floor-items">Floor Items</Link></li>
         {

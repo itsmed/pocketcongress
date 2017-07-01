@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { requestFloorItems } from '../../actions';
 import FloorItem from '../../components/flooritem/FloorItem';
 import DropDown from '../../components/dropdown/DropDown';
+import DateDropDown from '../../components/datedropdown/DateDropDown';
+
 
 class FloorItemList extends Component {
   constructor(props) {
@@ -14,11 +16,11 @@ class FloorItemList extends Component {
     };
 
     this.setActiveChamber = this.setActiveChamber.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
-  componentWillMount() {
-    let now = new Date();
-    this.props.requestFloorItems((now.getMonth() + 1), now.getFullYear());
+  handleSearch(month, year) {
+    console.log('serach', month, year);
   }
 
   setActiveChamber(activeChamber) {
@@ -35,6 +37,7 @@ class FloorItemList extends Component {
         action={ this.setActiveChamber }
         items={['all', 'house', 'senate']}
       />
+      <DateDropDown submit={ this.handleSearch } />
       <ul>
         {
           activeChamber === 'senate' ?

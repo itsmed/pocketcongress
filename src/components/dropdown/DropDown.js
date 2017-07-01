@@ -6,7 +6,7 @@ class DropDown extends Component {
 
     this.state = {
       expanded: false,
-      displayIndex: 0
+      displayIndex: this.props.displayIndex || 0
     };
 
     this.toggleExpanded = this.toggleExpanded.bind(this);
@@ -33,7 +33,7 @@ class DropDown extends Component {
 
   render() {
     const { items } = this.props;
-    return <ul onClick={ this.toggleExpanded }>
+    return <ul onClick={ this.toggleExpanded } style={this.props.styles}>
       {
         this.state.expanded ?
           items.map((item, index) => <li onClick={ () => this.doAction(item, index) } key={ item.toString()}>{item }</li>)
