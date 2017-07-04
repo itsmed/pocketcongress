@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 const FloorItemPreview = (props) => {
   const { item } = props;
-  console.log('item preview', item);
   return (
     <div>
      { 
@@ -20,13 +19,13 @@ const FloorItemPreview = (props) => {
 };
 
 function displayBill(item) {
-  console.log('item', item);
+  // console.log('item', item);
   return <div>
     <h3>Bill: {item.bill.number}</h3>
     <p>Title: {item.bill.title}</p>
     <p>Question: {item.question}</p>
     <p>Description: {item.description}</p>
-    <Link to={'/bill/details/' + item.bill.number.toLowerCase().replace(/\W/g, '')}>
+    <Link to={'/bill/details/' + item.congress + '/' + item.bill.number.toLowerCase().replace(/\W/g, '')}>
       <button>More</button>
     </Link>
   </div>;

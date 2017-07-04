@@ -20,6 +20,10 @@ import {
   reducerErrorMessage,
 } from './error_message/reducer.error_message';
 
+import {
+  reducerSetDate,
+} from './set_date/reducer.set_date';
+
 export const rootReducer = combineReducers({
   user: reducerUserAuth,
   isFetching: reducerIsFetching,
@@ -27,4 +31,5 @@ export const rootReducer = combineReducers({
   federalReps: reducerSetFederalReps,
   federalFloorItems: reducerFederalFloorItems,
   errorMessage: reducerErrorMessage,
+  date: reducerSetDate
 });

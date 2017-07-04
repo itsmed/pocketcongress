@@ -9,6 +9,7 @@ export {
   RECEIVE_FLOOR_ITEMS,
   ACKNOWLEDGE_ERROR_MESSAGE,
   RECEIVE_ERROR_MESSAGE,
+  SET_DATE,
 } from './consts';
 
 export {
@@ -43,4 +44,8 @@ export {
   receiveErrorMessage,
   acknowledgeErrorMessage,
 } from './error_message/action.error_message';
+
+export {
+  setDate,
+} from './set_date/action.set_date';
 

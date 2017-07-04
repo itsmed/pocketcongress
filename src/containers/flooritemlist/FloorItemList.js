@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { requestFloorItems } from '../../actions';
 import FloorItem from '../../components/flooritem/FloorItem';
 import DropDown from '../../components/dropdown/DropDown';
 import DateDropDown from '../../components/datedropdown/DateDropDown';
 
+import {
+  requestFloorItems,
+  setDate,
+} from '../../actions';
 
 class FloorItemList extends Component {
   constructor(props) {
@@ -20,8 +23,11 @@ class FloorItemList extends Component {
   }
 
   handleSearch(month, year) {
+    console.log('requesting floor items', month, year);
+    this.props.setDate(month, year);
     this.props.requestFloorItems(month, year);  
   }
+
 
   setActiveChamber(activeChamber) {
     this.setState({
@@ -31,14 +37,17 @@ class FloorItemList extends Component {
 
   render() {
     const items = this.props.floorItems;
-    console.log('items fucked', items);
     const { activeChamber } = this.state;
     return <div>
       <DropDown
         action={ this.setActiveChamber }
         items={['all', 'house', 'senate']}
       />
-      <DateDropDown submit={ this.handleSearch } />
+      <DateDropDown 
+        submit={ this.handleSearch } 
+        month={ this.props.date.month }
+        year={ this.props.date.year }
+      />
       <ul>
         {
           activeChamber === 'senate' ?
@@ -59,7 +68,8 @@ class FloorItemList extends Component {
 function mapStateToProps(state) {
   return {
     floorItems: state.federalFloorItems,
+    date: state.date
   };
 }
 
-export default connect(mapStateToProps, { requestFloorItems })(FloorItemList);
+export default connect(mapStateToProps, { requestFloorItems, setDate })(FloorItemList);

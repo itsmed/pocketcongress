@@ -45,7 +45,7 @@ const App = (props) => (
             <Route path="/signin" exact component={SignIn} />
             <Route path="/signup" exact component={SignUp} />
             <Route path="/profile" component={UserProfile} />
-            <Route path="/bill/details/:id" component={BillDetails}/>
+            <Route path="/bill/details/:congress/:id" component={BillDetails}/>
             <Route component={NoMatch}/>
           </Switch>
       }

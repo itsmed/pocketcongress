@@ -18,8 +18,8 @@ class DateDropDown extends Component {
     super(props);
 
     this.state = {
-      month: now.getMonth() + 1,
-      year: now.getFullYear(),
+      month: this.props.month,
+      year: this.props.year,
     };
 
     this.setStateMonth = this.setStateMonth.bind(this);
@@ -45,7 +45,7 @@ class DateDropDown extends Component {
       <span>Month</span>
       <DropDown
         items={ months }
-        displayIndex={ months[months.indexOf(now.getMonth())] }
+        displayIndex={ months.indexOf(this.props.month) }
         action={ e => this.setStateMonth(e)}
         styles={{maxHeight: '5em', overflow: 'scroll', border: 'solid', width: '4.5em'}}
       />
@@ -53,6 +53,7 @@ class DateDropDown extends Component {
       <DropDown
         items={ years }
         action={ e => this.setStateYear(e)}
+        displayIndex={ years.indexOf(this.props.year) }
         styles={{maxHeight: '5em', overflow: 'scroll', border: 'solid', width: '6.5em'}}
       />
       <Button bsSize="large" onClick={ this.handleSubmit }>Search</Button>
