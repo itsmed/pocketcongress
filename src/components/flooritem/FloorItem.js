@@ -20,12 +20,15 @@ const FloorItemPreview = (props) => {
 };
 
 function displayBill(item) {
+  console.log('item', item);
   return <div>
     <h3>Bill: {item.bill.number}</h3>
     <p>Title: {item.bill.title}</p>
     <p>Question: {item.question}</p>
     <p>Description: {item.description}</p>
-    <button>More</button>
+    <Link to={'/bill/details/' + item.bill.number.toLowerCase().replace(/\W/g, '')}>
+      <button>More</button>
+    </Link>
   </div>;
 }
 
@@ -36,7 +39,7 @@ function displayNomination(item) {
     <p>Agency: {item.nomination.agency}</p>
     <p>Question: {item.question}</p>
     <p>Description: {item.description}</p>
-    <p>Description: {item.description}</p>
+    <button>More</button>
   </div>;
 }
 

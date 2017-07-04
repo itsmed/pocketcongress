@@ -8,6 +8,7 @@ import {
 import { connect } from 'react-redux';
 
 
+import BillDetails from './components/billdetails/BillDetails';
 import FloorItemList from './containers/flooritemlist/FloorItemList';
 import Header from './containers/header/Header';
 import Landing from './components/landing/Landing';
@@ -44,6 +45,7 @@ const App = (props) => (
             <Route path="/signin" exact component={SignIn} />
             <Route path="/signup" exact component={SignUp} />
             <Route path="/profile" component={UserProfile} />
+            <Route path="/bill/details/:id" component={BillDetails}/>
             <Route component={NoMatch}/>
           </Switch>
       }

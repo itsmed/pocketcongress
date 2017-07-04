@@ -20,7 +20,7 @@ class FloorItemList extends Component {
   }
 
   handleSearch(month, year) {
-    console.log('serach', month, year);
+    this.props.requestFloorItems(month, year);  
   }
 
   setActiveChamber(activeChamber) {
@@ -31,6 +31,7 @@ class FloorItemList extends Component {
 
   render() {
     const items = this.props.floorItems;
+    console.log('items fucked', items);
     const { activeChamber } = this.state;
     return <div>
       <DropDown
