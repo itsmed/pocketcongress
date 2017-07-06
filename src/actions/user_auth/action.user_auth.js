@@ -19,6 +19,7 @@ import {
 export const authUser = user => {
   return dispatch => {
     dispatch({type: RECEIVE_USER_REPS, payload: user.federalReps });
+    dispatch({type: 'VERIFY_USER_DISTRICT_INF0', payload: user.address.fields.congressional_district })
     return dispatch({
       type: AUTH_USER,
       payload: user,

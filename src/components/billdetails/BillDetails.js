@@ -103,7 +103,15 @@ class BillDetails extends Component {
         <p>
           { expanded ? bill.summary : bill.summary_short }
         </p>
-        {bill.gpo_pdf_uri ? <a target="_blank" rel="noopener noreferrer" href={ bill.gpo_pdf_uri }>Full Bill As PDF</a> : ''}
+        {
+          bill.gpo_pdf_uri ? 
+            <a 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              href={ bill.gpo_pdf_uri }
+            >Full Bill As PDF</a>
+          : ''
+        }
       </div>
       <h4>Primary Subject: {bill.primary_subject}</h4>
       <h4>Subjects</h4>
