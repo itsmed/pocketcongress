@@ -13,9 +13,10 @@ export {
 } from './consts';
 
 export {
-  validatePassword,
   getFederalReps,
-  quickSort
+  handleUserVote,
+  quickSort,
+  validatePassword,
 } from './helpers';
 
 export {

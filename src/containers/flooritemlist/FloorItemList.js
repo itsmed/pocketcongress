@@ -15,7 +15,7 @@ class FloorItemList extends Component {
     super(props);
 
     this.state = {
-      activeChamber: 'all',
+      activeChamber: 'house',
     };
 
     this.setActiveChamber = this.setActiveChamber.bind(this);
@@ -36,11 +36,12 @@ class FloorItemList extends Component {
 
   render() {
     const items = this.props.floorItems;
+    console.log('[ITESM],', items);
     const { activeChamber } = this.state;
     return <div>
       <DropDown
         action={ this.setActiveChamber }
-        items={['all', 'house', 'senate']}
+        items={['House', 'Senate']}
       />
       <DateDropDown 
         submit={ this.handleSearch } 
@@ -49,15 +50,12 @@ class FloorItemList extends Component {
       />
       <ul>
         {
-          activeChamber === 'senate' ?
+          activeChamber.toLowerCase() === 'senate' ?
             items.senate.votes
-              .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}><FloorItem item={vote} /></li>)
-          : activeChamber === 'house' ?
-            items.house.votes
-              .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}><FloorItem item={vote} /></li>)
+              .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}><FloorItem chamber='senate' session={vote.session} item={vote} /></li>)
           :
-            [...items.house.votes, ...items.senate.votes]
-              .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}><FloorItem item={vote} /></li>)
+            items.house.votes
+              .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}><FloorItem chamber='house' session={vote.session} item={vote} /></li>)
         }
       </ul>
     </div>;

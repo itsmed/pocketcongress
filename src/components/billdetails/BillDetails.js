@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { database } from '../../firebase_config';
 import { API_BASE } from '../../actions';
 import {
@@ -7,6 +8,7 @@ import {
 
 import {
   quickSort,
+  handleUserVote,
 } from '../../actions';
 
 class BillDetails extends Component {
@@ -21,6 +23,7 @@ class BillDetails extends Component {
 
     this.toggleExpanded = this.toggleExpanded.bind(this);
     this.displayBill = this.displayBill.bind(this);
+    this.handleVote = this.handleVote.bind(this);
   } 
 
   componentWillMount() { 
@@ -64,6 +67,13 @@ class BillDetails extends Component {
     });
   }
 
+  handleVote(congress, billId, position) {
+    if (this.props.user) {
+      return handleUserVote(this.props.user.uid, congress, this.props.match.params.chamber, this.props.match.params.session, billId, position);
+    }
+    return console.log('handle not logged in user!');
+  }
+
   toggleExpanded() {
     this.setState({
       expanded: !this.state.expanded,
@@ -83,12 +93,18 @@ class BillDetails extends Component {
   }
 
   displayBill(bill) {
-    const { expanded } = this.state; 
+    const { expanded } = this.state;
     return <div>
       <div>
-        <Button bsStyle="danger">Vote No</Button>
-        <Button bsStyle="warning">Abstain</Button>
-        <Button bsStyle="success">Vote Yes</Button>
+        <Button 
+          onClick={ () => this.handleVote(bill.congress,
+          bill.number.toLowerCase().replace(/\W/g, ''), 'No') } bsStyle="danger">Vote No</Button>
+        <Button 
+          onClick={ () => this.handleVote(bill.congress,
+          bill.number.toLowerCase().replace(/\W/g, ''), 'Abstain') } bsStyle="warning">Abstain</Button>
+        <Button 
+          onClick={ () => this.handleVote(bill.congress,
+          bill.number.toLowerCase().replace(/\W/g, ''), 'Yes') } bsStyle="success">Vote Yes</Button>
       </div>
       <div>
         <h3>Congress {bill.congress} {bill.bill}</h3>
@@ -134,4 +150,8 @@ class BillDetails extends Component {
   }
 }
 
-export default BillDetails;
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps)(BillDetails);

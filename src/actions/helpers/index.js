@@ -9,3 +9,7 @@ export {
 export {
   quickSort
 } from './quicksort';
+
+export {
+  handleUserVote
+} from './handle_user_vote';
