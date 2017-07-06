@@ -23,7 +23,6 @@ class FloorItemList extends Component {
   }
 
   handleSearch(month, year) {
-    console.log('requesting floor items', month, year);
     this.props.setDate(month, year);
     this.props.requestFloorItems(month, year);  
   }

@@ -12,25 +12,21 @@ export const requestFloorItems = (month, year) => {
     localforage.getItem(`${month}/${year}`)
     .then(results => {
       if (!results) {
-        console.log('[LOCAL FORAGE] found no data', results);
         getVotesByDate(month, year)
         .then(res => res.json())
         .then(floorItems => {
           localforage.setItem(`${month}/${year}`, floorItems)
           .then(savedData => {
-            console.log('[LOCAL FORAGE] saved', savedData);
             dispatch({
               type: RECEIVE_FLOOR_ITEMS,
               payload: floorItems
             });
-
             return dispatch(toggleIsFetching());
           })
           .catch(err => Promise.reject(err));
         })
         .catch(err => Promise.reject(err));
       } else {
-        console.log('[LOCAL FORAGE] found stuff!', results);
         dispatch({
           type: RECEIVE_FLOOR_ITEMS,
           payload: results
@@ -46,12 +42,11 @@ export const requestFloorItems = (month, year) => {
 };
 
 function getVotesByDate(month, year) {
-  return fetch(API_BASE.concat('/api/votes/date'), {
-    method: 'POST',
+  return fetch(API_BASE.concat(`/api/votes/date/${month}/${year}`), {
+    method: 'GET',
     mode: 'cors',
     headers: {
       'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({"data": { month, year }})
+    }
   });
 }

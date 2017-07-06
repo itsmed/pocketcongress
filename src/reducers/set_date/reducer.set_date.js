@@ -5,7 +5,7 @@ import {
 const now = new Date();
 
 export const reducerSetDate = (state = {
-  month: now.getMonth(),
+  month: now.getMonth() + 1,
   year: now.getFullYear(),
 }, action) => {
   switch(action.type) {

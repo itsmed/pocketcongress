@@ -16,13 +16,17 @@ import {
   receiveErrorMessage,
 } from '../error_message/action.error_message';
 
-export const authUser = user => ({
-  type: AUTH_USER,
-  payload: user
-});
+export const authUser = user => {
+  return dispatch => {
+    dispatch({type: RECEIVE_USER_REPS, payload: user.federalReps });
+    return dispatch({
+      type: AUTH_USER,
+      payload: user,
+    });
+  };
+};
 
 export const unauthUser = () => {
-  console.log('ABOUT TO UNAUTH USER', localforage.getItem('user'));
   localforage.removeItem('user');
   if (window.location.pathname === '/profile') {
     window.location.replace('/');
@@ -39,8 +43,8 @@ export const getAuthUpdate = () => {
     return localforage.getItem('user')
       .then(user => {
         if (user !== null) {
-          checkWindowPath(user);
           dispatch(authUser(user));
+          checkWindowPath(user);
           return dispatch(toggleIsFetching());
         }
         return dispatch(toggleIsFetching());

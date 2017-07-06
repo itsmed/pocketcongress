@@ -15,6 +15,7 @@ export {
 export {
   validatePassword,
   getFederalReps,
+  quickSort
 } from './helpers';
 
 export {

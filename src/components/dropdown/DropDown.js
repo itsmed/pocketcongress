@@ -36,7 +36,7 @@ class DropDown extends Component {
     return <ul onClick={ this.toggleExpanded } style={this.props.styles}>
       {
         this.state.expanded ?
-          items.map((item, index) => <li onClick={ () => this.doAction(item, index) } key={ item.toString()}>{item }</li>)
+          items.map((item, index) => <li onClick={ () => this.doAction(item, index) } key={index}>{ item }</li>)
         :
           <li onClick={ () => this.doAction(items[this.state.displayIndex], 0) }>{ items[this.state.displayIndex] }</li>
       }
