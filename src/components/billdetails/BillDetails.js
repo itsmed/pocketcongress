@@ -4,7 +4,6 @@ import { API_BASE } from '../../actions';
 import {
   Button,
 } from 'react-bootstrap';
-import ReactPDF from 'react-pdf';
 
 import {
   quickSort,
@@ -72,7 +71,7 @@ class BillDetails extends Component {
   }
 
   render() {
-    const { bill, expanded } = this.state;
+    const { bill } = this.state;
     return <div>
       {
         bill ?
@@ -84,6 +83,7 @@ class BillDetails extends Component {
   }
 
   displayBill(bill) {
+    const { expanded } = this.state; 
     return <div>
       <div>
         <Button bsStyle="danger">Vote No</Button>
