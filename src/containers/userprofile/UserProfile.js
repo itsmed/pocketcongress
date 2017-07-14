@@ -39,7 +39,7 @@ class UserProfile extends Component {
             user && user.address ?
               Object.keys(user.address.address_components).map((key) => (
                 <li key={key}>
-                  <label for={key}>{key}</label>:{'\t'} 
+                  <label htmlFor={key}>{key}</label>:{'\t'} 
                   <span>{user.address.address_components[key]}</span>
                 </li>
               ))

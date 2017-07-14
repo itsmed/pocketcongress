@@ -11,6 +11,9 @@ import {
   handleUserVote,
 } from '../../actions';
 
+import UserPosition from '../../containers/userposition/UserPosition';
+import UserVoteInput from '../uservoteinput/UserVoteInput';
+
 class BillDetails extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +29,7 @@ class BillDetails extends Component {
     this.handleVote = this.handleVote.bind(this);
   } 
 
-  componentWillMount() { 
+  componentDidMount() { 
     const { congress, id } = this.props.match.params;
     database.ref(`bills/${congress}/${id}`).once('value', snap => {
       return new Promise((resolve, reject) => {
@@ -39,7 +42,7 @@ class BillDetails extends Component {
             }
           })
           .then(res => res.json())
-          .then(data => {return resolve(data)});
+          .then(data => resolve(data));
         } else {
           let newState = {
             bill: Object.assign({}, snap.val(), {
@@ -67,11 +70,12 @@ class BillDetails extends Component {
     });
   }
 
-  handleVote(congress, billId, position) {
+  handleVote(congress, position) {
     if (this.props.user) {
-      return handleUserVote(this.props.user.uid, congress, this.props.match.params.chamber, this.props.match.params.session, billId, position);
+      const { chamber, session, rollcall } = this.props.match.params;
+
+      return handleUserVote(this.props.user.uid, congress, chamber, session, rollcall, position);
     }
-    return console.log('handle not logged in user!');
   }
 
   toggleExpanded() {
@@ -93,18 +97,20 @@ class BillDetails extends Component {
   }
 
   displayBill(bill) {
+    const { chamber, session, rollcall } = this.props.match.params;
     const { expanded } = this.state;
+
     return <div>
-      <div>
-        <Button 
-          onClick={ () => this.handleVote(bill.congress,
-          bill.number.toLowerCase().replace(/\W/g, ''), 'No') } bsStyle="danger">Vote No</Button>
-        <Button 
-          onClick={ () => this.handleVote(bill.congress,
-          bill.number.toLowerCase().replace(/\W/g, ''), 'Abstain') } bsStyle="warning">Abstain</Button>
-        <Button 
-          onClick={ () => this.handleVote(bill.congress,
-          bill.number.toLowerCase().replace(/\W/g, ''), 'Yes') } bsStyle="success">Vote Yes</Button>
+        <div>
+          <UserVoteInput bill={ bill } voteAction={ this.handleVote } />
+          <h4>Your Position: <UserPosition
+              user={this.props.user}
+              chamber={chamber}
+              session={session}
+              rollcall={rollcall}
+              congress={bill.congress}
+            />
+          </h4>
       </div>
       <div>
         <h3>Congress {bill.congress} {bill.bill}</h3>
@@ -154,4 +160,8 @@ const mapStateToProps = (state) => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps)(BillDetails);
+export default connect(mapStateToProps, {
+  handleUserVote,
+})(BillDetails);
+
+

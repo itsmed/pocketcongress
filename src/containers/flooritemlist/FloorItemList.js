@@ -30,14 +30,14 @@ class FloorItemList extends Component {
 
   setActiveChamber(activeChamber) {
     this.setState({
-      activeChamber,
+      activeChamber: activeChamber.toLowerCase(),
     });
   }
 
   render() {
     const items = this.props.floorItems;
-    console.log('[ITESM],', items);
     const { activeChamber } = this.state;
+
     return <div>
       <DropDown
         action={ this.setActiveChamber }
@@ -52,10 +52,24 @@ class FloorItemList extends Component {
         {
           activeChamber.toLowerCase() === 'senate' ?
             items.senate.votes
-              .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}><FloorItem chamber='senate' session={vote.session} item={vote} /></li>)
+              .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}>
+                  <FloorItem
+                    chamber='senate'
+                    session={ vote.session }
+                    item={ vote }
+                    rollCall={ vote.roll_call }
+                  />
+                </li>)
           :
             items.house.votes
-              .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}><FloorItem chamber='house' session={vote.session} item={vote} /></li>)
+              .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}>
+                  <FloorItem
+                    chamber='house'
+                    session={ vote.session }
+                    item={ vote }
+                    rollCall={ vote.roll_call }
+                  />
+                </li>)
         }
       </ul>
     </div>;
