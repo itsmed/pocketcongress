@@ -2,25 +2,34 @@ import { database as db } from '../../firebase_config';
 
 export function handleUserVote(userId, congress, chamber, session, rollcall, position) {
 
-  //votes/congress/chamber/session/rollcallNumber/userOrRepId
-  const ref = db.ref(`votes/${congress}/${chamber}/${session}/${rollcall}`);
+  const votePath = `votes/${congress}/${chamber}/${session}/${rollcall}`;
+  const voteRef = db.ref(votePath);
+  const itemsVotedOnByUserRef = db.ref(`users/${userId}/voted_on`);
 
+  itemsVotedOnByUserRef.orderByValue().equalTo(votePath).once('value').then(snap => {
+    console.log('looking for dupes', snap.val());
+    if (snap.val() === null) {
+      itemsVotedOnByUserRef.push(votePath);
+    } else {
+      console.log('found it already', snap.val());
+    }
+  });
 
-  ref.once('value', snap => {
+  voteRef.once('value').then(snap => {
     const votes = snap.val();
 
-    for (let vote in votes) {
+    for (let voteId in votes) {
 
-      if (votes[vote].id === userId && votes[vote].id.position !== position) {
+      if (votes[voteId].id === userId && votes[voteId].id.position !== position) {
 
         const update = {};
-        update[`/votes/${congress}/${chamber}/${session}/${rollcall}/${vote}/position`] = position;
+        update[`/votes/${congress}/${chamber}/${session}/${rollcall}/${voteId}/position`] = position;
 
         return db.ref().update(update);
       }
     }
 
-    ref.push({
+    voteRef.push({
       id: userId,
       position: position
     });
