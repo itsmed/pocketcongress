@@ -7,36 +7,45 @@ export function handleUserVote(userId, congress, chamber, session, rollcall, pos
   const itemsVotedOnByUserRef = db.ref(`users/${userId}/voted_on`);
 
   itemsVotedOnByUserRef.orderByValue().equalTo(votePath).once('value').then(snap => {
-    console.log('looking for dupes', snap.val());
+
     if (snap.val() === null) {
       itemsVotedOnByUserRef.push(votePath);
     } else {
-      console.log('found it already', snap.val());
+      return;
     }
   });
 
   voteRef.once('value').then(snap => {
     const votes = snap.val();
+    if (snap.val() === null) {
+      voteRef.push({
+        id: userId,
+        position: position
+      });
+      return;
+    } else {
 
-    for (let voteId in votes) {
+      for (let voteId in votes) {
 
-      if (votes[voteId].id === userId && votes[voteId].id.position !== position) {
+        if (votes[voteId].id === userId && votes[voteId].id.position !== position) {
 
-        const update = {};
-        update[`/votes/${congress}/${chamber}/${session}/${rollcall}/${voteId}/position`] = position;
+          const update = {};
+          update[`/votes/${congress}/${chamber}/${session}/${rollcall}/${voteId}/position`] = position;
 
-        return db.ref().update(update);
+          db.ref().update(update);
+          return;
+        }
       }
+      voteRef.push({
+        id: userId,
+        position: position
+      });
     }
 
-    voteRef.push({
-      id: userId,
-      position: position
-    });
 
   })
   .catch(err => console.warn(err));
 
 
-  return console.log('user userId, billId', userId, congress, session, rollcall, position);
+  console.log('user userId, billId', userId, congress, session, rollcall, position);
 }

@@ -4,9 +4,9 @@ import { database } from '../../firebase_config';
 
 import UserPosition from '../../containers/userposition/UserPosition';
 import UserVoteInput from '../uservoteinput/UserVoteInput';
+import RepPosition from '../../components/rep_position/RepPosition';
 
 import {
-  Button,
   Row,
   Col,
   Grid,
@@ -26,6 +26,11 @@ class NomineeDetails extends Component {
     };
 
     this.handleVote = this.handleVote.bind(this);
+  }
+
+  componentWillUnmount() {
+    const { congress, id } = this.props.match.params;
+    database.ref(`bills/${congress}/${id}`).off();
   }
 
   componentWillMount() {
@@ -68,28 +73,44 @@ class NomineeDetails extends Component {
 
   render() {
     const { nominee } = this.state;
+    const reps = Object.keys(this.props.federalReps);
     const { chamber, session, rollcall, congress } = this.props.match.params;
     return <div>
       {
         nominee ?
           <Grid>
-            <Row>
-              <Col xs={12}>
-                <h4>Your Position: <UserPosition
-                  user={this.props.user}
-                  chamber={chamber}
-                  session={session}
-                  rollcall={rollcall}
-                  congress={congress}
-                />
-              </h4>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                <UserVoteInput congress={ congress } voteAction={ this.handleVote } />
-              </Col>
-            </Row>
+            <div className='background__grey'>
+              <Row>
+                  <Col xs={12}>
+                    <h4>Your Position: <UserPosition
+                      user={this.props.user}
+                      chamber={chamber}
+                      session={session}
+                      rollcall={rollcall}
+                      congress={congress}
+                    />
+                  </h4>
+                  </Col>
+                  <Col xs={12}>
+                    {
+                      reps.map(repId => <RepPosition
+                        repId={repId}
+                        key={repId}
+                        congress={congress}
+                        chamber={chamber}
+                        session={session}
+                        rollcall={rollcall}
+                        reps={this.props.federalReps}
+                      />)
+                    }
+                  </Col>
+              </Row>
+              <Row>
+                <Col xs={12}>
+                  <UserVoteInput congress={ congress } voteAction={ this.handleVote } />
+                </Col>
+              </Row>
+            </div>
             <Row>
               <Col xs={12} md={4} mdOffset={2}>
                 <h3>Congress: {nominee.congress}</h3>
@@ -114,7 +135,7 @@ class NomineeDetails extends Component {
             </Row>
           </Grid>
         :
-          ''
+          <h1>Loading...</h1>
       }
     </div>;
   }
@@ -122,6 +143,7 @@ class NomineeDetails extends Component {
 
 const mapStateToProps = (state) => ({
   user: state.user,
+  federalReps: state.federalReps
 });
 
 export default connect(mapStateToProps)(NomineeDetails);

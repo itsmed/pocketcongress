@@ -43,6 +43,7 @@ class FloorItemList extends Component {
 
   render() {
     const items = this.props.floorItems;
+    const reps = Object.keys(this.props.federalReps);
     const { activeChamber } = this.state;
 
     return <Grid>
@@ -82,6 +83,7 @@ class FloorItemList extends Component {
                       item={ vote }
                       rollCall={ vote.roll_call }
                     />
+
                   </li>)
             :
               items.house.votes
@@ -92,6 +94,7 @@ class FloorItemList extends Component {
                       item={ vote }
                       rollCall={ vote.roll_call }
                     />
+
                   </li>)
           }
         </ul>
@@ -103,7 +106,8 @@ class FloorItemList extends Component {
 function mapStateToProps(state) {
   return {
     floorItems: state.federalFloorItems,
-    date: state.date
+    date: state.date,
+    federalReps: state.federalReps,
   };
 }
 

@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import {
+  Button,
+  Row,
+  Col,
+  Grid,
+} from 'react-bootstrap';
+
 import RepPreview from '../../components/rep-preview/RepPreview';
 import UserRepComparisonPieGraph from '../../components/user_rep_comparison_pie_graph/UserRepComparisonPieGraph';
 
@@ -18,10 +25,15 @@ class UserProfile extends Component {
 
   render() {
     const { user, federalReps, district } = this.props;
-    return <div>
-      <h2>{ user ? user.name : ''} Profile</h2>
-      <p>{ user ? user.email : ''}</p>
-      <div>
+    return <Grid>
+      <Row>
+        <Col xs={12} md={4}>
+          <h2>{ user ? user.name : ''} Profile</h2>
+          <p>{ user ? user.email : ''}</p>
+        </Col>
+      </Row>
+      <Row>
+      <Col xs={12} md={5} mdOffset={1}>
         <h3>District Info</h3>
         {
           district ?
@@ -34,6 +46,8 @@ class UserProfile extends Component {
           :
             ''
         }
+      </Col>
+      <Col xs={12} md={5} mdOffset={1}>
         <ul>
           {
             user && user.address ?
@@ -47,19 +61,18 @@ class UserProfile extends Component {
               ''
           }
         </ul>
-      </div>
-      <div>
+      </Col>
+    </Row>
+      <Row>
         <h3>Federal Representatives</h3>
-        <ul>
-          {
-            Object.values(federalReps).map(rep => <li key={rep.id}>
-              <RepPreview rep={rep} />
-              <UserRepComparisonPieGraph user={ user } rep={ rep } />
-            </li>)
-          }
-        </ul>
-      </div>
-    </div>;
+        {
+          Object.values(federalReps).map(rep => <Col xs={12} md={4} key={rep.id}>
+            <RepPreview rep={rep} />
+            <UserRepComparisonPieGraph user={ user } rep={ rep } size={ 300 } />
+          </Col>)
+        }
+      </Row>
+    </Grid>;
   }
 }
 

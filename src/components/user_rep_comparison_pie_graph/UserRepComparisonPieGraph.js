@@ -35,29 +35,34 @@ class UserRepComparisonPieGraph extends Component {
       return votePaths;
     })
     .then(paths => {
-
+      let total = 0;
       for (let dbID in paths) {
         let path = paths[dbID];
         
         db.ref(path).orderByChild('id').equalTo(rep.id).once('value').then(snapshot => {
           if (snapshot.val() !== null) {
+            total++;
             const vote = Object.values(snapshot.val()).pop();
             vote.path = path;
             const newRepVotes = Object.assign({}, this.state.repVotes);
             newRepVotes[path] = vote;
             
-            const newState = Object.assign({}, this.state, {
-              repVotes: newRepVotes,
-            });
+            const newState = {};
+            newState.repVotes = newRepVotes;
+            newState.userVotes = this.state.userVotes;
+            newState.valueLabel = this.state.valueLabel;
 
             this.setState(newState);
+
           }
+          console.log(total);
         });
 
         db.ref(path).orderByChild('id').equalTo(user.uid).once('value').then(snapshot => {
 
 
           if (snapshot.val() !== null) {
+
             const vote = Object.values(snapshot.val()).pop();
             vote.path = path;
             const newUserVotes = Object.assign({}, this.state.userVotes);
@@ -104,8 +109,8 @@ class UserRepComparisonPieGraph extends Component {
       </ButtonGroup>
       <DonutChart
         value={ average || 0 }
-        valueLabel={ this.state.valueLabel }
-        size={ 300 }
+        valueLabel={ `Out of ${sharedVotePaths.length} vote${sharedVotePaths.length !== 1 ? 's' : ''}, ${this.state.valueLabel}` }
+        size={ this.props.size }
         strokewidth={ 10 }
       />
     </div>;

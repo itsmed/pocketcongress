@@ -6,11 +6,11 @@ import {
 const UserVoteInput = ({congress, voteAction}) => (
   <div>
     <Button 
-      onClick={ () => voteAction(congress, 'No') } bsStyle="danger">Vote No</Button>
+      onClick={ () => voteAction(congress, 'No') } bsStyle="primary" bsClass="btn button__primary" style={{margin: '10px'}}>Vote No</Button>
     <Button 
-      onClick={ () => voteAction(congress, 'Not Voting') } bsStyle="warning">Abstain</Button>
+      onClick={ () => voteAction(congress, 'Not Voting') } bsStyle="warning" style={{margin: '10px'}}>Abstain</Button>
     <Button 
-      onClick={ () => voteAction(congress, 'Yes') } bsStyle="success">Vote Yes</Button>
+      onClick={ () => voteAction(congress, 'Yes') } bsStyle="success" style={{margin: '10px'}}>Vote Yes</Button>
   </div>
 );
 

@@ -11,18 +11,25 @@ class UserPosition extends Component {
 
   }
 
+  componentWillUnmount() {
+    const { chamber, session, rollcall, congress } = this.props;
+    database.ref(`votes/${congress}/${chamber}/${session}/${rollcall}`).off();
+  }
+
   componentDidMount() {
     const { chamber, session, rollcall, user, congress } = this.props;
+
     const ref = database.ref(`votes/${congress}/${chamber}/${session}/${rollcall}`);
 
     let flag = false;
 
     ref.on('value', snap => {
-
+      const val = snap.val();
       for (let record in snap.val()) {
-        let vote = snap.val()[record];
+        let vote = val[record];
 
         if (vote.id === user.uid) {
+
           this.setState({
             message: vote.position,
           });
