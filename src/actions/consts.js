@@ -1,5 +1,5 @@
-// export const API_BASE = 'https://powerful-earth-40118.herokuapp.com';
-export const API_BASE = 'http://localhost:8000'; // for testing when offline
+export const API_BASE = 'https://powerful-earth-40118.herokuapp.com';
+// export const API_BASE = 'http://localhost:8000'; // for testing when offline
 export const ACKNOWLEDGE_ERROR_MESSAGE = 'ACKNOWLEDGE_ERROR_MESSAGE';
 export const RECEIVE_ERROR_MESSAGE = 'RECEIVE_ERROR_MESSAGE';
 export const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
