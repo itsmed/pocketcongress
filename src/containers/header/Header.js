@@ -11,12 +11,18 @@ import {
   unauthUser,
 } from '../../actions';
 
+import {
+  Nav,
+  NavItem,
+} from 'react-bootstrap';
+
 class Header extends Component {
   constructor(props) {
     super(props);
 
     this.handleSignOut = this.handleSignOut.bind(this);
   }
+
 
   componentDidMount() {
     this.props.getAuthUpdate();
@@ -29,32 +35,31 @@ class Header extends Component {
   render() {
     const { user } = this.props;
     return <header>
-      <ul>
-        <li>
+      <Nav bsStyle='tabs' justified>
+        <NavItem>
           <Glyphicon glyph="menu-hamburger" />
-        </li>
-        <li><Link to="/">Landing</Link></li>
-        <li><Link to="/floor-items">Floor Items</Link></li>
+        </NavItem>
+        <NavItem href="/">Landing</NavItem>
+        <NavItem href="/floor-items">Floor Items</NavItem>
         {
           user ?
             ''
           :
-            <li><Link to="/signup">Sign Up</Link></li>
+            <NavItem href="/signup">Sign Up</NavItem>
         }
         {
           user ?
-            <li><Link to="/profile">Profile</Link></li>
+            <NavItem href="/profile">Profile</NavItem>
           : 
             ''
         }
         {
           user ?
-            <li onClick={ this.handleSignOut }>Sign out</li>
+            <NavItem onClick={ this.handleSignOut }>Sign out</NavItem>
           :
-            <li><Link to="/signin">Sign In</Link></li>
+            <NavItem href="/signin">Sign In</NavItem>
         }
-      </ul>
-
+      </Nav>
     </header>;
   }
 }

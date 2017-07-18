@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 
+import {
+  Button,
+} from 'react-bootstrap';
+
 class DropDown extends Component {
   constructor(props) {
     super(props);
@@ -36,9 +40,13 @@ class DropDown extends Component {
     return <ul onClick={ this.toggleExpanded } style={this.props.styles}>
       {
         this.state.expanded ?
-          items.map((item, index) => <li onClick={ () => this.doAction(item, index) } key={index}>{ item }</li>)
+          items.map((item, index) => <li onClick={ () => this.doAction(item, index) } key={index}>
+            <Button>{ item }</Button>
+          </li>)
         :
-          <li onClick={ () => this.doAction(items[this.state.displayIndex], 0) }>{ items[this.state.displayIndex] }</li>
+          <li onClick={ () => this.doAction(items[this.state.displayIndex], 0) }>
+            <Button>{ items[this.state.displayIndex] }</Button>
+          </li>
       }
     </ul>;
   }

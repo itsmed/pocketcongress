@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import RepPreview from '../../components/rep-preview/RepPreview';
+import UserRepComparisonPieGraph from '../../components/user_rep_comparison_pie_graph/UserRepComparisonPieGraph';
 
 class UserProfile extends Component {
   constructor(props) {
@@ -17,7 +18,6 @@ class UserProfile extends Component {
 
   render() {
     const { user, federalReps, district } = this.props;
-    console.log('profile props', user);
     return <div>
       <h2>{ user ? user.name : ''} Profile</h2>
       <p>{ user ? user.email : ''}</p>
@@ -54,6 +54,7 @@ class UserProfile extends Component {
           {
             Object.values(federalReps).map(rep => <li key={rep.id}>
               <RepPreview rep={rep} />
+              <UserRepComparisonPieGraph user={ user } rep={ rep } />
             </li>)
           }
         </ul>

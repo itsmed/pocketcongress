@@ -3,6 +3,11 @@ import { Button } from 'react-bootstrap';
 
 import DropDown from '../dropdown/DropDown';
 
+import {
+  DropdownButton,
+  MenuItem,
+} from 'react-bootstrap';
+
 const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 let years = [2017, 2016, 2015, 2014];
 const now = new Date();
@@ -41,22 +46,26 @@ class DateDropDown extends Component {
   }
 
   render() {
-    return <div>
-      <span>Month</span>
-      <DropDown
-        items={ months }
-        displayIndex={ months.indexOf(this.props.month) }
-        action={ e => this.setStateMonth(e)}
-        styles={{maxHeight: '5em', overflow: 'scroll', border: 'solid', width: '4.5em'}}
-      />
-      <span>Year</span>
-      <DropDown
-        items={ years }
-        action={ e => this.setStateYear(e)}
-        displayIndex={ years.indexOf(this.props.year) }
-        styles={{maxHeight: '5em', overflow: 'scroll', border: 'solid', width: '6.5em'}}
-      />
-      <Button bsSize="large" onClick={ this.handleSubmit }>Search</Button>
+    return <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
+      <div style={{flex: 1}}>
+        <h5>Month</h5>
+        <DropDown
+          items={ months }
+          displayIndex={ months.indexOf(this.props.month) }
+          action={ e => this.setStateMonth(e)}
+          styles={{maxHeight: '10em', overflow: 'scroll',}}
+        />
+      </div>
+      <div style={{flex: 1}}>
+        <h5>Year</h5>
+        <DropDown
+          items={ years }
+          action={ e => this.setStateYear(e)}
+          displayIndex={ years.indexOf(this.props.year) }
+          styles={{maxHeight: '10em', overflow: 'scroll',}}
+        />
+      </div>
+      <Button bsSize="large" onClick={ this.handleSubmit } style={{flex: 1}}>Search</Button>
     </div>;
   }
 }
