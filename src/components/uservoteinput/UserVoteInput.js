@@ -3,14 +3,14 @@ import {
   Button,
 } from 'react-bootstrap';
 
-const UserVoteInput = ({bill, voteAction}) => (
+const UserVoteInput = ({congress, voteAction}) => (
   <div>
     <Button 
-      onClick={ () => voteAction(bill.congress, 'No') } bsStyle="danger">Vote No</Button>
+      onClick={ () => voteAction(congress, 'No') } bsStyle="danger">Vote No</Button>
     <Button 
-      onClick={ () => voteAction(bill.congress, 'Not Voting') } bsStyle="warning">Abstain</Button>
+      onClick={ () => voteAction(congress, 'Not Voting') } bsStyle="warning">Abstain</Button>
     <Button 
-      onClick={ () => voteAction(bill.congress, 'Yes') } bsStyle="success">Vote Yes</Button>
+      onClick={ () => voteAction(congress, 'Yes') } bsStyle="success">Vote Yes</Button>
   </div>
 );
 

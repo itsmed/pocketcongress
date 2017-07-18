@@ -102,7 +102,7 @@ class BillDetails extends Component {
 
     return <div>
         <div>
-          <UserVoteInput bill={ bill } voteAction={ this.handleVote } />
+          <UserVoteInput congress={ bill.congress } voteAction={ this.handleVote } />
           <h4>Your Position: <UserPosition
               user={this.props.user}
               chamber={chamber}
@@ -160,8 +160,6 @@ const mapStateToProps = (state) => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps, {
-  handleUserVote,
-})(BillDetails);
+export default connect(mapStateToProps)(BillDetails);
 
 
