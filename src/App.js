@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 
 
 import BillDetails from './components/billdetails/BillDetails';
-import FloorItemList from './containers/flooritemlist/FloorItemList';
+import FloorItemContainer from './containers/floor_item_container/FloorItemContainer';
 import Header from './containers/header/Header';
 import Landing from './components/landing/Landing';
 import NomineeDetails from './components/nomineedetails/NomineeDetails';
@@ -42,8 +42,8 @@ const App = (props) => (
         :
           <Switch>
             <Route path="/" exact component={Landing} />
-            <Route path="/floor-items" component={FloorItemList} />
-            <Route path="/floor-items/:month/:year" component={FloorItemList} />
+            <Route path="/floor-items" component={FloorItemContainer} />
+{/*            <Route path="/floor-items/:month/:year" component={FloorItemList} />*/}
             <Route path="/signin" exact component={SignIn} />
             <Route path="/signup" exact component={SignUp} />
             <Route path="/profile" component={UserProfile} />

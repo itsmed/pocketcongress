@@ -41,7 +41,7 @@ export const requestFloorItems = (month, year) => {
   };
 };
 
-function getVotesByDate(month, year) {
+export function getVotesByDate(month, year) {
   return fetch(API_BASE.concat(`/api/votes/date/${month}/${year}`), {
     method: 'GET',
     mode: 'cors',

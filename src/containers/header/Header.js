@@ -47,17 +47,25 @@ class Header extends Component {
           <Navbar.Toggle />
           <Navbar.Collapse>
             <Nav bsStyle='tabs' pullLeft justified>
-              <NavItem href="/">Landing</NavItem>
-              <NavItem href="/floor-items">Floor Items</NavItem>
+              <NavItem>
+                <Link to='/'>Landing</Link>
+              </NavItem>
+              <NavItem>
+                <Link to="/floor-items">Floor Items</Link>
+              </NavItem>
               {
                 user ?
                   ''
                 :
-                  <NavItem href="/signup">Sign Up</NavItem>
+                  <NavItem>
+                    <Link to="/signup">Sign Up</Link>
+                  </NavItem>
               }
               {
                 user ?
-                  <NavItem href="/profile">Profile</NavItem>
+                  <NavItem>
+                    <Link to="/profile">Profile</Link>
+                  </NavItem>
                 : 
                   ''
               }
@@ -65,7 +73,9 @@ class Header extends Component {
                 user ?
                   <NavItem onClick={ this.handleSignOut }>Sign out</NavItem>
                 :
-                  <NavItem href="/signin">Sign In</NavItem>
+                  <NavItem>
+                    <Link to="/signin">Sign In</Link>
+                  </NavItem>
               }
             </Nav>
           </Navbar.Collapse>

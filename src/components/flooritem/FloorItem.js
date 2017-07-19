@@ -23,7 +23,7 @@ const FloorItemPreview = (props) => {
 };
 
 function displayBill(item, chamber, session, rollCall) {
-  return <div>
+  return <div style={{borderBottomStyle: 'solid', borderBottomWidth: '1px'}}>
     <h3>Bill: {item.bill.number}</h3>
     <p>Title: {item.bill.title}</p>
     <p>Question: {item.question}</p>
@@ -39,7 +39,7 @@ function displayBill(item, chamber, session, rollCall) {
 }
 
 function displayNomination(item, chamber, session, rollCall) {
-  return <div>
+  return <div style={{borderBottomStyle: 'solid', borderBottomWidth: '1px'}}>
     <h3>Nomination: {item.nomination.number}</h3>
     <p>Nominee: {item.nomination.name}</p>
     <p>Agency: {item.nomination.agency}</p>

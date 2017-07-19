@@ -40,6 +40,7 @@ export {
 
 export {
   requestFloorItems,
+  getVotesByDate,
 } from './congressional_votes/action.floor_items';
 
 export {

@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import FloorItem from '../../components/flooritem/FloorItem';
-import DateDropDown from '../../components/datedropdown/DateDropDown';
-
 import {
   requestFloorItems,
   setDate,
@@ -17,7 +14,10 @@ import {
   Row,
 } from 'react-bootstrap';
 
-class FloorItemList extends Component {
+import DateDropDown from '../../components/datedropdown/DateDropDown';
+import FloorItemList from '../../components/floor_item_list/FloorItemList';
+
+class FloorItemContainer extends Component {
   constructor(props) {
     super(props);
 
@@ -50,7 +50,7 @@ class FloorItemList extends Component {
       <Row>
         <Col xs={20} xsOffset={1}>
           <h3>Floor Items</h3>
-          <p>Items voted on by the House and Senate.</p>
+          <p>Items voted on by the {this.state.activeChamber}.</p>
         </Col>
       </Row>
       <Row>
@@ -72,32 +72,7 @@ class FloorItemList extends Component {
       </Row>
 
       <Row>
-        <ul>
-          {
-            activeChamber.toLowerCase() === 'senate' ?
-              items.senate.votes
-                .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}>
-                    <FloorItem
-                      chamber='senate'
-                      session={ vote.session }
-                      item={ vote }
-                      rollCall={ vote.roll_call }
-                    />
-
-                  </li>)
-            :
-              items.house.votes
-                .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}>
-                    <FloorItem
-                      chamber='house'
-                      session={ vote.session }
-                      item={ vote }
-                      rollCall={ vote.roll_call }
-                    />
-
-                  </li>)
-          }
-        </ul>
+        <FloorItemList items={ this.props.floorItems } activeChamber={ this.state.activeChamber } />
       </Row>
     </Grid>;
   }
@@ -111,4 +86,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { requestFloorItems, setDate })(FloorItemList);
+export default connect(mapStateToProps, { requestFloorItems, setDate })(FloorItemContainer);
