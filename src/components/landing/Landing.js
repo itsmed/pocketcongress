@@ -14,7 +14,7 @@ import {
 const Landing = () => (
   <Grid>
     <Row>
-      <Col xs={4} xsOffset={4}>
+      <Col xs={12} md={4} mdOffset={4}>
         <h1>Pocket Congress</h1>
       </Col>
       <Col xs={12}>

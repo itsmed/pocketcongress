@@ -7,14 +7,14 @@ li {
   list-style: none;
 }
 
-header {
+/*header {
   background-color: #F4F9F5;
   border-style: solid;
   border-color: #DEE2DF;
   border-width: 1px;
   border-bottom-width: 2px;
   border-right-width: 2px;
-}
+}*/
 
 .button__primary {
   background-color: #C3ABF2;

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 
-import { Glyphicon } from 'react-bootstrap';
 
 import {
   getAuthUpdate,
@@ -12,7 +11,12 @@ import {
 import {
   Nav,
   NavItem,
+  Navbar,
 } from 'react-bootstrap';
+
+import {
+  Link,
+} from 'react-router-dom';
 
 class Header extends Component {
   constructor(props) {
@@ -33,31 +37,40 @@ class Header extends Component {
   render() {
     const { user } = this.props;
     return <header>
-      <Nav bsStyle='tabs' justified>
-        <NavItem>
-          <Glyphicon glyph="menu-hamburger" />
-        </NavItem>
-        <NavItem href="/">Landing</NavItem>
-        <NavItem href="/floor-items">Floor Items</NavItem>
-        {
-          user ?
-            ''
-          :
-            <NavItem href="/signup">Sign Up</NavItem>
-        }
-        {
-          user ?
-            <NavItem href="/profile">Profile</NavItem>
-          : 
-            ''
-        }
-        {
-          user ?
-            <NavItem onClick={ this.handleSignOut }>Sign out</NavItem>
-          :
-            <NavItem href="/signin">Sign In</NavItem>
-        }
-      </Nav>
+          <h2>
+
+              <Link to='/'>Pocket Congress</Link>
+
+          </h2>
+        
+        <Navbar collapseOnSelect>
+          <Navbar.Toggle />
+          <Navbar.Collapse>
+            <Nav bsStyle='tabs' pullLeft justified>
+              <NavItem href="/">Landing</NavItem>
+              <NavItem href="/floor-items">Floor Items</NavItem>
+              {
+                user ?
+                  ''
+                :
+                  <NavItem href="/signup">Sign Up</NavItem>
+              }
+              {
+                user ?
+                  <NavItem href="/profile">Profile</NavItem>
+                : 
+                  ''
+              }
+              {
+                user ?
+                  <NavItem onClick={ this.handleSignOut }>Sign out</NavItem>
+                :
+                  <NavItem href="/signin">Sign In</NavItem>
+              }
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+
     </header>;
   }
 }
