@@ -46,6 +46,10 @@ class Landing extends Component {
             house: jsonResponse.House
           }
         });
+      })
+      .catch(err => {
+        console.log(err);
+        console.log('expected', err.message);
       });
 
   }

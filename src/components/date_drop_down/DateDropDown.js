@@ -4,7 +4,7 @@ import {
   Button,
 } from 'react-bootstrap';
 
-import DropDown from '../dropdown/DropDown';
+import DropDown from '../drop_down/DropDown';
 
 
 const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];

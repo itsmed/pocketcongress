@@ -14,7 +14,7 @@ import {
   getFederalReps,
 } from '../../actions';
 
-import AddressForm from '../../components/addressform/AddressForm';
+import AddressForm from '../../components/address_form/AddressForm';
 
 class SignUp extends Component {
   constructor(props) {

@@ -17,8 +17,8 @@ import {
 
 
 import RepPosition from '../../components/rep_position/RepPosition';
-import UserPosition from '../../components/userposition/UserPosition';
-import UserVoteInput from '../../components/uservoteinput/UserVoteInput';
+import UserPosition from '../../components/user_position/UserPosition';
+import UserVoteInput from '../../components/user_vote_input/UserVoteInput';
 
 class BillDetails extends Component {
   constructor(props) {
