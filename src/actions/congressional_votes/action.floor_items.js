@@ -1,4 +1,3 @@
-// import localforage from 'localforage';
 
 import {
   API_BASE,
@@ -16,7 +15,6 @@ export const requestFloorItems = (month, year) => {
       .then(jsonResponse => dispatch({ type: RECEIVE_FLOOR_ITEMS, payload: jsonResponse }))
       .then(() => dispatch(toggleIsFetching()))
       .catch(err => {
-        console.log('error', err.message);
         dispatch(receiveErrorMessage(err.message));
         return dispatch(toggleIsFetching());
       });
