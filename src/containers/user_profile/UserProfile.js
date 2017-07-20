@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import {
-  Button,
   Row,
   Col,
   Grid,
 } from 'react-bootstrap';
 
-import RepPreview from '../../components/rep-preview/RepPreview';
+import RepPreview from '../../components/rep_preview/RepPreview';
 import UserRepComparisonPieGraph from '../../components/user_rep_comparison_pie_graph/UserRepComparisonPieGraph';
 
 class UserProfile extends Component {

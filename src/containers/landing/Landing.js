@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
 import {
+  Link,
+} from 'react-router-dom';
+
+import {
   getVotesByDate,
 } from '../../actions';
 
@@ -12,11 +16,7 @@ import {
   Well,
 } from 'react-bootstrap';
 
-import {
-  Link,
-} from 'react-router-dom';
-
-import FloorItemList from '../floor_item_list/FloorItemList';
+import FloorItemList from '../../components/floor_item_list/FloorItemList';
 
 class Landing extends Component {
   constructor(props) {

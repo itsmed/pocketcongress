@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { database } from '../../firebase_config';
 
-import UserPosition from '../../containers/userposition/UserPosition';
-import UserVoteInput from '../uservoteinput/UserVoteInput';
-import RepPosition from '../../components/rep_position/RepPosition';
+import {
+  quickSort,
+  handleUserVote,
+} from '../../actions';
 
 import {
   Row,
@@ -12,10 +13,9 @@ import {
   Grid,
 } from 'react-bootstrap';
 
-import {
-  quickSort,
-  handleUserVote,
-} from '../../actions';
+import UserPosition from '../../components/user_position/UserPosition';
+import UserVoteInput from '../../components/user_vote_input/UserVoteInput';
+import RepPosition from '../../components/rep_position/RepPosition';
 
 class NomineeDetails extends Component {
   constructor(props) {

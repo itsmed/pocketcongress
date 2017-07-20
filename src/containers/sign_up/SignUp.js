@@ -4,8 +4,6 @@ import { validate } from 'email-validator';
 
 import firebase from '../../firebase_config';
 
-import AddressForm from '../../components/addressform/AddressForm';
-
 import { 
   authorizeNewUserWithProvider,
   getAuthUpdate,
@@ -15,6 +13,8 @@ import {
   setUserDistrict,
   getFederalReps,
 } from '../../actions';
+
+import AddressForm from '../../components/addressform/AddressForm';
 
 class SignUp extends Component {
   constructor(props) {

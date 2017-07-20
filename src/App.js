@@ -13,7 +13,7 @@ import {
 import BillDetails from './containers/bill_details/BillDetails';
 import FloorItemContainer from './containers/floor_item_container/FloorItemContainer';
 import Header from './containers/header/Header';
-import Landing from './components/landing/Landing';
+import Landing from './containers/landing/Landing';
 import NomineeDetails from './containers/nominee_details/NomineeDetails';
 import SignIn from './containers/sign_in/SignIn';
 import SignUp from './containers/sign_up/SignUp';
