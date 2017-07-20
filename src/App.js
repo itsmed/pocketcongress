@@ -1,25 +1,26 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   BrowserRouter as Router,
   Route,
-  Redirect,
   Switch
 } from 'react-router-dom';
-import { connect } from 'react-redux';
 
+import {
+  acknowledgeErrorMessage,
+} from './actions';
 
-import BillDetails from './components/billdetails/BillDetails';
+import BillDetails from './containers/bill_details/BillDetails';
 import FloorItemContainer from './containers/floor_item_container/FloorItemContainer';
 import Header from './containers/header/Header';
 import Landing from './components/landing/Landing';
-import NomineeDetails from './components/nomineedetails/NomineeDetails';
-import SignIn from './components/signin/SignIn';
-import SignUp from './components/signup/SignUp';
-import UserProfile from './containers/userprofile/UserProfile';
+import NomineeDetails from './containers/nominee_details/NomineeDetails';
+import SignIn from './containers/sign_in/SignIn';
+import SignUp from './containers/sign_up/SignUp';
+import UserProfile from './containers/user_profile/UserProfile';
+
 
 import './App.css';
-import { acknowledgeErrorMessage } from './actions';
-
 
 const NoMatch = () => (<div>No Match</div>);
 const ErrorMessage = (props) => (<div onClick={ props.acknowledgeErrorMessage }><span>click to close</span><br />{props.errorMessage}</div>);

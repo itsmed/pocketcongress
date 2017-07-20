@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FloorItem from '../../components/flooritem/FloorItem';
+import FloorItem from '../floor_item/FloorItem';
 
 const FloorItemList = ({ items, activeChamber }) => (
   <div>

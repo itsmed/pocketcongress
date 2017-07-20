@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { database } from '../../firebase_config';
-import { API_BASE } from '../../actions';
+
+import {
+  API_BASE,
+  quickSort,
+  handleUserVote,
+} from '../../actions';
+  
 import {
   Button,
   Row,
@@ -9,14 +15,10 @@ import {
   Grid,
 } from 'react-bootstrap';
 
-import {
-  quickSort,
-  handleUserVote,
-} from '../../actions';
 
 import RepPosition from '../../components/rep_position/RepPosition';
-import UserPosition from '../../containers/userposition/UserPosition';
-import UserVoteInput from '../uservoteinput/UserVoteInput';
+import UserPosition from '../../components/userposition/UserPosition';
+import UserVoteInput from '../../components/uservoteinput/UserVoteInput';
 
 class BillDetails extends Component {
   constructor(props) {

@@ -14,7 +14,7 @@ import {
   Row,
 } from 'react-bootstrap';
 
-import DateDropDown from '../../components/datedropdown/DateDropDown';
+import DateDropDown from '../../components/date_drop_down/DateDropDown';
 import FloorItemList from '../../components/floor_item_list/FloorItemList';
 
 class FloorItemContainer extends Component {
@@ -42,21 +42,20 @@ class FloorItemContainer extends Component {
   }
 
   render() {
-    const items = this.props.floorItems;
-    const reps = Object.keys(this.props.federalReps);
+    const { floorItems } = this.props;
     const { activeChamber } = this.state;
 
     return <Grid>
       <Row>
         <Col xs={20} xsOffset={1}>
           <h3>Floor Items</h3>
-          <p>Items voted on by the {this.state.activeChamber}.</p>
+          <p>Items voted on by the { activeChamber }.</p>
         </Col>
       </Row>
       <Row>
         <Col xs={10} xsOffset={1} md={3} mdOffset={1}>
           <h6>Chamber</h6>
-          <DropdownButton bsStyle={'primary'} title={this.state.activeChamber.toUpperCase()} key={99} id={`split-button-basic-${99}`}>
+          <DropdownButton bsStyle={'primary'} title={ activeChamber.toUpperCase() } key={99} id={`split-button-basic-${99}`}>
             <MenuItem onSelect={ this.setActiveChamber } eventKey="House">House</MenuItem>
             <MenuItem onSelect={ this.setActiveChamber } eventKey="Senate">Senate</MenuItem>
           </DropdownButton>
@@ -72,7 +71,7 @@ class FloorItemContainer extends Component {
       </Row>
 
       <Row>
-        <FloorItemList items={ this.props.floorItems } activeChamber={ this.state.activeChamber } />
+        <FloorItemList items={ floorItems } activeChamber={ this.state.activeChamber } />
       </Row>
     </Grid>;
   }
@@ -82,7 +81,6 @@ function mapStateToProps(state) {
   return {
     floorItems: state.federalFloorItems,
     date: state.date,
-    federalReps: state.federalReps,
   };
 }
 

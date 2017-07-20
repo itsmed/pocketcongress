@@ -4,7 +4,7 @@ import { validate } from 'email-validator';
 
 import firebase from '../../firebase_config';
 
-import AddressForm from '../../containers/addressform/AddressForm';
+import AddressForm from '../../components/addressform/AddressForm';
 
 import { 
   authorizeNewUserWithProvider,

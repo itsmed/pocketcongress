@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
+
+import {
+  Button,
+} from 'react-bootstrap';
 
 import DropDown from '../dropdown/DropDown';
 
-import {
-  DropdownButton,
-  MenuItem,
-} from 'react-bootstrap';
 
 const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 let years = [2017, 2016, 2015, 2014];
-const now = new Date();
 
 let i = 2013;
 while (i > 1930) {
