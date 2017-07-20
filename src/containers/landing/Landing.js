@@ -66,7 +66,7 @@ class Landing extends Component {
       </Row>
       <Row>
         <div style={{marginTop: '2em'}}>
-          <Well>
+          <div>
             {
               this.props.errorMessage ?
 
@@ -76,17 +76,24 @@ class Landing extends Component {
                 />
 
               :
-
-                <div style={{ maxHeight: '300px', overflow: 'scroll'}}>
+                <div>
                   <Col xs={10} xsOffset={1} md={4}>
-                    <FloorItemList items={this.props.floorItems } activeChamber={'senate'} isFetching={ this.props.isFetching } acknowledgeErrorMessage={ this.props.acknowledgeErrorMessage } errorMessage={ this.props.errorMessage } />
-                  </Col>
-                  <Col xs={10} xsOffset={1} md={4}>
-                    <FloorItemList items={this.props.floorItems } activeChamber={'house'} isFetching={ this.props.isFetching } acknowledgeErrorMessage={ this.props.acknowledgeErrorMessage } errorMessage={ this.props.errorMessage } />
-                  </Col>
+                     <Well>
+                        <div style={{ maxHeight: '300px', overflow: 'scroll' }}>
+                          <FloorItemList items={this.props.floorItems } activeChamber={'senate'} isFetching={ this.props.isFetching } acknowledgeErrorMessage={ this.props.acknowledgeErrorMessage } errorMessage={ this.props.errorMessage } />
+                        </div>
+                      </Well>
+                    </Col>
+                    <Col xs={10} xsOffset={1} md={4}>
+                      <Well>
+                        <div style={{ maxHeight: '300px', overflow: 'scroll' }}>
+                          <FloorItemList items={this.props.floorItems } activeChamber={'house'} isFetching={ this.props.isFetching } acknowledgeErrorMessage={ this.props.acknowledgeErrorMessage } errorMessage={ this.props.errorMessage } />
+                        </div>
+                      </Well>
+                    </Col>
                 </div>
             }
-          </Well>
+          </div>
         </div>
       </Row>
       <Row>

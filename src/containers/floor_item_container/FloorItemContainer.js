@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import {
+  acknowledgeErrorMessage,
   requestFloorItems,
   setDate,
 } from '../../actions';
@@ -15,6 +16,7 @@ import {
 } from 'react-bootstrap';
 
 import DateDropDown from '../../components/date_drop_down/DateDropDown';
+import ErrorMessage from '../../components/error_message/ErrorMessage';
 import FloorItemList from '../../components/floor_item_list/FloorItemList';
 
 class FloorItemContainer extends Component {
@@ -42,7 +44,7 @@ class FloorItemContainer extends Component {
   }
 
   render() {
-    const { floorItems } = this.props;
+    const { acknowledgeErrorMessage, errorMessage, floorItems, } = this.props;
     const { activeChamber } = this.state;
 
     return <Grid>
@@ -71,7 +73,18 @@ class FloorItemContainer extends Component {
       </Row>
 
       <Row>
-        <FloorItemList items={ floorItems } activeChamber={ this.state.activeChamber } />
+        {
+          errorMessage ?
+            <ErrorMessage
+              errorMessage={ errorMessage }
+              acknowledgeErrorMessage={ acknowledgeErrorMessage }
+            />
+          :
+            <FloorItemList
+              items={ floorItems }
+              activeChamber={ activeChamber }
+            />
+        }
       </Row>
     </Grid>;
   }
@@ -81,7 +94,12 @@ function mapStateToProps(state) {
   return {
     floorItems: state.federalFloorItems,
     date: state.date,
+    errorMessage: state.errorMessage,
   };
 }
 
-export default connect(mapStateToProps, { requestFloorItems, setDate })(FloorItemContainer);
+export default connect(mapStateToProps, {
+  acknowledgeErrorMessage,
+  requestFloorItems,
+  setDate,
+})(FloorItemContainer);
