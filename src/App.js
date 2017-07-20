@@ -1,14 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
+
 import {
   BrowserRouter as Router,
   Route,
   Switch
 } from 'react-router-dom';
-
-import {
-  acknowledgeErrorMessage,
-} from './actions';
 
 import BillDetails from './containers/bill_details/BillDetails';
 import FloorItemContainer from './containers/floor_item_container/FloorItemContainer';
@@ -23,43 +19,27 @@ import UserProfile from './containers/user_profile/UserProfile';
 import './App.css';
 
 const NoMatch = () => (<div>No Match</div>);
-const ErrorMessage = (props) => (<div onClick={ props.acknowledgeErrorMessage }><span>click to close</span><br />{props.errorMessage}</div>);
 
-const App = (props) => (
+
+const App = () => (
   <Router>
     <div>
       <Header />
-      {
-        props.isFetching ?
-          <div>
-            <h1>LOADING...</h1>
-          </div>
-        :
-        props.errorMessage !== null ?
-          <ErrorMessage
-            acknowledgeErrorMessage={ props.acknowledgeErrorMessage } 
-            errorMessage={ props.errorMessage } 
-          />
-        :
-          <Switch>
-            <Route path="/" exact component={Landing} />
-            <Route path="/floor-items" component={FloorItemContainer} />
+  
+        <Switch>
+          <Route path="/" exact component={Landing} />
+          <Route path="/floor-items" component={FloorItemContainer} />
 {/*            <Route path="/floor-items/:month/:year" component={FloorItemList} />*/}
-            <Route path="/signin" exact component={SignIn} />
-            <Route path="/signup" exact component={SignUp} />
-            <Route path="/profile" component={UserProfile} />
-            <Route path="/bill/details/:congress/:chamber/:session/:rollcall/:id" component={BillDetails}/>
-            <Route path="/nominees/details/:congress/:chamber/:session/:rollcall/:id" component={NomineeDetails}/>
-            <Route component={NoMatch}/>
-          </Switch>
-      }
+          <Route path="/signin" exact component={SignIn} />
+          <Route path="/signup" exact component={SignUp} />
+          <Route path="/profile" component={UserProfile} />
+          <Route path="/bill/details/:congress/:chamber/:session/:rollcall/:id" component={BillDetails}/>
+          <Route path="/nominees/details/:congress/:chamber/:session/:rollcall/:id" component={NomineeDetails}/>
+          <Route component={NoMatch}/>
+        </Switch>
+
     </div>
   </Router>
 );
 
-const mapStateToProps = (state) => ({
-  isFetching: state.isFetching,
-  errorMessage: state.errorMessage,
-});
-
-export default connect(mapStateToProps, { acknowledgeErrorMessage })(App);
+export default App;

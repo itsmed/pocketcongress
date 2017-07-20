@@ -10,6 +10,7 @@ export const reducerFederalFloorItems = (state = {
     votes: [],
   },
 }, action) => {
+  console.log('VOTE ITEM REDUVERS', action);
   switch(action.type) {
   case RECEIVE_FLOOR_ITEMS:
     return Object.assign({}, state, {

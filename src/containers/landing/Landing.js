@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import {
   Link,
 } from 'react-router-dom';
 
 import {
-  getVotesByDate,
+  requestFloorItems,
+  receiveErrorMessage,
+  acknowledgeErrorMessage,
 } from '../../actions';
 
 import {
@@ -16,42 +19,17 @@ import {
   Well,
 } from 'react-bootstrap';
 
+import ErrorMessage from '../../components/error_message/ErrorMessage';
 import FloorItemList from '../../components/floor_item_list/FloorItemList';
 
 class Landing extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      items: {
-        house: {
-          votes: [],
-        },
-        senate: {
-          votes: [],
-        },
-      },
-    };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const now = new Date();
-    getVotesByDate((now.getMonth() + 1), now.getFullYear())
-      .then(res => res.json())
-      .then(jsonResponse => {
-        console.log('wtf', jsonResponse);
-        this.setState({
-          items: {
-            senate: jsonResponse.Senate,
-            house: jsonResponse.House
-          }
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        console.log('expected', err.message);
-      });
-
+    return this.props.requestFloorItems((now.getMonth() + 1), now.getFullYear());
   }
 
   render() {
@@ -89,14 +67,25 @@ class Landing extends Component {
       <Row>
         <div style={{marginTop: '2em'}}>
           <Well>
-            <div style={{ maxHeight: '300px', overflow: 'scroll'}}>
-              <Col xs={10} xsOffset={1} md={4}>
-                <FloorItemList items={this.state.items} activeChamber={'senate'} />
-              </Col>
-              <Col xs={10} xsOffset={1} md={4}>
-                <FloorItemList items={this.state.items} activeChamber={'house'} />
-              </Col>
-            </div>
+            {
+              this.props.errorMessage ?
+
+                <ErrorMessage
+                  acknowledgeErrorMessage={ this.props.acknowledgeErrorMessage } 
+                  errorMessage={ this.props.errorMessage } 
+                />
+
+              :
+
+                <div style={{ maxHeight: '300px', overflow: 'scroll'}}>
+                  <Col xs={10} xsOffset={1} md={4}>
+                    <FloorItemList items={this.props.floorItems } activeChamber={'senate'} isFetching={ this.props.isFetching } acknowledgeErrorMessage={ this.props.acknowledgeErrorMessage } errorMessage={ this.props.errorMessage } />
+                  </Col>
+                  <Col xs={10} xsOffset={1} md={4}>
+                    <FloorItemList items={this.props.floorItems } activeChamber={'house'} isFetching={ this.props.isFetching } acknowledgeErrorMessage={ this.props.acknowledgeErrorMessage } errorMessage={ this.props.errorMessage } />
+                  </Col>
+                </div>
+            }
           </Well>
         </div>
       </Row>
@@ -135,4 +124,14 @@ class Landing extends Component {
   }
 }
 
-export default Landing;
+const mapStateToProps = (state) => ({
+  floorItems: state.federalFloorItems,
+  errorMessage: state.errorMessage,
+  isFetching: state.isFetching,
+});
+
+export default connect(mapStateToProps, {
+  requestFloorItems,
+  receiveErrorMessage,
+  acknowledgeErrorMessage,
+})(Landing);
