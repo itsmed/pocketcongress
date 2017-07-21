@@ -46,6 +46,17 @@ class SignIn extends Component {
         }
       })
       .catch(err => console.log('[FIREBASE COMPONENT DID MOUNT]', err));
+
+    this.refs.email.focus();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.errorMessage && !this.props.errorMessage) {
+      this.setState({
+        emailValue: prevState.emailValue,
+        passwordValue: ''
+      });
+    }
   }
 
   handleProviderSubmit(provider) {
@@ -77,7 +88,6 @@ class SignIn extends Component {
   }
 
   handleFormSubmit() {
-    console.log('called handleFormSubmit signin', this.state.emailValue, this.state.passwordValue);
     this.props.signInWithEmailAndPassword(this.state.emailValue, this.state.passwordValue);
   }
 

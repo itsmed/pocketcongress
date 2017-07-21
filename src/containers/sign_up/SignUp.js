@@ -60,6 +60,16 @@ class SignUp extends Component {
         }
       })
       .catch(err => console.log('[FIREBASE COMPONENT DID MOUNT]', err));
+
+    this.refs.email.focus();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.errorMessage && !this.props.errorMessage) {
+      this.setState(Object.assign({}, prevState, {
+        passwordValue: '', 
+      }));
+    }
   }
 
   handleProviderSubmit(provider) {
@@ -85,7 +95,7 @@ class SignUp extends Component {
 
   handleUserNameFormChange() {
     this.setState({
-      userName: this.refs.userName.value,
+      userNameValue: this.refs.userName.value,
     });
   }
 
@@ -192,16 +202,18 @@ class SignUp extends Component {
           <div>
             <form onSubmit={ this.validateInfo }>
               <input
-                type="text"
+                type="email"
                 onChange={ this.handleEmailFormChange }
                 placeholder="email"
                 ref="email"
+                value={ this.state.emailValue }
               />
               <input
                 type="text"
                 onChange={ this.handleUserNameFormChange }
                 placeholder="user name"
                 ref="userName"
+                value={ this.state.userNameValue }
               />
               <input
                 type="password"
