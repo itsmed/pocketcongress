@@ -4,7 +4,8 @@ import { validate } from 'email-validator';
 
 import firebase from '../../firebase_config';
 
-import { 
+import {
+  acknowledgeErrorMessage,
   authorizeNewUserWithProvider,
   getAuthUpdate,
   createUser,
@@ -15,6 +16,7 @@ import {
 } from '../../actions';
 
 import AddressForm from '../../components/address_form/AddressForm';
+import ErrorMessage from '../../components/error_message/ErrorMessage';
 
 class SignUp extends Component {
   constructor(props) {
@@ -180,37 +182,51 @@ class SignUp extends Component {
 
   renderSignUpForm() {
     return <div>
-      <form onSubmit={ this.validateInfo }>
-        <input
-          type="text"
-          onChange={ this.handleEmailFormChange }
-          placeholder="email"
-          ref="email"
-        />
-        <input
-          type="text"
-          onChange={ this.handleUserNameFormChange }
-          placeholder="user name"
-          ref="userName"
-        />
-        <input
-          type="password"
-          onChange={ this.handlePasswordFormChange }
-          placeholder="password"
-          ref="password"
-        />
-        <input
-          type="submit"
-          value="Submit"
-        />
-      </form>
-      <button onClick={ () => this.handleProviderSubmit('google') }>Sign In With Google</button>
+      {
+        this.props.errorMessage ?
+          <ErrorMessage
+            errorMessage={ this.props.errorMessage }
+            acknowledgeErrorMessage={ this.props.acknowledgeErrorMessage }
+          />
+        :
+          <div>
+            <form onSubmit={ this.validateInfo }>
+              <input
+                type="text"
+                onChange={ this.handleEmailFormChange }
+                placeholder="email"
+                ref="email"
+              />
+              <input
+                type="text"
+                onChange={ this.handleUserNameFormChange }
+                placeholder="user name"
+                ref="userName"
+              />
+              <input
+                type="password"
+                onChange={ this.handlePasswordFormChange }
+                placeholder="password"
+                ref="password"
+              />
+              <input
+                type="submit"
+                value="Submit"
+              />
+            </form>
+            <button onClick={ () => this.handleProviderSubmit('google') }>Sign In With Google</button>
+          </div>
+      }
     </div>;
   }
 }
-const mapStateToProps = (state) => ({user: state.user});
+const mapStateToProps = (state) => ({
+  user: state.user,
+  errorMessage: state.errorMessage,
+});
 
 export default connect(mapStateToProps , {
+  acknowledgeErrorMessage,
   authorizeNewUserWithProvider,
   getAuthUpdate,
   createUser,
