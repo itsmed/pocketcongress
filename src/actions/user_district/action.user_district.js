@@ -1,12 +1,17 @@
 import {
   API_BASE,
-  TOGGLE_IS_FETCHING,
   RECEIVE_USER_DISTRICT_INFO,
   VERIFY_USER_DISTRICT_INF0,
   RECEIVE_USER_REPS,
 } from '../consts';
 
-import { toggleIsFetching } from '../is_fetching/action.is_fetching';
+import {
+  receiveErrorMessage,
+} from '../error_message/action.error_message';
+
+import {
+  toggleIsFetching
+} from '../is_fetching/action.is_fetching';
 
 export const setUserDistrict = (addrObj) => {
   return dispatch => {
@@ -34,9 +39,7 @@ export const setUserDistrict = (addrObj) => {
         payload: addrObj
       });
     })
-    .catch(err => {
-      console.log('err', err);
-    });
+    .catch(err => receiveErrorMessage(err.message));
   };
 };
 

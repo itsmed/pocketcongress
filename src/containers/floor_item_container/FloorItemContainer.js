@@ -44,7 +44,7 @@ class FloorItemContainer extends Component {
   }
 
   render() {
-    const { acknowledgeErrorMessage, errorMessage, floorItems, } = this.props;
+    const { acknowledgeErrorMessage, errorMessage, floorItems, isFetching } = this.props;
     const { activeChamber } = this.state;
 
     return <Grid>
@@ -79,6 +79,8 @@ class FloorItemContainer extends Component {
               errorMessage={ errorMessage }
               acknowledgeErrorMessage={ acknowledgeErrorMessage }
             />
+          : isFetching ?
+            <h1>Loading...</h1>
           :
             <FloorItemList
               items={ floorItems }
@@ -95,6 +97,7 @@ function mapStateToProps(state) {
     floorItems: state.federalFloorItems,
     date: state.date,
     errorMessage: state.errorMessage,
+    isFetching: state.isFetching,
   };
 }
 

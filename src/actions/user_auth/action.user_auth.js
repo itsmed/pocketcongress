@@ -6,8 +6,8 @@ import {
   AUTH_USER,
   UNAUTH_USER,
   RECEIVE_USER_REPS,
-  API_BASE,
 } from '../consts';
+
 import {
   toggleIsFetching,
 } from '../is_fetching/action.is_fetching';
@@ -18,8 +18,15 @@ import {
 
 export const authUser = user => {
   return dispatch => {
-    dispatch({type: RECEIVE_USER_REPS, payload: user.federalReps });
-    dispatch({type: 'VERIFY_USER_DISTRICT_INF0', payload: user.address.fields.congressional_district })
+    dispatch({
+      type: RECEIVE_USER_REPS,
+      payload: user.federalReps
+    });
+    
+    dispatch({
+      type: 'VERIFY_USER_DISTRICT_INF0',
+      payload: user.address.fields.congressional_district
+    });
     return dispatch({
       type: AUTH_USER,
       payload: user,
@@ -43,14 +50,14 @@ export const getAuthUpdate = () => {
     dispatch(toggleIsFetching());
     return localforage.getItem('user')
       .then(user => {
+        checkWindowPath(user);
         if (user !== null) {
           dispatch(authUser(user));
-          checkWindowPath(user);
           return dispatch(toggleIsFetching());
         }
         return dispatch(toggleIsFetching());
       })
-      .catch(err => console.log('[LOCALFORAGE] most likely the cause', err));
+      .catch(err => dispatch(receiveErrorMessage(err.message)));
   };
 };
 
@@ -75,8 +82,7 @@ export const authorizeNewUserWithProvider = (method) => {
       break;
     default:
       console.log('got this UNEXPECTED method in switch [default]', method);
-      dispatch(toggleIsFetching());
-      return null;
+      return dispatch(toggleIsFetching());
     }
     provider.addScope('profile');
     provider.addScope('email');
@@ -86,7 +92,8 @@ export const authorizeNewUserWithProvider = (method) => {
         return user;
       })
       .catch(err => {
-        console.log('err', err);
+        dispatch(receiveErrorMessage(err.message));
+        return dispatch(toggleIsFetching());
       });
   };
 };
@@ -107,11 +114,9 @@ export const signInWithEmailAndPassword = (email, password) => {
       }); 
     })
     .catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
 
-      console.log(errorCode, 'error signing in with email', errorMessage);
+      dispatch(receiveErrorMessage(error.message));
+      return dispatch(toggleIsFetching());
     });
   };
 };
@@ -121,12 +126,14 @@ export const setUser = (user) => {
     return database.ref(`/users/${user.uid}`).once('value').then(function(snap) {
       return saveUser(snap.val(), dispatch);
     })
-    .catch(err => console.log('GOTTA HANDLE THE SET USER ERROR', err));
+    .catch(err => {
+      return dispatch(receiveErrorMessage(err.message));
+    });
   };
 };
 
 function saveUser(user, dispatch) {
-  console.log('INSIDE SAVE USER', user);
+
   const newUser = {
     address: user.address,
     name: user.displayName || user.name,
@@ -136,10 +143,10 @@ function saveUser(user, dispatch) {
     // photoUrl: user.photoUrl,
     refreshToken: user.refreshToken,
   };
-  console.log('USER TO BE SAVED', newUser);
+
   localforage.setItem('user', newUser)
     .then(userResult => {
-      console.log('user result', userResult);
+
       dispatch(authUser(userResult));
       dispatch({
         type: RECEIVE_USER_REPS,
@@ -152,14 +159,15 @@ function saveUser(user, dispatch) {
         .catch(err => Promise.reject(err));
     })
     .catch(error => {
-      console.log('[LOCAL FORAGE] save user error', error.message);
+
+      dispatch(receiveErrorMessage(error.message));
       return dispatch(toggleIsFetching());
     });
 }
 
 
 function checkWindowPath(user) {
-  console.log('window PAATH', user, window.location.pathname);
+
   if ((user !== null && window.location.pathname === '/signin') || ( user !== null && window.location.pathname === '/signup')) {
     window.location.replace('/profile');
   }

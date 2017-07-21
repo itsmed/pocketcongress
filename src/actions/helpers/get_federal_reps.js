@@ -2,6 +2,10 @@ import {
   API_BASE,
 } from '../consts';
 
+import {
+  receiveErrorMessage,
+} from '../error_message/action.error_message';
+
 export function getFederalReps(state, district) {
   const data = {
     state,
@@ -23,5 +27,5 @@ export function getFederalReps(state, district) {
       console.log('got these resps', json.results);
       return json.results;
     })
-    .catch(err => Promise.reject(err));
+    .catch(err => receiveErrorMessage(err.message));
 }

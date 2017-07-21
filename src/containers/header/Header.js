@@ -14,7 +14,10 @@ import {
   Nav,
   NavItem,
   Navbar,
+  Col,
 } from 'react-bootstrap';
+
+
 
 class Header extends Component {
   constructor(props) {
@@ -35,19 +38,22 @@ class Header extends Component {
   render() {
     const { user } = this.props;
     return <header>
-          <h2>
 
-              <Link to='/'>Pocket Congress</Link>
-
-          </h2>
+        <Link to='/'>
+          <h2>Pocket Congress</h2>
+        </Link>
         
         <Navbar collapseOnSelect>
           <Navbar.Toggle />
+          <Col xsHidden>
+            <Navbar.Brand>
+              <Link to='/'>
+                <img src={require('../../images/ballot_box.jpg')} width='80px'/>
+              </Link>
+            </Navbar.Brand>
+          </Col>
           <Navbar.Collapse>
             <Nav bsStyle='tabs' pullLeft justified>
-              <NavItem>
-                <Link to='/'>Landing</Link>
-              </NavItem>
               <NavItem>
                 <Link to="/floor-items">Floor Items</Link>
               </NavItem>

@@ -13,17 +13,18 @@ import UserRepComparisonPieGraph from '../../components/user_rep_comparison_pie_
 class UserProfile extends Component {
   constructor(props) {
     super(props);
-    console.log('construction', this.props);
+    
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('receiving', nextProps);
+  componentDidMount() {
+    if (!this.props.user) {
+      window.location.replace('/floor-items');
+    }
   }
-
-
 
   render() {
     const { user, federalReps, district } = this.props;
+    console.log('props usr provil', this.props);
     return <Grid>
       <Row>
         <Col xs={12} md={4}>

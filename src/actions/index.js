@@ -22,6 +22,7 @@ export {
 export {
   authorizeNewUserWithProvider,
   authUser,
+  checkWindowPath,
   createUser,
   getAuthUpdate,
   setUser,

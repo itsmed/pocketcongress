@@ -1,5 +1,9 @@
 import { database as db } from '../../firebase_config';
 
+import {
+  receiveErrorMessage,
+} from '../error_message/action.error_message';
+
 export function handleUserVote(userId, congress, chamber, session, rollcall, position) {
 
   const votePath = `votes/${congress}/${chamber}/${session}/${rollcall}`;
@@ -44,8 +48,5 @@ export function handleUserVote(userId, congress, chamber, session, rollcall, pos
 
 
   })
-  .catch(err => console.warn(err));
-
-
-  console.log('user userId, billId', userId, congress, session, rollcall, position);
+  .catch(err => receiveErrorMessage(err.message));
 }
