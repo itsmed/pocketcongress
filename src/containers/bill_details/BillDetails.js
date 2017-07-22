@@ -132,15 +132,32 @@ class BillDetails extends Component {
           </Col>
           <Col xs={12}>
             {
-              reps.map(repId => <RepPosition
-                repId={repId}
-                key={repId}
-                congress={bill.congress}
-                chamber={chamber}
-                session={session}
-                rollcall={rollcall}
-                reps={this.props.federalReps}
-              />)
+              reps.map(repId => {
+                return chamber === 'senate' && 
+                  this.props.federalReps[repId].role.toLowerCase().indexOf('senator') > -1 ?
+                    <RepPosition
+                      repId={repId}
+                      key={repId}
+                      congress={bill.congress}
+                      chamber={chamber}
+                      session={session}
+                      rollcall={rollcall}
+                      reps={this.props.federalReps}
+                    />
+                  : chamber === 'house' && 
+                  this.props.federalReps[repId].role.toLowerCase().indexOf('representative') > -1 ?
+                    <RepPosition
+                      repId={repId}
+                      key={repId}
+                      congress={bill.congress}
+                      chamber={chamber}
+                      session={session}
+                      rollcall={rollcall}
+                      reps={this.props.federalReps}
+                    />
+                  :
+                    '';
+              })
             }
           </Col>
         </Row>
@@ -152,15 +169,15 @@ class BillDetails extends Component {
           <h3>Sponsor: {bill.sponsor.concat(' ', bill.sponsor_party, ', ', bill.sponsor_state)}</h3>
           <h3>Status: {bill.status}</h3>
           <p>Introduced: { bill.introduced_date }</p>
-          <p>Date House Passed: { bill.house_passage_vote }</p>
-          <p>Date Senate Passed: { bill.senate_passage_vote }</p>
+          <p>Date House Passed: { bill.house_passage_vote || `Hasn't passed in the House yet.`}</p>
+          <p>Date Senate Passed: { bill.senate_passage_vote || `Hasn't passed in the Senate yet.`}</p>
         </Col>
         <Col xs={12} md={4}>
           <h4>Primary Subject: {bill.primary_subject}</h4>
           <h4>Subjects</h4>
           <ul style={{height: '200px', overflow: 'scroll', borderWidth: '1px', borderStyle: 'solid', textAlign: 'center'}}>
             {
-              bill.subjects.map(s => <li key={s.url_name}>{s.name}</li>)
+              bill.subjects ? bill.subjects.map(s => <li key={s.url_name}>{s.name}</li>) : ''
             }
           </ul>
         </Col>
@@ -168,11 +185,11 @@ class BillDetails extends Component {
           <h4>Actions</h4>
           <ul style={{height: '200px', overflow: 'scroll', borderWidth: '1px', borderStyle: 'solid', textAlign: 'center'}}>
             {
-              bill.actions.map(a => <li key={a.date.concat(a.description)}>
+              bill.actions ? bill.actions.map(a => <li key={a.date.concat(a.description)}>
                 <p>Date: {a.date}</p>
                 <p>Description: {a.description}</p>
                 <hr />
-              </li>)
+              </li>) : ''
             }
           </ul>
         </Col>
@@ -180,9 +197,25 @@ class BillDetails extends Component {
       <Row>
         <Col xs={12}>
           <h3>Summary</h3>
-          <Button onClick={ this.toggleExpanded }>{expanded ? 'Less' : 'More' }</Button>
+          {
+            bill.summary_short.length === 0 && bill.summary.length === 0 ?
+              ''
+            : 
+              <Button onClick={ this.toggleExpanded }>{expanded ? 'Less' : 'More' }</Button>
+          }
           <p>
-            { expanded ? bill.summary : bill.summary_short }
+            { 
+              expanded && bill.summary.length > 0 ? 
+                bill.summary 
+              : 
+                'No Summary Available'
+            }
+            {
+              !expanded && bill.summary_short.length > 0 ?
+                bill.summary_short 
+              :
+                'No Summary Available'
+            }
           </p>
         </Col>
       </Row>

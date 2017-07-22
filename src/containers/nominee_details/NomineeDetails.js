@@ -93,15 +93,37 @@ class NomineeDetails extends Component {
                   </Col>
                   <Col xs={12}>
                     {
-                      reps.map(repId => <RepPosition
-                        repId={repId}
-                        key={repId}
-                        congress={congress}
-                        chamber={chamber}
-                        session={session}
-                        rollcall={rollcall}
-                        reps={this.props.federalReps}
-                      />)
+                      reps.map(repId => {
+                        console.log('REPID*****************', repId, this.props.federalReps);
+                        if (chamber === 'senate' && 
+                        this.props.federalReps[repId].role.toLowerCase().indexOf('senator') > -1) {
+                          console.log('senate', this.props.federalReps[repId]);
+                          return <RepPosition
+                                  repId={repId}
+                                  key={repId}
+                                  congress={congress}
+                                  chamber={chamber}
+                                  session={session}
+                                  rollcall={rollcall}
+                                  reps={this.props.federalReps}
+                                />;
+                        } else if (chamber === 'house' && 
+                        this.props.federalReps[repId].role.toLowerCase().indexOf('representative') > -1) {
+                          console.log('house', this.props.federalReps[repId]);
+                          return <RepPosition
+                                  repId={repId}
+                                  key={repId}
+                                  congress={congress}
+                                  chamber={chamber}
+                                  session={session}
+                                  rollcall={rollcall}
+                                  reps={this.props.federalReps}
+                                />;
+                        } else {
+                          console.log('other');
+                          return '';
+                        }
+                      })
                     }
                   </Col>
               </Row>

@@ -44,7 +44,7 @@ class RepPosition extends Component {
             <h4>{reps[repId].role + ' ' + reps[repId].name} Position: { this.state.position }</h4>
           </div>
         :
-          ''
+          <h4>No votes from your representatives yet.</h4>
       }
     </div>;
   }

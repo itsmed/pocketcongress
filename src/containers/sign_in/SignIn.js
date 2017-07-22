@@ -123,7 +123,12 @@ class SignIn extends Component {
                 value="Submit"
               />
             </form>
-            <button onClick={ () => this.handleProviderSubmit('google')}>Sign In With Google</button>
+            {
+              window.localStorage === undefined || window.sessionStorage === undefined ?
+                <h3>This browser does not support this sign in method</h3>
+              :
+                <button onClick={ () => this.handleProviderSubmit('google')}>Sign In With Google</button>
+            }
           </div>
       }
     </div>;
