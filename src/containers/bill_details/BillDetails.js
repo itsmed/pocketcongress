@@ -16,7 +16,7 @@ import {
 } from 'react-bootstrap';
 
 
-import RepPosition from '../../components/rep_position/RepPosition';
+import RepPositions from '../../components/rep_positions/RepPositions';
 import UserPosition from '../../components/user_position/UserPosition';
 import UserVoteInput from '../../components/user_vote_input/UserVoteInput';
 
@@ -131,34 +131,13 @@ class BillDetails extends Component {
             </h4>
           </Col>
           <Col xs={12}>
-            {
-              reps.map(repId => {
-                return chamber === 'senate' && 
-                  this.props.federalReps[repId].role.toLowerCase().indexOf('senator') > -1 ?
-                    <RepPosition
-                      repId={repId}
-                      key={repId}
-                      congress={bill.congress}
-                      chamber={chamber}
-                      session={session}
-                      rollcall={rollcall}
-                      reps={this.props.federalReps}
-                    />
-                  : chamber === 'house' && 
-                  this.props.federalReps[repId].role.toLowerCase().indexOf('representative') > -1 ?
-                    <RepPosition
-                      repId={repId}
-                      key={repId}
-                      congress={bill.congress}
-                      chamber={chamber}
-                      session={session}
-                      rollcall={rollcall}
-                      reps={this.props.federalReps}
-                    />
-                  :
-                    '';
-              })
-            }
+            <RepPositions
+              reps={ this.props.federalReps }
+              chamber={ chamber }
+              session={ session }
+              rollcall={ rollcall }
+              congress={ bill.congress }
+            />
           </Col>
         </Row>
       </div>

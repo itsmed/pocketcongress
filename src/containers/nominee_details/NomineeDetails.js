@@ -15,7 +15,7 @@ import {
 
 import UserPosition from '../../components/user_position/UserPosition';
 import UserVoteInput from '../../components/user_vote_input/UserVoteInput';
-import RepPosition from '../../components/rep_position/RepPosition';
+import RepPositions from '../../components/rep_positions/RepPositions';
 
 class NomineeDetails extends Component {
   constructor(props) {
@@ -73,7 +73,6 @@ class NomineeDetails extends Component {
 
   render() {
     const { nominee } = this.state;
-    const reps = Object.keys(this.props.federalReps);
     const { chamber, session, rollcall, congress } = this.props.match.params;
     return <div>
       {
@@ -92,39 +91,12 @@ class NomineeDetails extends Component {
                   </h4>
                   </Col>
                   <Col xs={12}>
-                    {
-                      reps.map(repId => {
-                        console.log('REPID*****************', repId, this.props.federalReps);
-                        if (chamber === 'senate' && 
-                        this.props.federalReps[repId].role.toLowerCase().indexOf('senator') > -1) {
-                          console.log('senate', this.props.federalReps[repId]);
-                          return <RepPosition
-                                  repId={repId}
-                                  key={repId}
-                                  congress={congress}
-                                  chamber={chamber}
-                                  session={session}
-                                  rollcall={rollcall}
-                                  reps={this.props.federalReps}
-                                />;
-                        } else if (chamber === 'house' && 
-                        this.props.federalReps[repId].role.toLowerCase().indexOf('representative') > -1) {
-                          console.log('house', this.props.federalReps[repId]);
-                          return <RepPosition
-                                  repId={repId}
-                                  key={repId}
-                                  congress={congress}
-                                  chamber={chamber}
-                                  session={session}
-                                  rollcall={rollcall}
-                                  reps={this.props.federalReps}
-                                />;
-                        } else {
-                          console.log('other');
-                          return '';
-                        }
-                      })
-                    }
+                    <RepPositions
+                      reps={ this.props.federalReps }
+                      chamber={ chamber }
+                      session={ session }
+                      rollcall={ rollcall }
+                    />
                   </Col>
               </Row>
               <Row>

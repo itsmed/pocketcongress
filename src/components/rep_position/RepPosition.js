@@ -34,14 +34,14 @@ class RepPosition extends Component {
   }
 
   render() {
-    const { reps } = this.props;
-    const { repId } = this.state;
+    const { rep } = this.props;
+
 
     return <div>
       {
-        repId ?
+        rep ?
           <div>
-            <h4>{reps[repId].role + ' ' + reps[repId].name} Position: { this.state.position }</h4>
+            <h4>{rep.role + ' ' + rep.name} Position: { this.state.position }</h4>
           </div>
         :
           <h4>No votes from your representatives yet.</h4>
