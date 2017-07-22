@@ -82,11 +82,11 @@ class NomineeDetails extends Component {
               <Row>
                   <Col xs={12}>
                     <h4>Your Position: <UserPosition
-                      user={this.props.user}
-                      chamber={chamber}
-                      session={session}
-                      rollcall={rollcall}
-                      congress={congress}
+                      user={ this.props.user }
+                      chamber={ chamber }
+                      session={ session }
+                      rollcall={ rollcall }
+                      congress={ congress }
                     />
                   </h4>
                   </Col>
@@ -96,6 +96,7 @@ class NomineeDetails extends Component {
                       chamber={ chamber }
                       session={ session }
                       rollcall={ rollcall }
+                      congress={ congress }
                     />
                   </Col>
               </Row>
@@ -107,20 +108,20 @@ class NomineeDetails extends Component {
             </div>
             <Row>
               <Col xs={12} md={4} mdOffset={2}>
-                <h3>Congress: {nominee.congress}</h3>
-                <h4>Status: {nominee.status}</h4>
-                <h4>State: {nominee.nominee_state}</h4>
-                <h5>{nominee.description}</h5>
-                <p>Date Received: {nominee.date_received}</p>
-                <p>Latest Action Date: {nominee.latest_action_date}</p>
+                <h3>Congress: { nominee.congress }</h3>
+                <h4>Status: { nominee.status }</h4>
+                <h4>State: { nominee.nominee_state }</h4>
+                <h5>{ nominee.description }</h5>
+                <p>Date Received: { nominee.date_received }</p>
+                <p>Latest Action Date: { nominee.latest_action_date }</p>
               </Col>
               <Col xs={12} md={4}>
                 <h4>Actions</h4>
                 <ul style={{height: '200px', overflow: 'scroll', borderWidth: '1px', borderStyle: 'solid', textAlign: 'center'}}>
                   {
                     nominee.actions.map(a => <li key={a.date.concat(a.description)}>
-                      <p>Date: {a.date}</p>
-                      <p>Description: {a.description}</p>
+                      <p>Date: { a.date }</p>
+                      <p>Description: { a.description }</p>
                       <hr />
                     </li>)
                   }
