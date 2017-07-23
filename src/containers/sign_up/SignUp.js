@@ -109,7 +109,7 @@ class SignUp extends Component {
     const self = this;
     return firebase.auth().createUserWithEmailAndPassword(this.state.emailValue, this.state.passwordValue)
       .then(result => {
-        console.log('created user', result);
+
         const newUser = Object.assign({}, result, {
           displayName: self.state.userName
         });
@@ -118,15 +118,15 @@ class SignUp extends Component {
           currentStep: 1
         });
       })
-      .catch(err => console.log('ERROR CREATING USER', err));
+      .catch(err => receiveErrorMessage(err.message));
   }
 
   handleAddressSubmit(addr) {
     const self = this;
-    console.log('handleAddressSubmit called with', addr);
+
     return getFederalReps(addr.address_components.state, addr.fields.congressional_district.district_number)
         .then(reps => {
-          console.log('got reps in component!', reps, self.state);
+
           self.setState({
             verifiedAddress: addr,
             currentStep: 2,
@@ -178,7 +178,7 @@ class SignUp extends Component {
             <AddressForm 
               submitAddress={ this.receiveAddresses }
               addresses={ this.state.possibleAddresses }
-              toggleFetching={ this.toggleFetching }
+              toggleIsFetching={ this.toggleFetching }
             />
           </div>
         :

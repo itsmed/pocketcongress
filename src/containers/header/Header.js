@@ -17,7 +17,7 @@ import {
   Col,
 } from 'react-bootstrap';
 
-
+import DistrictInfo from '../../components/district_info/DistrictInfo';
 
 class Header extends Component {
   constructor(props) {
@@ -36,7 +36,7 @@ class Header extends Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { user, federalReps, district } = this.props;
     return <header>
 
         <Link to='/'>
@@ -56,6 +56,9 @@ class Header extends Component {
             <Nav bsStyle='tabs' pullLeft justified>
               <NavItem>
                 <Link to="/floor-items">Floor Items</Link>
+              </NavItem>
+              <NavItem>
+                <Link to="/find-reps">Find Reps</Link>
               </NavItem>
               {
                 user ?
@@ -84,14 +87,16 @@ class Header extends Component {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-
+      <DistrictInfo federalReps={ federalReps } district={ district } />
     </header>;
   }
 }
 
 function mapStateToProps(state) {
   return {
-    user: state.user
+    user: state.user,
+    federalReps: state.federalReps,
+    district: state.district,
   };
 }
 

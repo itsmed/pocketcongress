@@ -23,10 +23,9 @@ class RepPosition extends Component {
 
     ref.orderByChild('id').equalTo(repId).once('value', snap => {
       if (snap.val() === null) {
-        console.log('found nothing????????????????????', snap.val(), this.props);
         return;
       }
-      console.log('found SOMETHING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', snap.val());
+
       this.setState({
         repId,
         position: Object.values(snap.val())[0].position

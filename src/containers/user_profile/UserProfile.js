@@ -67,7 +67,7 @@ class UserProfile extends Component {
         <h3>Federal Representatives</h3>
         {
           Object.values(federalReps).map(rep => <Col xs={12} md={4} key={rep.id}>
-            <RepPreview rep={rep} />
+            <RepPreview rep={rep} size='large' />
             <UserRepComparisonPieGraph user={ user } rep={ rep } size={ 300 } />
           </Col>)
         }

@@ -28,15 +28,16 @@ export const setUserDistrict = (addrObj) => {
     .then(res => res.json())
     .then(repObj => {
       dispatch(toggleIsFetching());
+
       return dispatch({
         type: RECEIVE_USER_REPS,
-        payload: repObj.reps
+        payload: repObj.results
       });
     })
     .then(() => {
       dispatch({
         type: VERIFY_USER_DISTRICT_INF0,
-        payload: addrObj
+        payload: addrObj.fields.congressional_district
       });
     })
     .catch(err => receiveErrorMessage(err.message));

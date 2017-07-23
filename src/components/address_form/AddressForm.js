@@ -4,15 +4,7 @@ import {
   API_BASE,
 } from '../../actions';
 
-const AddressConfirmation = ({addr}) => (
-  <ul key={addr.address_components.number.concat(addr.address_components.street, addr.address_components.zip)}>
-    <li>Number: {addr.address_components.number}</li>
-    <li>Street: {addr.address_components.street}</li>
-    <li>City: {addr.address_components.city}</li>
-    <li>State: {addr.address_components.state}</li>
-    <li>Zip Code: {addr.address_components.zip}</li>
-  </ul>
-);
+import AddressDisplayComponent from '../address_display_component/AddressDisplayComponent';
 
 class AddressForm extends Component {
   constructor(props) {
@@ -39,7 +31,7 @@ class AddressForm extends Component {
   }
 
   getLocation() {
-    this.props.toggleFetching();
+    this.props.toggleIsFetching();
     let p = new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(p => {
         let params = {
@@ -67,12 +59,12 @@ class AddressForm extends Component {
     .then(res => res.json())
     .then(resp => {
       this.props.submitAddress('possibleAddresses', resp.results);
-      return this.props.toggleFetching();
+      return this.props.toggleIsFetching();
     });
   }
 
   getUserDistrictByAddress (addrObj) {
-    this.props.toggleFetching();
+    this.props.toggleIsFetching();
     return fetch(API_BASE.concat('/api/get-district-by-address'), {
       method: 'POST',
       mode: 'cors',
@@ -84,7 +76,7 @@ class AddressForm extends Component {
     .then(res => res.json())
     .then(resp => {
       this.props.submitAddress('possibleAddresses', resp.results);
-      return this.props.toggleFetching();
+      return this.props.toggleIsFetching();
     });
   };
 
@@ -94,6 +86,11 @@ class AddressForm extends Component {
 
   render() {
     return <div>
+      {
+        this.props.addresses.map((a, i) => <div key={i} onClick={ () => this.verifyAddress(a) }>
+          <AddressDisplayComponent addr={a} />
+        </div>)
+      }
       { navigator.geolocation ?
           <div>
             <p>If you are at home, you can use your location</p>
@@ -102,11 +99,6 @@ class AddressForm extends Component {
           </div> 
         :
           ''
-      }
-      {
-        this.props.addresses.map((a, i) => <div key={i} onClick={ () => this.verifyAddress(a) }>
-          <AddressConfirmation addr={a} />
-        </div>)
       }
       <label>Street: </label><input type="text" placeholder="Street" ref="streetInput" /><br />
       <label>Apartment: </label><input type="text" placeholder="Apartment" ref="aptInput" /><br />

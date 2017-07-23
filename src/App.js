@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 
 import BillDetails from './containers/bill_details/BillDetails';
+import FindRepsContainer from './containers/find_reps_container/FindRepsContainer';
 import FloorItemContainer from './containers/floor_item_container/FloorItemContainer';
 import Header from './containers/header/Header';
 import Landing from './containers/landing/Landing';
@@ -14,7 +15,6 @@ import NomineeDetails from './containers/nominee_details/NomineeDetails';
 import SignIn from './containers/sign_in/SignIn';
 import SignUp from './containers/sign_up/SignUp';
 import UserProfile from './containers/user_profile/UserProfile';
-
 
 import './App.css';
 
@@ -27,14 +27,15 @@ const App = () => (
       <Header />
   
         <Switch>
-          <Route path="/" exact component={Landing} />
-          <Route path="/floor-items" component={FloorItemContainer} />
-{/*            <Route path="/floor-items/:month/:year" component={FloorItemList} />*/}
-          <Route path="/signin" exact component={SignIn} />
-          <Route path="/signup" exact component={SignUp} />
-          <Route path="/profile" component={UserProfile} />
-          <Route path="/bill/details/:congress/:chamber/:session/:rollcall/:id" component={BillDetails}/>
-          <Route path="/nominees/details/:congress/:chamber/:session/:rollcall/:id" component={NomineeDetails}/>
+          <Route path='/' exact component={Landing} />
+          <Route path='/floor-items' component={FloorItemContainer} />
+{/*            <Route path='/floor-items/:month/:year' component={FloorItemList} />*/}
+          <Route path='/signin' exact component={SignIn} />
+          <Route path='/signup' exact component={SignUp} />
+          <Route path='/profile' component={UserProfile} />
+          <Route path='/bill/details/:congress/:chamber/:session/:rollcall/:id' component={BillDetails}/>
+          <Route path='/nominees/details/:congress/:chamber/:session/:rollcall/:id' component={NomineeDetails}/>
+          <Route path='/find-reps' component={FindRepsContainer} />
           <Route component={NoMatch}/>
         </Switch>
 
