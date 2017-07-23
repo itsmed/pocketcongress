@@ -6,6 +6,7 @@ import {
   API_BASE,
   quickSort,
   handleUserVote,
+  setVisitorVotePosition,
 } from '../../actions';
   
 import {
@@ -82,10 +83,13 @@ class BillDetails extends Component {
   }
 
   handleVote(congress, position) {
+    const { chamber, session, rollcall } = this.props.match.params;
     if (this.props.user) {
-      const { chamber, session, rollcall } = this.props.match.params;
 
       return handleUserVote(this.props.user.uid, congress, chamber, session, rollcall, position);
+    } else {
+      const votePath = `votes/${congress}/${chamber}/${session}/${rollcall}`;
+      return this.props.setVisitorVotePosition(votePath, position);
     }
   }
 
@@ -109,7 +113,7 @@ class BillDetails extends Component {
 
   displayBill(bill) {
     const { chamber, session, rollcall } = this.props.match.params;
-    const reps = Object.keys(this.props.federalReps);
+    const { visitorVotePositions } = this.props;
     const { expanded } = this.state;
 
     return <Grid>
@@ -127,6 +131,7 @@ class BillDetails extends Component {
                 session={session}
                 rollcall={rollcall}
                 congress={bill.congress}
+                visitorPositions={ visitorVotePositions }
               />
             </h4>
           </Col>
@@ -218,8 +223,11 @@ class BillDetails extends Component {
 const mapStateToProps = (state) => ({
   user: state.user,
   federalReps: state.federalReps,
+  visitorVotePositions: state.visitorVotePositions,
 });
 
-export default connect(mapStateToProps)(BillDetails);
+export default connect(mapStateToProps, {
+  setVisitorVotePosition,
+})(BillDetails);
 
 

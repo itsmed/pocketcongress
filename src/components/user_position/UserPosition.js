@@ -9,6 +9,9 @@ class UserPosition extends Component {
       message: 'Loading...'
     };
 
+    this.flag = false;
+
+    this.findVisitorVotes = this.findVisitorVotes.bind(this);
   }
 
   componentWillUnmount() {
@@ -16,34 +19,65 @@ class UserPosition extends Component {
     database.ref(`votes/${congress}/${chamber}/${session}/${rollcall}`).off();
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { chamber, session, rollcall, user, congress } = nextProps;
+    const votePath = `votes/${congress}/${chamber}/${session}/${rollcall}`;
+    const vote = nextProps.visitorPositions.find(vote => vote.path === votePath);
+
+    if (vote) {
+      this.setState({
+        message: vote.position,
+      });
+      this.flag = true;
+    }
+  }
+
   componentDidMount() {
     const { chamber, session, rollcall, user, congress } = this.props;
+    const votePath = `votes/${congress}/${chamber}/${session}/${rollcall}`;
+    
+    if (user) {
+      
+      const ref = database.ref(votePath);
 
-    const ref = database.ref(`votes/${congress}/${chamber}/${session}/${rollcall}`);
 
-    let flag = false;
+      ref.on('value', snap => {
+        const val = snap.val();
+        for (let record in snap.val()) {
+          let vote = val[record];
 
-    ref.on('value', snap => {
-      const val = snap.val();
-      for (let record in snap.val()) {
-        let vote = val[record];
+          if (vote.id === user.uid) {
 
-        if (vote.id === user.uid) {
-
-          this.setState({
-            message: vote.position,
-          });
-          flag = true;
+            this.setState({
+              message: vote.position,
+            });
+            this.flag = true;
+          }
         }
-      }
+      });   
+    } else {
+      this.findVisitorVotes();
+    }
 
-      if (!flag) {
-        this.setState({
-          message: 'You haven\'t voted yet.'
-        });
-      }
+    if (!this.flag) {
+      this.setState({
+        message: 'You haven\'t voted yet.'
+      });
+    }
 
-    });   
+  }
+
+  findVisitorVotes() {
+    const { chamber, session, rollcall, user, congress } = this.props;
+    const votePath = `votes/${congress}/${chamber}/${session}/${rollcall}`;
+    const vote = this.props.visitorPositions.find(vote => vote.path === votePath);
+
+    if (vote) {
+      this.setState({
+        message: vote.position,
+      });
+      this.flag = true;
+    }
   }
 
   render() {

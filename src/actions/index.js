@@ -10,6 +10,7 @@ export {
   ACKNOWLEDGE_ERROR_MESSAGE,
   RECEIVE_ERROR_MESSAGE,
   SET_DATE,
+  SET_VISITOR_VOTE_POSITION,
 } from './consts';
 
 export {
@@ -52,4 +53,8 @@ export {
 export {
   setDate,
 } from './set_date/action.set_date';
+
+export {
+  setVisitorVotePosition,
+} from './set_visitor_vote_position/action.set_visitor_vote_position';
 

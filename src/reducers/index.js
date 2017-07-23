@@ -24,6 +24,10 @@ import {
   reducerSetDate,
 } from './set_date/reducer.set_date';
 
+import {
+  reducerSetVisitorVotePosition
+} from './set_visitor_vote_position/reducer.set_visitor_vote_position';
+
 export const rootReducer = combineReducers({
   user: reducerUserAuth,
   isFetching: reducerIsFetching,
@@ -31,5 +35,6 @@ export const rootReducer = combineReducers({
   federalReps: reducerSetFederalReps,
   federalFloorItems: reducerFederalFloorItems,
   errorMessage: reducerErrorMessage,
-  date: reducerSetDate
+  date: reducerSetDate,
+  visitorVotePositions: reducerSetVisitorVotePosition,
 });
