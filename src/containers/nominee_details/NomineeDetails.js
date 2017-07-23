@@ -5,6 +5,7 @@ import { database } from '../../firebase_config';
 import {
   quickSort,
   handleUserVote,
+  setVisitorVotePosition,
 } from '../../actions';
 
 import {
@@ -64,15 +65,19 @@ class NomineeDetails extends Component {
   }
 
   handleVote(congress, position) {
+    const { chamber, session, rollcall } = this.props.match.params;
     if (this.props.user) {
-      const { chamber, session, rollcall } = this.props.match.params;
 
       return handleUserVote(this.props.user.uid, congress, chamber, session, rollcall, position);
+    } else {
+      const votePath = `votes/${congress}/${chamber}/${session}/${rollcall}`;
+      return this.props.setVisitorVotePosition(votePath, position);
     }
   }
 
   render() {
     const { nominee } = this.state;
+    const { visitorPositions } = this.props;
     const { chamber, session, rollcall, congress } = this.props.match.params;
     return <div>
       {
@@ -87,6 +92,7 @@ class NomineeDetails extends Component {
                       session={ session }
                       rollcall={ rollcall }
                       congress={ congress }
+                      visitorPositions={ visitorPositions }
                     />
                   </h4>
                   </Col>
@@ -138,9 +144,12 @@ class NomineeDetails extends Component {
 
 const mapStateToProps = (state) => ({
   user: state.user,
-  federalReps: state.federalReps
+  federalReps: state.federalReps,
+  visitorPositions: state.visitorVotePositions,
 });
 
-export default connect(mapStateToProps)(NomineeDetails);
+export default connect(mapStateToProps, {
+  setVisitorVotePosition,
+})(NomineeDetails);
 
  
