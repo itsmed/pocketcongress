@@ -15,6 +15,7 @@ import {
   NavItem,
   Navbar,
   Col,
+  Button,
 } from 'react-bootstrap';
 
 import DistrictInfo from '../../components/district_info/DistrictInfo';
@@ -23,7 +24,12 @@ class Header extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      showDistrictInfo: false,
+    };
+
     this.handleSignOut = this.handleSignOut.bind(this);
+    this.toggleShowDistrictInfo = this.toggleShowDistrictInfo.bind(this);
   }
 
 
@@ -35,8 +41,16 @@ class Header extends Component {
     this.props.unauthUser(this.props.user.id);
   }
 
+  toggleShowDistrictInfo() {
+    return this.setState({
+      showDistrictInfo: !this.state.showDistrictInfo,
+    });
+  }
+
   render() {
-    const { user, federalReps, district } = this.props;
+    const { user, federalReps, district, visitorVotePositions } = this.props;
+    const { showDistrictInfo } = this.state;
+
     return <header>
 
         <Link to='/'>
@@ -87,7 +101,16 @@ class Header extends Component {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-      <DistrictInfo federalReps={ federalReps } district={ district } />
+      {
+        showDistrictInfo ?
+          <div>
+            <Button bsStyle='link' onClick={ this.toggleShowDistrictInfo }>Hide</Button>
+            <DistrictInfo federalReps={ federalReps } district={ district } user={ user } />
+          </div>
+        : district.verifiedDistrict ?
+          <Button bsStyle='link' onClick={ this.toggleShowDistrictInfo }>District Info</Button>
+        : ''
+      }
     </header>;
   }
 }
@@ -100,4 +123,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { getAuthUpdate, unauthUser })(Header);
+export default connect(mapStateToProps, {
+  getAuthUpdate,
+  unauthUser,
+})(Header);

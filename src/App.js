@@ -29,7 +29,6 @@ const App = () => (
         <Switch>
           <Route path='/' exact component={Landing} />
           <Route path='/floor-items' component={FloorItemContainer} />
-{/*            <Route path='/floor-items/:month/:year' component={FloorItemList} />*/}
           <Route path='/signin' exact component={SignIn} />
           <Route path='/signup' exact component={SignUp} />
           <Route path='/profile' component={UserProfile} />

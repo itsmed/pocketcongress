@@ -13,6 +13,10 @@ import {
   setUser,
 } from '../../actions';
 
+import {
+  Button,
+} from 'react-bootstrap';
+
 import ErrorMessage from '../../components/error_message/ErrorMessage';
 
 class SignIn extends Component {
@@ -127,7 +131,7 @@ class SignIn extends Component {
               window.localStorage === undefined || window.sessionStorage === undefined ?
                 <h3>This browser does not support this sign in method</h3>
               :
-                <button onClick={ () => this.handleProviderSubmit('google')}>Sign In With Google</button>
+                <Button onClick={ () => this.handleProviderSubmit('google')}>Sign In With Google</Button>
             }
           </div>
       }

@@ -39,21 +39,25 @@ class Landing extends Component {
           <h1>Pocket Congress</h1>
         </Col>
         <Col xs={12}>
-          <h4>Helping you keep Congress accountable without the hype.</h4>
+          <h4>Congress Works For You.</h4>
+        </Col>
+        <Col xs={12} md={10} mdOffset={1}>
+          <p>It can be easy to decide who to vote for, but it can be hard to remember what their positions are and why you're voting for them.</p>
+          <p>Since how our elected representatives' vote on legislation and nominees affects our lives more than their campaign speeches, Pocket Congress helps you keep track of what your elected representatives vote on in the US Senate and US House of Representatives.</p>
         </Col>
       </Row>
       <Row>
         <Col xs={12} md={4}>
-          <h3>Find Your Representatives</h3>
+          <h3>See Your Representatives</h3>
           <p>Enter the address at which you are registerd to vote or share your location to find you if you are at home, and you will be shown your US Senators and US Congress Person, as well as their contact information.</p>
         </Col>
         <Col xs={12} md={4}>
-          <h3>See How They Vote</h3>
-          <p>Pocket Congress gives you an easy way to check in on what your elected representatives are voting on each day. Just the bill, ammendment or nomination, and the details. Check up on Congress and see how your representatives vote on each item.</p>
+          <h3>See What They Vote On</h3>
+          <p>See the bills, ammendments and nominations that have been voted on in the US House of Representatives and the US Senate. Click on the "More" button to get the details on the nominee or legislative item, as well as to see how your representatives voted.</p>
         </Col>
         <Col xs={12} md={4}>
-          <h3>Vote and Compare</h3>
-          <p>Vote and see how your representatives voted on the same items, then see how often you agree with the representatives.</p>
+          <h3>See How Your Prefreneces Compare</h3>
+          <p>You can "vote" to express your opinion on the legislation. This information is not shared with anyone (so call your Senators and Representatives!). Visit your profile page to see how often you agree or disagree with your elected representatives.</p>
         </Col>
       </Row>
       <Row>

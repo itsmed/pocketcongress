@@ -111,7 +111,7 @@ class UserRepComparisonPieGraph extends Component {
         value={ average || 0 }
         valueLabel={ `Out of ${sharedVotePaths.length} vote${sharedVotePaths.length !== 1 ? 's' : ''}, ${this.state.valueLabel}` }
         size={ this.props.size }
-        strokewidth={ 10 }
+        strokewidth={ this.props.strokeWidth }
       />
     </div>;
   }

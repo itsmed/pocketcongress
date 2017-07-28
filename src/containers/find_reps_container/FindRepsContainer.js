@@ -57,11 +57,16 @@ class FindRepsContainer extends Component {
           <h1>Loading....</h1>
         :
         currentStep === 0 ?
-          <AddressForm
-            toggleIsFetching={ toggleIsFetching }
-            addresses={ possibleAddresses }
-            submitAddress={ this.receiveAddresses }
-          />
+          <div>
+            <h4>Set Your Congressional District</h4>
+            <p>Congressional districts are based on lines drawn by Congress every 10 years following the results of the census. As a result, a zip code alone is not enough to determine your congressional distrit.</p>
+            <h6>This information will not be shared with anyone.</h6>
+            <AddressForm 
+              submitAddress={ this.receiveAddresses }
+              addresses={ possibleAddresses }
+              toggleIsFetching={ toggleFetching }
+            />
+          </div>
         :
           <Link to='/floor-items'>
             <Button bsStyle='success' block>Continue</Button>

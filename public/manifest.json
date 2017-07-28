@@ -1,11 +1,11 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "PoktCongress",
+  "name": "Pokt Congress Demo App",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "favicon.jpg",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/jpg"
     }
   ],
   "start_url": "./index.html",

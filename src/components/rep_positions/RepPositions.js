@@ -32,7 +32,7 @@ const RepPositions = ({reps, chamber, session, rollcall, congress}) => (
           rep={rep}
           />;
       } else {
-        console.log('other');
+        console.log('other', chamber, rep.role);
         return '';
       }
     })

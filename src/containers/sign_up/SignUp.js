@@ -15,6 +15,10 @@ import {
   getFederalReps,
 } from '../../actions';
 
+import {
+  Button,
+} from 'react-bootstrap';
+
 import AddressForm from '../../components/address_form/AddressForm';
 import ErrorMessage from '../../components/error_message/ErrorMessage';
 
@@ -173,8 +177,8 @@ class SignUp extends Component {
         currentStep === 1 ?
           <div>
             <h4>Set Your Congressional District</h4>
-            <p>Set your district. You can search for other ones AT THIS LINK</p>
-            <p>Congressional districts are based on lines drawn by Congress every 10 years following the results of the census. EXPLAIN WHY THIS IS NEEED</p>
+            <p>Congressional districts are based on lines drawn by Congress every 10 years following the results of the census. As a result, a zip code alone is not enough to determine your congressional distrit.</p>
+            <h6>This information will not be shared with anyone.</h6>
             <AddressForm 
               submitAddress={ this.receiveAddresses }
               addresses={ this.state.possibleAddresses }
@@ -230,7 +234,7 @@ class SignUp extends Component {
               window.localStorage === undefined || window.sessionStorage === undefined ?
                 <h3>This browser does not support this sign in method</h3>
               :
-                <button onClick={ () => this.handleProviderSubmit('google')}>Sign In With Google</button>
+                <Button onClick={ () => this.handleProviderSubmit('google')}>Sign In With Google</Button>
             }
           </div>
       }
