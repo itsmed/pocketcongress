@@ -18,10 +18,9 @@ const Footer = (props) => (
         </Col>
       </Row>
       <Row>
-        <Col xs={4} xsOffset={4}>
+        <Col xs={6} xsOffset={3}>
           <p>
-            <Glyphicon glyph="copyright-mark" />
-            <a href="https://itsmed.github.io/" target="_blank" rel="noopener">Dejon Gill</a>
+          <Glyphicon glyph="copyright-mark" /> <a href="https://itsmed.github.io/" target="_blank" rel="noopener">Dejon Gill</a>
           </p>
         </Col>
       </Row>

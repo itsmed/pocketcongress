@@ -21,6 +21,7 @@ import {
 
 import AddressForm from '../../components/address_form/AddressForm';
 import ErrorMessage from '../../components/error_message/ErrorMessage';
+import LoadingComponent from '../../components/loading_component/LoadingComponent';
 
 class SignUp extends Component {
   constructor(props) {
@@ -157,11 +158,6 @@ class SignUp extends Component {
     });
   }
 
-  signUpLoadingCard () {
-    return <div>
-      <h1>Sign Up Loading...</h1>
-    </div>;
-  }
 
   render() {
     const { currentStep, fetching } = this.state;
@@ -169,7 +165,7 @@ class SignUp extends Component {
       <h2>Sign Up</h2>
       {
         fetching === true ?
-          this.signUpLoadingCard()
+          <LoadingComponent />
         :
         currentStep === 0 ?
           this.renderSignUpForm()
@@ -186,10 +182,7 @@ class SignUp extends Component {
             />
           </div>
         :
-        currentStep === 2 ?
-          'step3'
-        :
-          'default!'
+          ''
       }
     </div>;
   }

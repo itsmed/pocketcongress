@@ -1,12 +1,13 @@
 import React from 'react';
 
 import FloorItem from '../floor_item/FloorItem';
+import LoadingComponent from '../loading_component/LoadingComponent';
 
 const FloorItemList = ({ items, activeChamber, isFetching }) => (
   <div>
     {
       isFetching ?
-        <h1>Loading...</h1>
+        <LoadingComponent />
       
       :
 

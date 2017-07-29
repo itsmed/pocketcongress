@@ -18,6 +18,7 @@ import {
 import DateDropDown from '../../components/date_drop_down/DateDropDown';
 import ErrorMessage from '../../components/error_message/ErrorMessage';
 import FloorItemList from '../../components/floor_item_list/FloorItemList';
+import LoadingComponent from '../../components/loading_component/LoadingComponent';
 
 class FloorItemContainer extends Component {
   constructor(props) {
@@ -80,7 +81,7 @@ class FloorItemContainer extends Component {
               acknowledgeErrorMessage={ acknowledgeErrorMessage }
             />
           : isFetching ?
-            <h1>Loading...</h1>
+            <LoadingComponent />
           :
             <FloorItemList
               items={ floorItems }

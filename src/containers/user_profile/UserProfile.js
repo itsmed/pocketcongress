@@ -24,7 +24,7 @@ class UserProfile extends Component {
 
   render() {
     const { user, federalReps, district } = this.props;
-    console.log('props usr provil', this.props);
+
     return <Grid>
       <Row>
         <Col xs={12} md={4}>
