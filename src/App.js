@@ -6,6 +6,7 @@ import {
   Switch
 } from 'react-router-dom';
 
+import About from './components/about/About';
 import BillDetails from './containers/bill_details/BillDetails';
 import FindRepsContainer from './containers/find_reps_container/FindRepsContainer';
 import FloorItemContainer from './containers/floor_item_container/FloorItemContainer';
@@ -29,6 +30,7 @@ const App = () => (
   
         <Switch>
           <Route path='/' exact component={Landing} />
+          <Route path='/about' exact component={About} />
           <Route path='/floor-items' component={FloorItemContainer} />
           <Route path='/signin' exact component={SignIn} />
           <Route path='/signup' exact component={SignUp} />
