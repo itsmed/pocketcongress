@@ -8,7 +8,7 @@ import {
 } from 'react-bootstrap';
 
 const Footer = (props) => (
-  <footer>
+  <footer style={{marginTop: '200px'}}>
     <Grid>
       <Row>
         <Col xs={12}>
