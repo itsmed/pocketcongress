@@ -64,7 +64,7 @@ class FindRepsContainer extends Component {
             <AddressForm 
               submitAddress={ this.receiveAddresses }
               addresses={ possibleAddresses }
-              toggleIsFetching={ toggleFetching }
+              toggleIsFetching={ toggleIsFetching }
             />
           </div>
         :

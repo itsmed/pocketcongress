@@ -10,7 +10,7 @@ import BillDetails from './containers/bill_details/BillDetails';
 import FindRepsContainer from './containers/find_reps_container/FindRepsContainer';
 import FloorItemContainer from './containers/floor_item_container/FloorItemContainer';
 import Header from './containers/header/Header';
-import Footer from './containers/footer/Header';
+import Footer from './components/footer/Footer';
 import Landing from './containers/landing/Landing';
 import NomineeDetails from './containers/nominee_details/NomineeDetails';
 import SignIn from './containers/sign_in/SignIn';
