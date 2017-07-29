@@ -94,6 +94,9 @@ class Header extends Component {
                     <Link to="/signin">Sign In</Link>
                   </NavItem>
               }
+              <NavItem>
+                <Link to='/about'>About</Link>
+              </NavItem>
             </Nav>
           </Navbar.Collapse>
         </Navbar>

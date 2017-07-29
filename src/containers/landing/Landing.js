@@ -39,7 +39,8 @@ class Landing extends Component {
           <h1>Pocket Congress</h1>
         </Col>
         <Col xs={12}>
-          <h4>Congress Works For You.</h4>
+          <h4>Congress Works For You</h4>
+          <p>Pocket Congress is a web app that aims to increase voter knowledge and participation by providing an easy way to view, track, and compare your elected representatives' voting records to your own preferences.</p>
         </Col>
         <Col xs={12} md={10} mdOffset={1}>
           <p>It can be easy to decide who to vote for, but it can be hard to remember what their positions are and why you're voting for them.</p>
