@@ -177,7 +177,7 @@ class SignUp extends Component {
         currentStep === 1 ?
           <div>
             <h4>Set Your Congressional District</h4>
-            <p>Congressional districts are based on lines drawn by Congress every 10 years following the results of the census. As a result, a zip code alone is not enough to determine your congressional distrit.</p>
+            <p>Congressional districts are based on lines drawn by Congress every 10 years following the results of the census. As a result, a zip code alone is not enough to determine your congressional district.</p>
             <h6>This information will not be shared with anyone.</h6>
             <AddressForm 
               submitAddress={ this.receiveAddresses }

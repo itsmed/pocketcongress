@@ -43,13 +43,13 @@ class Landing extends Component {
         </Col>
         <Col xs={12} md={10} mdOffset={1}>
           <p>It can be easy to decide who to vote for, but it can be hard to remember what their positions are and why you're voting for them.</p>
-          <p>Since how our elected representatives' vote on legislation and nominees affects our lives more than their campaign speeches, Pocket Congress helps you keep track of what your elected representatives vote on in the US Senate and US House of Representatives.</p>
+          <p>Since how our elected representatives vote on legislation and nominees affects our lives more than their campaign speeches, Pocket Congress helps you keep track of the positions that your elected representatives take when they vote on in the US Senate and US House of Representatives.</p>
         </Col>
       </Row>
       <Row>
         <Col xs={12} md={4}>
           <h3>See Your Representatives</h3>
-          <p>Enter the address at which you are registerd to vote or share your location to find you if you are at home, and you will be shown your US Senators and US Congress Person, as well as their contact information.</p>
+          <p>Enter the address at which you are registerd to vote or share your location if you are at home, and you will be shown your US Senators and US Congress Person, as well as their contact information.</p>
         </Col>
         <Col xs={12} md={4}>
           <h3>See What They Vote On</h3>

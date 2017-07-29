@@ -52,11 +52,7 @@ class Header extends Component {
     const { showDistrictInfo } = this.state;
 
     return <header>
-
-        <Link to='/'>
-          <h2>Pocket Congress</h2>
-        </Link>
-        
+ 
         <Navbar collapseOnSelect>
           <Navbar.Toggle />
           <Col xsHidden>
