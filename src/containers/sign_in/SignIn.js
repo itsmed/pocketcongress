@@ -54,10 +54,9 @@ class SignIn extends Component {
           return self.props.setUser(result.user);
         }
       })
-      .catch(err => console.log('[FIREBASE COMPONENT DID MOUNT]', err));
+      .catch(err => receiveErrorMessage(err.message));
 
     this.emailValue.focus();
-    console.log('SIGNIN', this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -94,10 +93,11 @@ class SignIn extends Component {
   validateEmail() {
     if (this.state.emailValue === undefined ||
       this.state.emailValue.length === 0) return;
-    return validate(this.state.emailValue) ? 'sucess' : 'error';
+    return validate(this.state.emailValue) ? 'success' : 'error';
   }
 
-  handleFormSubmit() {
+  handleFormSubmit(e) {
+    e.preventDefault();
     this.props.signInWithEmailAndPassword(this.state.emailValue, this.state.passwordValue);
   }
 

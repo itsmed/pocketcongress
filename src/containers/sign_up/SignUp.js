@@ -17,6 +17,10 @@ import {
 
 import {
   Button,
+  FormControl,
+  FormGroup,
+  ControlLabel,
+  HelpBlock,
 } from 'react-bootstrap';
 
 import AddressForm from '../../components/address_form/AddressForm';
@@ -45,11 +49,12 @@ class SignUp extends Component {
     this.handleEmailFormChange = this.handleEmailFormChange.bind(this);
     this.handleUserNameFormChange = this.handleUserNameFormChange.bind(this);
     this.handlePasswordFormChange = this.handlePasswordFormChange.bind(this);
-    this.validateInfo = this.validateInfo.bind(this);
     this.handleAddressSubmit = this.handleAddressSubmit.bind(this);
     this.receiveAddresses = this.receiveAddresses.bind(this);
     this.toggleFetching = this.toggleFetching.bind(this);
-    this.signUpLoadingCard = this.signUpLoadingCard.bind(this);
+    this.validateEmail = this.validateEmail.bind(this);
+    this.validatePassword = this.validatePassword.bind(this);
+    this.validateUsername = this.validateUsername.bind(this);
   }
 
   componentDidMount() {
@@ -64,9 +69,9 @@ class SignUp extends Component {
           });
         }
       })
-      .catch(err => console.log('[FIREBASE COMPONENT DID MOUNT]', err));
+      .catch(err => receiveErrorMessage(err.message));
 
-    this.refs.email.focus();
+    this.emailValue.focus();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -81,49 +86,55 @@ class SignUp extends Component {
     this.props.authorizeNewUserWithProvider(provider);
   }
 
-  validateInfo(e) {
-    e.preventDefault();
-    if (!(validate(this.state.emailValue))) {
-      return this.props.receiveErrorMessage(`[${this.state.emailValue}] is not a valid email`);
-    }
-    if (validatePassword(this.state.passwordValue) === -1) {
-      return this.props.receiveErrorMessage(`Passwords must be at least 8 characters long, including at least one number, special character, lowercase letter and capital letter`);
-    }
-    this.handleFormSubmit();
+  validatePassword() {
+    if (this.state.passwordValue === undefined ||
+      this.state.passwordValue.length === 0) return;
+    return validatePassword(this.state.passwordValue) > -1 ? 'success' : 'error';
   }
+
+  validateEmail() {
+    if (this.state.emailValue === undefined ||
+      this.state.emailValue.length === 0) return;
+    return validate(this.state.emailValue) ? 'success' : 'error';
+  }
+
+  validateUsername() {
+    return this.state.userNameValue.length > 1 ? 'success' : 'error';
+  }    
 
   handleEmailFormChange() {
     this.setState({
-      emailValue: this.refs.email.value,
+      emailValue: this.emailValue.value,
     });
   }
 
   handleUserNameFormChange() {
     this.setState({
-      userNameValue: this.refs.userName.value,
+      userNameValue: this.userNameValue.value,
     });
   }
 
   handlePasswordFormChange() {
     this.setState({
-      passwordValue: this.refs.password.value,
+      passwordValue: this.passwordValue.value,
     });
   }
 
-  handleFormSubmit() {
+  handleFormSubmit(e) {
+    e.preventDefault();
     const self = this;
     return firebase.auth().createUserWithEmailAndPassword(this.state.emailValue, this.state.passwordValue)
       .then(result => {
-
+        console.log('create user here for some reason????', result);
         const newUser = Object.assign({}, result, {
-          displayName: self.state.userName
+          displayName: self.state.userNameValue
         });
         self.setState({
           user: newUser,
           currentStep: 1
         });
       })
-      .catch(err => receiveErrorMessage(err.message));
+      .catch(err => self.props.receiveErrorMessage(err.message));
   }
 
   handleAddressSubmit(addr) {
@@ -139,11 +150,10 @@ class SignUp extends Component {
           });
         })
         .then(() => this.props.createUser(this.state.user, this.state.verifiedAddress, this.state.federalReps))
-        .catch(err => console.log('everything is fukced', err.message));
+        .catch(err => self.props.receiveErrorMessage(err.message));
   }
 
   receiveAddresses(key, addr) {
-    console.log('receiving ', key, addr);
     if (key === 'verifiedAddress') {
       return this.handleAddressSubmit(addr);
     }
@@ -197,37 +207,54 @@ class SignUp extends Component {
           />
         :
           <div>
-            <form onSubmit={ this.validateInfo }>
-              <input
-                type="email"
-                onChange={ this.handleEmailFormChange }
-                placeholder="email"
-                ref="email"
-                value={ this.state.emailValue }
-              />
-              <input
-                type="text"
-                onChange={ this.handleUserNameFormChange }
-                placeholder="user name"
-                ref="userName"
-                value={ this.state.userNameValue }
-              />
-              <input
-                type="password"
-                onChange={ this.handlePasswordFormChange }
-                placeholder="password"
-                ref="password"
-              />
-              <input
-                type="submit"
-                value="Submit"
-              />
+            <form style={{marginBottom: '2em', paddingBottom: '2em', borderBottomStyle: 'solid'}} onSubmit={ this.handleFormSubmit }>
+              <FormGroup controlId='signup--email' validationState={ this.validateEmail() }
+              >
+                <ControlLabel>Email</ControlLabel>
+                <FormControl
+                  type="text"
+                  onChange={ this.handleEmailFormChange }
+                  placeholder="email"
+                  inputRef={ ref => this.emailValue = ref }
+                  value={ this.state.emailValue }
+                />
+                <FormControl.Feedback />
+              </FormGroup>
+              <FormGroup controlId='signup--username' validationState={ this.validateUsername }>
+                <ControlLabel>User Name</ControlLabel>
+                <FormControl
+                  type="text"
+                  onChange={ this.handleUserNameFormChange }
+                  placeholder="user name"
+                  inputRef={ ref => this.userNameValue = ref }
+                  value={ this.state.userNameValue }
+                />
+                <FormControl.Feedback />
+              </FormGroup>
+              <FormGroup controlId='signup--password' validationState={ this.validatePassword() }
+              >
+                <ControlLabel>Password</ControlLabel>
+                <FormControl
+                  type="password"
+                  onChange={ this.handlePasswordFormChange }
+                  placeholder="password"
+                  inputRef={ ref => this.passwordValue = ref }
+                  value={ this.state.passwordValue }
+                />
+                <HelpBlock>Passwords must be at least 8 characters long, including at least one number, special character, lowercase letter and capital letter</HelpBlock>
+                <FormControl.Feedback />
+              </FormGroup>
+              <Button type="submit" bsStyle='success' block>Submit</Button>
             </form>
+
             {
               window.localStorage === undefined || window.sessionStorage === undefined ?
                 <h3>This browser does not support this sign in method</h3>
               :
-                <Button onClick={ () => this.handleProviderSubmit('google')}>Sign In With Google</Button>
+                <div>
+                  <h5>Or</h5>
+                  <Button bsStyle='primary' onClick={ () => this.handleProviderSubmit('google')}>Sign In With Google</Button>
+                </div>
             }
           </div>
       }
