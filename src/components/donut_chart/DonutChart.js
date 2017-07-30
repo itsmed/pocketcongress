@@ -8,7 +8,7 @@ class DonutChart extends Component {
   }
 
   render() {
-
+    const { small } = this.props;
     const halfsize = (this.props.size * 0.5);
     const radius = halfsize - (this.props.strokewidth * 0.5);
     const circumference = 2 * Math.PI * radius;
@@ -24,8 +24,8 @@ class DonutChart extends Component {
         <circle r={radius} cx={halfsize} cy={halfsize} transform={rotateval} style={trackstyle} className="donutchart-track"/>
         <circle r={radius} cx={halfsize} cy={halfsize} transform={rotateval} style={indicatorstyle} className="donutchart-indicator"/>
         <text className="donutchart-text" x={halfsize} y={halfsize} style={{textAnchor:'middle'}} >
-          <tspan className="donutchart-text-val">{this.props.valueLabel + ': ' + this.props.value}</tspan>
-          <tspan className="donutchart-text-percent">%</tspan>
+          <tspan style={ small ? {fontSize: '16px'} : {fontSize: '22px'} }>{this.props.valueLabel + ': ' + this.props.value}</tspan>
+          <tspan style={ small ? {fontSize: '10px'} : {fontSize: '14px'} }>%</tspan>
         </text>
       </svg>
     );

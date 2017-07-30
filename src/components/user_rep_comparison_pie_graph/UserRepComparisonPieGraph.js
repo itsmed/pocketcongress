@@ -102,16 +102,18 @@ class UserRepComparisonPieGraph extends Component {
     const averageAgree = Math.round((agree / userVotes.length) * 100);
     const averageDisagree = Math.round((disagree / userVotes.length) * 100);
     const average = this.state.valueLabel === 'Agree' ? averageAgree : averageDisagree;
+
     return <div>
-      <ButtonGroup>
+      <ButtonGroup style={{marginBottom: '1em'}}>
         <Button onClick={ () => this.handleValueLabelChange('Agree') }>Agree</Button>
         <Button onClick={ () => this.handleValueLabelChange('Disagree') }>Disagree</Button>
       </ButtonGroup>
       <DonutChart
         value={ average || 0 }
-        valueLabel={ `Out of ${sharedVotePaths.length} vote${sharedVotePaths.length !== 1 ? 's' : ''}, ${this.state.valueLabel}` }
+        valueLabel={ this.props.small ? `${this.state.valueLabel}` : `Out of ${sharedVotePaths.length} vote${sharedVotePaths.length !== 1 ? 's' : ''}, ${this.state.valueLabel}` }
         size={ this.props.size }
         strokewidth={ this.props.strokeWidth }
+        small={ this.props.small ? true : false }
       />
     </div>;
   }

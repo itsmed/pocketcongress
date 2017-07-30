@@ -26,7 +26,7 @@ const DistrictInfo = ({district, federalReps, user}) => {
         Object.values(federalReps).map(rep => <Col key={rep.id + 'header+preview'} xs={12} md={4}>
           <RepPreview rep={rep} size='small' />
           {
-            user ? <UserRepComparisonPieGraph user={ user } rep={ rep } size={ 100 } strokeWidth={ 3 } /> : ''
+            user ? <UserRepComparisonPieGraph user={ user } rep={ rep } size={ 100 } strokeWidth={ 3 } small /> : ''
           }
         </Col>)
       }
