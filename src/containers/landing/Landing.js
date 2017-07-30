@@ -46,6 +46,9 @@ class Landing extends Component {
           <p>It can be easy to decide who to vote for, but it can be hard to remember what their positions are and why you're voting for them.</p>
           <p>Since how our elected representatives vote on legislation and nominees affects our lives more than their campaign speeches, Pocket Congress helps you keep track of the positions that your elected representatives take when they vote on in the US Senate and US House of Representatives.</p>
         </Col>
+        <Link to='/find-reps'>
+          <Button bsStyle='primary' block>Find Your Reps</Button>
+        </Link>
       </Row>
       <Row>
         <Col xs={12} md={4}>

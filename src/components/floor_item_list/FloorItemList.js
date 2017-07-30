@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FloorItem from '../floor_item/FloorItem';
+import FloorItemPreview from '../floor_item_preview/FloorItemPreview';
 import LoadingComponent from '../loading_component/LoadingComponent';
 
 const FloorItemList = ({ items, activeChamber, isFetching }) => (
@@ -26,7 +26,7 @@ const FloorItemList = ({ items, activeChamber, isFetching }) => (
                 activeChamber.toLowerCase() === 'senate' ?
                   items.senate.votes
                     .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}>
-                        <FloorItem
+                        <FloorItemPreview
                           chamber='senate'
                           session={ vote.session }
                           item={ vote }
@@ -37,7 +37,7 @@ const FloorItemList = ({ items, activeChamber, isFetching }) => (
                 :
                   items.house.votes
                     .filter(vote => vote.bill || vote.nomination).map((vote, i) => <li key={i}>
-                        <FloorItem
+                        <FloorItemPreview
                           chamber='house'
                           session={ vote.session }
                           item={ vote }
