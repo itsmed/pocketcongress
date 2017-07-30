@@ -13,6 +13,7 @@ import {
 } from 'react-bootstrap';
 
 import AddressForm from '../../components/address_form/AddressForm';
+import LoadingComponent from '../../components/loading_component/LoadingComponent';
 
 class FindRepsContainer extends Component {
   constructor(props) {
@@ -54,7 +55,7 @@ class FindRepsContainer extends Component {
     return <div>
       {
         isFetching ?
-          <h1>Loading....</h1>
+          <LoadingComponent />
         :
         currentStep === 0 ?
           <div>

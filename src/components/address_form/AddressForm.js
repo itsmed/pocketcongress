@@ -4,6 +4,16 @@ import {
   API_BASE,
 } from '../../actions';
 
+import {
+  Button,
+  FormControl,
+  FormGroup,
+  ControlLabel,
+  Grid,
+  Col,
+  Row
+} from 'react-bootstrap';
+
 import AddressDisplayComponent from '../address_display_component/AddressDisplayComponent';
 
 class AddressForm extends Component {
@@ -18,7 +28,7 @@ class AddressForm extends Component {
   }
 
   handleAddressSubmit() {
-    const { streetInput, aptInput, cityInput, stateInput, zipInput } = this.refs;
+    const { streetInput, aptInput, cityInput, stateInput, zipInput } = this;
     const params = {
       street: streetInput.value,
       apt: aptInput.value,
@@ -87,25 +97,87 @@ class AddressForm extends Component {
   render() {
     return <div>
       {
-        this.props.addresses.map((a, i) => <div key={i} onClick={ () => this.verifyAddress(a) }>
-          <AddressDisplayComponent addr={a} />
-        </div>)
-      }
-      { navigator.geolocation ?
+        this.props.addresses.length === 0 ?
           <div>
-            <p>If you are at home, you can use your location</p>
-            <button onClick={ this.getLocation }>Use My Location</button> 
-            <p>- Or -</p>
-          </div> 
+            { navigator.geolocation ?
+              <div style={{marginBottom: '5em', borderBottomStyle: 'solid'}}>
+                <p>If you are at home, you can use your location</p>
+                <Button bsStyle='primary' onClick={ this.getLocation } block>Use My Location</Button> 
+              </div> 
+            :
+              ''
+            }
+            <form onSubmit={ this.handleAddressSubmit }>
+              <p>Or use this address</p>
+              <FormGroup controlId='street'>
+                <ControlLabel>Street</ControlLabel>
+                <FormControl
+                  type="text"
+                  onChange={ () => '' }
+                  placeholder="street"
+                  inputRef={ ref => this.streetInput = ref }
+                />
+                <FormControl.Feedback />
+              </FormGroup>
+
+              <FormGroup controlId='apartment'>
+                <ControlLabel>Apartment</ControlLabel>
+                <FormControl
+                  type="text"
+                  onChange={ () => '' }
+                  placeholder="apartment"
+                  inputRef={ ref => this.aptInput = ref }
+                />
+                <FormControl.Feedback />
+              </FormGroup>
+
+              <FormGroup controlId='city'>
+                <ControlLabel>City</ControlLabel>
+                <FormControl
+                  type="text"
+                  onChange={ () => '' }
+                  placeholder="city"
+                  inputRef={ ref => this.cityInput = ref }
+                />
+                <FormControl.Feedback />
+              </FormGroup>
+
+              <FormGroup controlId='state'>
+                <ControlLabel>State</ControlLabel>
+                <FormControl
+                  type="text"
+                  onChange={ () => '' }
+                  placeholder="state"
+                  inputRef={ ref => this.stateInput = ref }
+                />
+                <FormControl.Feedback />
+              </FormGroup>
+
+              <FormGroup controlId='zipcode'>
+                <ControlLabel>Zip Code</ControlLabel>
+                <FormControl
+                  type="text"
+                  onChange={ () => '' }
+                  placeholder="zip code"
+                  inputRef={ ref => this.zipInput = ref }
+                />
+                <FormControl.Feedback />
+              </FormGroup>
+
+              <Button bsStyle='success' type='submit' onClick={ this.handleAddressSubmit } block>Submit</Button>
+            </form>
+          </div>
         :
-          ''
+          <Grid>
+            <Row>
+            {
+              this.props.addresses.map((a, i) => <Col xs={12} md={4} key={i} onClick={ () => this.verifyAddress(a) }>
+                <AddressDisplayComponent addr={a} />
+              </Col>)
+            }
+            </Row>
+          </Grid>
       }
-      <label>Street: </label><input type="text" placeholder="Street" ref="streetInput" /><br />
-      <label>Apartment: </label><input type="text" placeholder="Apartment" ref="aptInput" /><br />
-      <label>City: </label><input type="text" placeholder="City" ref="cityInput" /><br />
-      <label>State: </label><input type="text" placeholder="State" ref="stateInput" /><br />
-      <label>Zip Code: </label><input type="text" placeholder="Zip Code" ref="zipInput" /><br />
-      <button onClick={ this.handleAddressSubmit }>Submit</button>
     </div>;
   }
 }

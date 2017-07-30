@@ -35,7 +35,7 @@ class SignUp extends Component {
       currentStep: 0,
       emailValue: '',
       passwordValue: '',
-      userNameValue: '',
+      userNameValue: null,
       possibleAddresses: [],
       federalReps: [],
       verifiedAddress: null,
@@ -99,6 +99,7 @@ class SignUp extends Component {
   }
 
   validateUsername() {
+    if (this.state.userNameValue === null) return;
     return this.state.userNameValue.length > 1 ? 'success' : 'error';
   }    
 
@@ -220,7 +221,7 @@ class SignUp extends Component {
                 />
                 <FormControl.Feedback />
               </FormGroup>
-              <FormGroup controlId='signup--username' validationState={ this.validateUsername }>
+              <FormGroup controlId='signup--username' validationState={ this.validateUsername() }>
                 <ControlLabel>User Name</ControlLabel>
                 <FormControl
                   type="text"
