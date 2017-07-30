@@ -1,4 +1,4 @@
-export const API_BASE = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://powerful-earth-40118.herokuapp.com';
+export const API_BASE = process.env.NODE_ENV === 'production' ? 'https://powerful-earth-40118.herokuapp.com' : 'http://localhost:8000';
 export const ACKNOWLEDGE_ERROR_MESSAGE = 'ACKNOWLEDGE_ERROR_MESSAGE';
 export const RECEIVE_ERROR_MESSAGE = 'RECEIVE_ERROR_MESSAGE';
 export const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';

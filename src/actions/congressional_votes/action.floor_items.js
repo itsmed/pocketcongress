@@ -10,8 +10,10 @@ export const requestFloorItems = (month, year) => {
   return (dispatch) => {
     dispatch(toggleIsFetching());
     return getVotesByDate(month, year)
-      .then(res => res.json())
-      .then(jsonResponse => dispatch({ type: RECEIVE_FLOOR_ITEMS, payload: jsonResponse }))
+      .then(jsonResponse => {
+        return jsonResponse.error ? dispatch(receiveErrorMessage(jsonResponse.error)) :
+        dispatch({ type: RECEIVE_FLOOR_ITEMS, payload: jsonResponse });
+      })
       .then(() => dispatch(toggleIsFetching()))
       .catch(err => {
         dispatch(receiveErrorMessage(err.message));
@@ -27,5 +29,5 @@ export function getVotesByDate(month, year) {
     headers: {
       'Content-Type': 'application/json'
     }
-  });
+  }).then(res => res.json());
 }

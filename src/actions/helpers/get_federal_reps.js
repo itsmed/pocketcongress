@@ -24,7 +24,6 @@ export function getFederalReps(state, district) {
       return res.json();
     })
     .then(json => {
-      console.log('got these resps', json.results);
       return json.results;
     })
     .catch(err => receiveErrorMessage(err.message));
