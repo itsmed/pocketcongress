@@ -1,42 +1,30 @@
-export function quickSort(input, compare) {
-  var lesser = [],
-      greater = [],
-      pivot;
+export function quickSort(list, callback) {
+  
+  const compare = callback || function(a, b) {
+    return a < b;
+  };
 
-  if (!Array.isArray(input)) {
-    throw new Error('Can only sort arrays.');
+  if (!Array.isArray(list)) {
+    throw new Error('Can only sort arrays');
   }
 
-  var array = input.slice(0); // make a copy of the array
-
-  if (array.length < 2) {
-    return array;
+  if (list.length < 2) {
+    return list;
   }
 
-  // Create a compare func if not passed in
-  if (typeof compare !== 'function') {
-    compare = function (a, b) {
-      return a > b ? 1 : -1;
-    };
-  }
+  list = list.slice(0);
+  const pivot = list.pop();
+  const left = [];
+  const right = [];
 
-  // Get our pivot, this can be random
-  pivot = array.splice(Math.floor((Math.random() * array.length)));
-
-  // Iterate and put vals into either lesser or greater lists compared
-  // to the pivot
-  for (var i = 0; i < array.length; i++) {
-    if (compare(array[i], pivot) < 1) {
-      lesser.push(array[i]);
+  for (let i = 0; i < list.length; i++) {
+    if (compare(list[i], pivot)) {
+      left.push(list[i]);
     } else {
-      greater.push(array[i]);
+      right.push(list[i]);
     }
   }
 
-  // Sort lesser and greater lists, concat results
-  return Array.prototype.concat(
-    quickSort(lesser, compare),
-    pivot,
-    quickSort(greater, compare)
-  );
-};
+  return [...quickSort(left, compare), pivot, ...quickSort(right, compare)];
+
+}
