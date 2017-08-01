@@ -21,6 +21,7 @@ import {
 
 import ErrorMessage from '../../components/error_message/ErrorMessage';
 import FloorItemList from '../../components/floor_item_list/FloorItemList';
+import LandingCarousel from '../../components/landing_carousel/LandingCarousel';
 
 class Landing extends Component {
   constructor(props) {
@@ -44,8 +45,17 @@ class Landing extends Component {
         </Col>
         <Col xs={12} md={10} mdOffset={1}>
           <p>It can be easy to decide who to vote for, but it can be hard to remember what their positions are and why you're voting for them.</p>
-          <p>Since how our elected representatives vote on legislation and nominees affects our lives more than their campaign speeches, Pocket Congress helps you keep track of the positions that your elected representatives take when they vote on in the US Senate and US House of Representatives.</p>
         </Col>
+      </Row>
+      <Row>
+        <Col xsHidden md={12}>
+          <Well>
+            <LandingCarousel />
+          </Well>
+        </Col>
+        <p>Since how our elected representatives vote on legislation and nominees affects our lives more than their campaign speeches, Pocket Congress helps you keep track of the positions that your elected representatives take when they vote on in the US Senate and US House of Representatives.</p>
+      </Row>
+      <Row>
         <Link to='/find-reps'>
           <Button bsStyle='primary' block>Find Your Reps</Button>
         </Link>
@@ -150,3 +160,4 @@ export default connect(mapStateToProps, {
   receiveErrorMessage,
   acknowledgeErrorMessage,
 })(Landing);
+
