@@ -11,13 +11,13 @@ const About = (props) => (
     <Grid>
       <Row>
         <Col xs={12}>
-          <h2>Pocket Congress</h2>
+          <h2>PoktCongress</h2>
         </Col>
       </Row>
       <Row>
         <Col xs={12}>
           <h4>Congress Works For You</h4>
-          <p>Pocket Congress is a web app that aims to increase voter knowledge and participation by providing an easy way to view, track, and compare your elected representatives' voting records to your own preferences.</p>
+          <p>PoktCongress is a web app that aims to increase voter knowledge and participation by providing an easy way to view, track, and compare your elected representatives' voting records to your own preferences.</p>
         </Col>
       </Row>
       <Row>
@@ -35,7 +35,7 @@ const About = (props) => (
       <Row>
         <Col xs={12}>
           <h3>Purpose</h3>
-          <p>Pocket Congress is intended for your education only. All attempts are made to maintain correct data, but no guarantees of accuracy are made. ( For example, congressional districts may change ) If you find an error, please report it.</p>
+          <p>PoktCongress is intended for your education only. All attempts are made to maintain correct data, but no guarantees of accuracy are made. ( For example, congressional districts may change ) If you find an error, please report it.</p>
         </Col>
       </Row>
       <Row>
